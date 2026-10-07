@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-< lang="vi">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -166,7 +166,10 @@ body {
   margin-bottom: 10px;
   border-left: 4px solid #66bb6a;
   cursor: pointer;
+  transition: all 0.2s;
 }
+
+.reward-item:hover { background: #e8f5e9; transform: translateX(4px); }
 
 .reward-item .name { font-weight: 600; color: #1b5e20; font-size: 14px; }
 .reward-item .cost { color: #00897b; font-weight: 800; font-size: 14px; background: white; padding: 4px 10px; border-radius: 8px; }
@@ -273,6 +276,127 @@ body {
   color: #555;
   font-size: 13.5px;
   line-height: 1.5;
+}
+
+/* LỊCH SỬ RÚT TIỀN */
+.history-item {
+  padding: 14px;
+  background: #f8fdf8;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border-left: 3px solid #66bb6a;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.history-item:hover {
+  background: #f1f8e9;
+  transform: translateX(4px);
+}
+
+.history-empty {
+  text-align: center;
+  padding: 25px;
+  color: #888;
+  font-size: 13px;
+}
+
+.history-empty i {
+  font-size: 40px;
+  color: #c8e6c9;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.history-status {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.history-status.pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.history-status.completed {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+
+/* CHỌN NHÀ MẠNG */
+.operator-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.operator-item {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 10px 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+}
+
+.operator-item:hover {
+  border-color: #66bb6a;
+  transform: translateY(-2px);
+}
+
+.operator-item.selected {
+  border-color: #1b5e20;
+  background: #e8f5e9;
+  box-shadow: 0 4px 12px rgba(27,94,32,0.2);
+}
+
+.operator-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 70px;
+}
+
+/* CHỌN MỆNH GIÁ */
+.denom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.denom-item {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 15px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 700;
+  color: #555;
+  font-size: 14px;
+}
+
+.denom-item:hover {
+  border-color: #66bb6a;
+  color: #1b5e20;
+  transform: translateY(-2px);
+}
+
+.denom-item.selected {
+  border-color: #1b5e20;
+  background: linear-gradient(135deg, #1b5e20, #00897b);
+  color: white;
+  box-shadow: 0 4px 12px rgba(27,94,32,0.3);
 }
 </style>
 </head>
@@ -385,35 +509,63 @@ body {
   <div id="tab-reward" class="hidden">
     <div class="card">
       <div class="card-title">
-        <i class="fas fa-gift"></i>
-        Đổi thưởng
+        <i class="fas fa-sim-card"></i>
+        Chọn nhà mạng
       </div>
       <div class="card-desc">
-        Đổi điểm thành thẻ cào điện thoại. Điểm càng cao, thẻ càng lớn!
+        Chọn nhà mạng bạn muốn nhận thẻ
       </div>
-      <div class="reward-item" onclick="selectReward(10000, 1000)">
-        <span class="name">💳 Thẻ 10.000đ</span>
-        <span class="cost">1.000 điểm</span>
+      <div class="operator-grid">
+        <div class="operator-item" id="op-viettel" onclick="selectOperator('Viettel', 'viettel')">
+          <img src="https://i.postimg.cc/vZFr5SVS/Viettel-Logo.png" alt="Viettel" class="operator-img">
+        </div>
+        <div class="operator-item" id="op-vinaphone" onclick="selectOperator('Vinaphone', 'vinaphone')">
+          <img src="https://i.postimg.cc/PJnD1CLP/Vinaphone-Logo.png" alt="Vinaphone" class="operator-img">
+        </div>
+        <div class="operator-item" id="op-mobifone" onclick="selectOperator('Mobifone', 'mobifone')">
+          <img src="https://i.postimg.cc/hGJQwLx6/Mobifone-Logo.png" alt="Mobifone" class="operator-img">
+        </div>
+        <div class="operator-item" id="op-garena" onclick="selectOperator('Garena', 'garena')">
+          <img src="https://i.postimg.cc/Rhm3N28S/images-(1).jpg" alt="Garena" class="operator-img">
+        </div>
       </div>
-      <div class="reward-item" onclick="selectReward(20000, 2000)">
-        <span class="name">💳 Thẻ 20.000đ</span>
-        <span class="cost">2.000 điểm</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-tags"></i>
+        Chọn mệnh giá
       </div>
-      <div class="reward-item" onclick="selectReward(50000, 5000)">
-        <span class="name">💳 Thẻ 50.000đ</span>
-        <span class="cost">5.000 điểm</span>
+      <div class="card-desc" id="operatorNote">
+        Vui lòng chọn nhà mạng trước
       </div>
-      <div class="reward-item" onclick="selectReward(100000, 10000)">
-        <span class="name">💳 Thẻ 100.000đ</span>
-        <span class="cost">10.000 điểm</span>
+      <div class="denom-grid" id="denomGrid"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-check-circle"></i>
+        Xác nhận đổi thưởng
       </div>
-      <div class="reward-item" onclick="selectReward(200000, 20000)">
-        <span class="name">💳 Thẻ 200.000đ</span>
-        <span class="cost">20.000 điểm</span>
+      <div class="card-desc" id="confirmNote">
+        Vui lòng chọn nhà mạng + mệnh giá
       </div>
-      <button class="btn btn-light" onclick="requestReward()" style="margin-top:15px;">
+      <button class="btn btn-light" onclick="requestReward()">
         <i class="fas fa-money-bill-wave"></i> Yêu cầu đổi thưởng
       </button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-history"></i>
+        Lịch sử rút tiền
+      </div>
+      <div id="historyList">
+        <div class="history-empty">
+          <i class="fas fa-inbox"></i>
+          Chưa có giao dịch nào
+        </div>
+      </div>
     </div>
 
     <div class="card" style="background: linear-gradient(135deg, #fff8e1, #ffecb3);">
@@ -515,7 +667,7 @@ body {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-tyoeWEJRvh9dVDoRXmeItJteGDiSkpA",
@@ -533,10 +685,45 @@ const db = getFirestore(app);
 let userId = null;
 let currentPoints = 0;
 let selectedReward = null;
+let selectedOperator = null;
 let lastAdTime = 0;
 const COOLDOWN = 120;
 const AD_DURATION = 30000;
 const MAX_ADS_PER_DAY = 20;
+
+const DENOM_BY_OPERATOR = {
+  'Viettel': [
+    { amount: 10000, points: 1000 },
+    { amount: 20000, points: 2000 },
+    { amount: 50000, points: 5000 },
+    { amount: 100000, points: 10000 },
+    { amount: 200000, points: 20000 },
+    { amount: 500000, points: 50000 }
+  ],
+  'Vinaphone': [
+    { amount: 10000, points: 1000 },
+    { amount: 20000, points: 2000 },
+    { amount: 50000, points: 5000 },
+    { amount: 100000, points: 10000 },
+    { amount: 200000, points: 20000 },
+    { amount: 500000, points: 50000 }
+  ],
+  'Mobifone': [
+    { amount: 10000, points: 1000 },
+    { amount: 20000, points: 2000 },
+    { amount: 50000, points: 5000 },
+    { amount: 100000, points: 10000 },
+    { amount: 200000, points: 20000 },
+    { amount: 500000, points: 50000 }
+  ],
+    'Garena': [
+    { amount: 20000, points: 2000 },
+    { amount: 50000, points: 5000 },
+    { amount: 100000, points: 10000 },
+    { amount: 200000, points: 20000 },
+    { amount: 500000, points: 50000 }
+  ]
+};
 
 signInAnonymously(auth).catch(function(err) { console.log("Lỗi:", err); });
 
@@ -591,8 +778,7 @@ window.watchAd = async function() {
     localStorage.setItem('lastAdDate', today);
     localStorage.setItem('todayAds', '0');
   }
-
-  if (todayAds >= MAX_ADS_PER_DAY) {
+    if (todayAds >= MAX_ADS_PER_DAY) {
     status.innerText = '⚠️ Hôm nay đã đủ ' + MAX_ADS_PER_DAY + ' ads. Quay lại ngày mai!';
     return;
   }
@@ -644,6 +830,10 @@ window.switchTab = function(tab, e) {
   document.querySelectorAll('[id^="tab-"]').forEach(function(t) { t.classList.add('hidden'); });
   e.currentTarget.classList.add('active');
   document.getElementById('tab-' + tab).classList.remove('hidden');
+
+  if (tab === 'reward' && userId) {
+    loadHistory();
+  }
 };
 
 window.openSurvey = function() {
@@ -655,28 +845,201 @@ window.openSurvey = function() {
   const url = "https://offers.cpx-research.com/index.php" +
     "?app_id=36947" +
     "&ext_user_id=" + userId +
-      "&username=" +
-      "&email=" +
-      "&subid_1=&subid_2";
+    "&username=" +
+    "&email=" +
+    "&subid_1=&subid_2";
 
   window.open(url, '_blank');
 };
 
-window.selectReward = function(amount, points) {
-  selectedReward = { amount: amount, points: points };
-  alert('✅ Đã chọn: Thẻ ' + amount.toLocaleString() + 'đ\nCần: ' + points.toLocaleString() + ' điểm');
+window.selectOperator = function(operatorName, operatorClass) {
+  selectedOperator = { name: operatorName, class: operatorClass };
+
+  document.querySelectorAll('.operator-item').forEach(function(el) {
+    el.classList.remove('selected');
+  });
+  document.getElementById('op-' + operatorClass).classList.add('selected');
+
+  const denomList = DENOM_BY_OPERATOR[operatorName] || [];
+  const grid = document.getElementById('denomGrid');
+  grid.innerHTML = '';
+
+  denomList.forEach(function(item) {
+    const div = document.createElement('div');
+    div.className = 'denom-item';
+    div.innerHTML = item.amount.toLocaleString() + 'đ<br><small style="font-size:11px;color:#888;font-weight:500;">' + item.points.toLocaleString() + ' điểm</small>';
+    div.onclick = function(e) { selectDenom(item.amount, item.points, e); };
+    grid.appendChild(div);
+  });
+
+  selectedReward = null;
+
+  document.getElementById('operatorNote').innerHTML = 
+    '✅ Đã chọn: <b style="color:#1b5e20">' + operatorName + '</b>. Vui lòng chọn mệnh giá.';
+
+  updateConfirmNote();
+};
+
+window.selectDenom = function(amount, points, e) {
+  if (!selectedOperator) {
+    alert('⚠️ Vui lòng chọn nhà mạng trước!');
+    return;
+  }
+
+  selectedReward = { 
+    amount: amount, 
+    points: points,
+    operator: selectedOperator.name
+  };
+
+  document.querySelectorAll('.denom-item').forEach(function(el) {
+    el.classList.remove('selected');
+  });
+
+  if (e) e.currentTarget.classList.add('selected');
+
+  updateConfirmNote();
+};
+
+window.updateConfirmNote = function() {
+  if (selectedReward && selectedReward.operator) {
+    document.getElementById('confirmNote').innerHTML = 
+      '✅ Bạn chọn: <b style="color:#1b5e20">Thẻ ' + selectedReward.operator + ' ' + 
+      selectedReward.amount.toLocaleString() + 'đ</b><br>Cần: <b>' + selectedReward.points.toLocaleString() + ' điểm</b>';
+  } else if (selectedOperator && !selectedReward) {
+    document.getElementById('confirmNote').innerHTML = 
+      '✅ Nhà mạng: <b>' + selectedOperator.name + '</b><br>Vui lòng chọn mệnh giá';
+  } else {
+    document.getElementById('confirmNote').innerHTML = 'Vui lòng chọn nhà mạng + mệnh giá';
+  }
 };
 
 window.requestReward = async function() {
   if (!selectedReward) {
-    alert('⚠️ Vui lòng chọn phần thưởng trước!');
+    alert('⚠️ Vui lòng chọn nhà mạng + mệnh giá trước!');
     return;
   }
   if (currentPoints < selectedReward.points) {
     alert('❌ Bạn cần ' + selectedReward.points.toLocaleString() + ' điểm!\nHiện có: ' + currentPoints.toLocaleString() + ' điểm');
     return;
   }
-  alert('✅ Đã gửi yêu cầu đổi thưởng!\n\nAdmin sẽ liên hệ trong 1-3 ngày để gửi thẻ cào.');
+
+  try {
+    const rewardRef = doc(collection(db, 'rewards'));
+    await setDoc(rewardRef, {
+      userId: userId,
+      amount: selectedReward.amount,
+      points: selectedReward.points,
+      operator: selectedReward.operator,
+      status: 'pending',
+      createdAt: serverTimestamp()
+    });
+
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, { points: increment(-selectedReward.points) });
+
+    await loadPoints();
+    await loadHistory();
+
+    alert('✅ Đã gửi yêu cầu đổi thưởng!\n\nAdmin sẽ xử lý trong 1-3 ngày.');
+    selectedReward = null;
+
+  } catch (err) {
+    console.log(err);
+    alert('❌ Có lỗi, vui lòng thử lại!');
+  }
+};
+
+window.loadHistory = async function() {
+  const list = document.getElementById('historyList');
+  if (!list) return;
+
+  try {
+    const q = query(collection(db, 'rewards'), where('userId', '==', userId));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      list.innerHTML = '<div class="history-empty"><i class="fas fa-inbox"></i>Chưa có giao dịch nào</div>';
+      return;
+    }
+
+    let items = [];
+    snapshot.forEach(function(d) {
+      items.push({ id: d.id, data: d.data() });
+    });
+
+    items.sort(function(a, b) {
+      const ta = a.data.createdAt ? a.data.createdAt.seconds : 0;
+      const tb = b.data.createdAt ? b.data.createdAt.seconds : 0;
+      return tb - ta;
+    });
+
+    let html = '';
+    items.forEach(function(item) {
+      const d = item.data;
+      const statusText = d.status === 'completed' ? 'Thành công' : 'Đang xử lý';
+      const statusClass = d.status === 'completed' ? 'completed' : 'pending';
+      const dateStr = d.createdAt ? new Date(d.createdAt.seconds * 1000).toLocaleString('vi-VN') : '';
+
+      html += '<div class="history-item" onclick="showRewardDetail(\'' + item.id + '\')">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+          '<div>' +
+            '<div style="font-weight:700;color:#1b5e20;font-size:14px;">💳 Thẻ ' + (d.operator || '') + ' ' + d.amount.toLocaleString() + 'đ</div>' +
+            '<div style="font-size:11px;color:#888;margin-top:4px;">' + dateStr + '</div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;">' +
+            '<span class="history-status ' + statusClass + '">' + statusText + '</span>' +
+            '<i class="fas fa-chevron-right" style="color:#888;font-size:12px;"></i>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+
+    list.innerHTML = html;
+
+  } catch (err) {
+    console.log(err);
+    list.innerHTML = '<div class="history-empty"><i class="fas fa-exclamation-triangle"></i>Không tải được lịch sử</div>';
+  }
+};
+
+window.showRewardDetail = async function(rewardId) {
+  try {
+    const ref = doc(db, 'rewards', rewardId);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) {
+      alert('❌ Không tìm thấy giao dịch!');
+      return;
+    }
+
+    const data = snap.data();
+
+    if (data.status === 'completed') {
+      let msg = '✅ ĐÃ XỬ LÝ THÀNH CÔNG!\n\n';
+      msg += '💳 Loại thẻ: ' + (data.operator || 'Thẻ cào') + ' ' + data.amount.toLocaleString() + 'đ\n\n';
+
+      if (data.cardCode) {
+        msg += '📝 Mã thẻ: ' + data.cardCode + '\n';
+      }
+      if (data.cardSerial) {
+        msg += '🔢 Số seri: ' + data.cardSerial + '\n';
+      }
+
+      alert(msg);
+    } else {
+      let msg = '⏳ ĐANG XỬ LÝ\n\n';
+      msg += '💳 Thẻ: ' + (data.operator || '') + ' ' + data.amount.toLocaleString() + 'đ\n';
+      msg += '📅 Ngày yêu cầu: ' + (data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('vi-VN') : '') + '\n\n';
+      msg += 'Admin sẽ gửi thẻ trong 1-3 ngày làm việc.\n';
+      msg += 'Vui lòng quay lại kiểm tra sau!';
+      alert(msg);
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert('❌ Lỗi tải chi tiết!');
+  }
 };
 </script>
 
