@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Túi Điểm Online</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: #f0f4f8;
+  min-height: 100vh;
+  color: #333;
+}
+
+/* ===== LOGIN SCREEN ===== */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%);
+  padding: 20px;
+}
+
+.login-box {
+  background: white;
+  border-radius: 24px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.login-box .icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #1b5e20, #00897b);
+  color: white;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 20px;
+}
+
+.login-box h1 {
+  color: #1b5e20;
+  font-size: 22px;
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.login-box p {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 25px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 15px;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.login-box input:focus {
+  outline: none;
+  border-color: #1b5e20;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1b5e20, #00897b);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s;
+}
+
+.login-box button:active { transform: scale(0.98); }
+
+.login-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: 10px;
+  min-height: 20px;
+  font-weight: 600;
+}
+
+/* ===== ADMIN PANEL ===== */
+#adminPanel { display: none; }
+
+.admin-header {
+  background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(27,94,32,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.admin-header .brand i {
+  background: rgba(255,255,255,0.2);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.admin-header .logout {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.admin-header .logout:hover { background: rgba(255,255,255,0.3); }
+
+.admin-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* STATS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.stat-card .num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1b5e20;
+  line-height: 1;
+}
+
+.stat-card .lbl {
+  font-size: 11px;
+  color: #888;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.stat-card.pending .num { color: #ff9800; }
+.stat-card.done .num { color: #4CAF50; }
+
+/* FILTER */
+.filter-bar {
+  background: white;
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input {
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.filter-bar input:focus { outline: none; border-color: #1b5e20; }
+
+.filter-bar select {
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  background: white;
+  cursor: pointer;
+}
+
+.filter-bar select:focus { outline: none; border-color: #1b5e20; }
+
+.filter-bar button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1b5e20, #00897b);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+}
+
+/* ORDER CARD */
+.order-card {
+  background: white;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-left: 5px solid #ff9800;
+  transition: all 0.3s;
+}
+
+.order-card.completed { border-left-color: #4CAF50; }
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.order-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1b5e20;
+}
+
+.order-title i { color: #00897b; margin-right: 6px; }
+
+.order-status {
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.order-status.pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.order-status.completed {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+
+.order-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.order-info .item {
+  color: #666;
+}
+
+.order-info .item b {
+  color: #333;
+  font-weight: 700;
+}
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px dashed #eee;
+}
+
+.order-actions input {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.order-actions input:focus { outline: none; border-color: #1b5e20; }
+
+.order-actions button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.btn-approve {
+  background: linear-gradient(135deg, #4CAF50, #2e7d32);
+  color: white;
+}
+
+.btn-approve:active { transform: scale(0.97); }
+
+.btn-view {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+.loading i {
+  font-size: 40px;
+  color: #c8e6c9;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: #888;
+  background: white;
+  border-radius: 16px;
+}
+
+.empty-state i {
+  font-size: 50px;
+  color: #c8e6c9;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1b5e20;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: all 0.4s;
+  z-index: 9999;
+  max-width: 90%;
+  text-align: center;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.error {
+  background: #d32f2f;
+}
+
+@media (max-width: 500px) {
+  .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat-card { padding: 14px 8px; }
+  .stat-card .num { font-size: 20px; }
+  .order-info { grid-template-columns: 1fr; }
+  .order-actions { flex-direction: column; }
+  .order-actions input, .order-actions button { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="icon"><i class="fas fa-lock"></i></div>
+    <h1>Trang Quản Trị</h1>
+    <p>Túi Điểm Online - Admin Panel</p>
+    <input type="password" id="adminPass" placeholder="Nhập mật khẩu admin" Quanshinotoh2212"if(event.key==='Enter') login()">
+    <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <div class="brand">
+      <i class="fas fa-shield-alt"></i>
+      <span>Admin Panel</span>
+    </div>
+    <button class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Thoát</button>
+  </div>
+
+  <div class="admin-container">
+    
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="num" id="statTotal">0</div>
+        <div class="lbl">Tổng đơn</div>
+      </div>
+      <div class="stat-card pending">
+        <div class="num" id="statPending">0</div>
+        <div class="lbl">Đang chờ</div>
+      </div>
+      <div class="stat-card done">
+        <div class="num" id="statDone">0</div>
+        <div class="lbl">Đã duyệt</div>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="🔍 Tìm theo ID user, nhà mạng..." oninput="renderOrders()">
+      <select id="statusFilter" onchange="renderOrders()">
+        <option value="all">Tất cả trạng thái</option>
+        <option value="pending">Đang xử lý</option>
+        <option value="completed">Thành công</option>
+      </select>
+      <button onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Làm mới</button>
+    </div>
+
+    <!-- ORDERS LIST -->
+    <div id="ordersList">
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        Đang tải dữ liệu...
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC-tyoeWEJRvh9dVDoRXmeItJteGDiSkpA",
+  authDomain: "tui-diem-online-455e2.firebaseapp.com",
+  projectId: "tui-diem-online-455e2",
+  storageBucket: "tui-diem-online-455e2.firebasestorage.app",
+  messagingSenderId: "506486761764",
+  appId: "1:506486761764:web:d335f747ce8ab5c46dabb1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ============ ĐỔI MẬT KHẨU ADMIN Ở ĐÂY ============ */
+const ADMIN_PASSWORD = "admin123";
+/* =================================================== */
+
+let allOrders = [];
+
+// ===== LOGIN =====
+window.login = function() {
+  const pass = document.getElementById('adminPass').value;
+  const err = document.getElementById('loginError');
+
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('adminLoggedIn', 'true');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    loadOrders();
+  } else {
+    err.innerText = '❌ Mật khẩu không đúng!';
+    document.getElementById('adminPass').value = '';
+  }
+};
+
+window.logout = function() {
+  sessionStorage.removeItem('adminLoggedIn');
+  location.reload();
+};
+
+// Check session
+if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  setTimeout(loadOrders, 100);
+}
+
+// ===== LOAD ORDERS =====
+window.loadOrders = async function() {
+  const list = document.getElementById('ordersList');
+  list.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i>Đang tải dữ liệu...</div>';
+
+  try {
+    const snap = await getDocs(collection(db, 'rewards'));
+    allOrders = [];
+
+    snap.forEach(function(d) {
+      allOrders.push({ id: d.id, data: d.data() });
+    });
+
+    // Sort mới nhất trước
+    allOrders.sort(function(a, b) {
+      const ta = a.data.createdAt ? a.data.createdAt.seconds : 0;
+      const tb = b.data.createdAt ? b.data.createdAt.seconds : 0;
+      return tb - ta;
+    });
+
+    updateStats();
+    renderOrders();
+
+  } catch (err) {
+    console.log(err);
+    list.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i>Lỗi tải dữ liệu!</div>';
+  }
+};
+
+function updateStats() {
+  const total = allOrders.length;
+  const pending = allOrders.filter(function(o) { return o.data.status !== 'completed'; }).length;
+  const done = total - pending;
+
+  document.getElementById('statTotal').innerText = total;
+  document.getElementById('statPending').innerText = pending;
+  document.getElementById('statDone').innerText = done;
+}
+
+// ===== RENDER =====
+window.renderOrders = function() {
+  const list = document.getElementById('ordersList');
+  const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+  const statusFilter = document.getElementById('statusFilter').value;
+
+  let filtered = allOrders;
+
+  if (statusFilter !== 'all') {
+    filtered = filtered.filter(function(o) { return o.data.status === statusFilter; });
+  }
+
+  if (keyword) {
+    filtered = filtered.filter(function(o) {
+      const d = o.data;
+      return (d.userId || '').toLowerCase().includes(keyword) ||
+             (d.operator || '').toLowerCase().includes(keyword) ||
+             (d.amount || '').toString().includes(keyword);
+    });
+  }
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>Không có đơn nào</div>';
+    return;
+  }
+
+  let html = '';
+  filtered.forEach(function(order) {
+    const d = order.data;
+    const isCompleted = d.status === 'completed';
+    const dateStr = d.createdAt ? new Date(d.createdAt.seconds * 1000).toLocaleString('vi-VN') : 'N/A';
+
+    html += '<div class="order-card ' + (isCompleted ? 'completed' : '') + '">';
+
+    // Header
+    html += '<div class="order-header">';
+    html += '<div class="order-title"><i class="fas fa-receipt"></i>Đơn #' + order.id.substring(0, 8) + '</div>';
+    html += '<div class="order-status ' + (isCompleted ? 'completed' : 'pending') + '">' +
+            (isCompleted ? '✅ Thành công' : '⏳ Đang xử lý') + '</div>';
+    html += '</div>';
+
+    // Info
+    html += '<div class="order-info">';
+    html += '<div class="item">👤 User ID: <b>' + (d.userId ? d.userId.substring(0, 12) + '...' : 'N/A') + '</b></div>';
+    html += '<div class="item">💳 Thẻ: <b>' + (d.operator || '') + ' ' + (d.amount || 0).toLocaleString() + 'đ</b></div>';
+    html += '<div class="item">💰 Điểm trừ: <b>' + (d.points || 0).toLocaleString() + ' điểm</b></div>';
+    html += '<div class="item">📅 Ngày tạo: <b>' + dateStr + '</b></div>';
+
+    if (isCompleted) {
+      if (d.cardCode) html += '<div class="item">📝 Mã thẻ: <b style="color:#4CAF50;">' + d.cardCode + '</b></div>';
+      if (d.cardSerial) html += '<div class="item">🔢 Seri: <b style="color:#4CAF50;">' + d.cardSerial + '</b></div>';
+      if (d.approvedAt) {
+        const apprDate = new Date(d.approvedAt.seconds * 1000).toLocaleString('vi-VN');
+        html += '<div class="item">✅ Duyệt lúc: <b>' + apprDate + '</b></div>';
+      }
+    }
+
+    html += '</div>';
+
+    // Actions
+    if (!isCompleted) {
+      html += '<div class="order-actions">';
+      html += '<input type="text" id="code-' + order.id + '" placeholder="📝 Nhập mã thẻ">';
+      html += '<input type="text" id="serial-' + order.id + '" placeholder="🔢 Nhập số seri">';
+      html += '<button class="btn-approve" onclick="approveOrder(\'' + order.id + '\')"><i class="fas fa-check"></i> Duyệt & Gửi thẻ</button>';
+      html += '</div>';
+    } else {
+      html += '<div class="order-actions">';
+      html += '<button class="btn-view" onclick="viewUserOrders(\'' + d.userId + '\')"><i class="fas fa-user"></i> Xem đơn của user này</button>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  list.innerHTML = html;
+};
+
+// ===== APPROVE ORDER =====
+window.approveOrder = async function(orderId) {
+  const codeInput = document.getElementById('code-' + orderId);
+  const serialInput = document.getElementById('serial-' + orderId);
+
+  const cardCode = codeInput.value.trim();
+  const cardSerial = serialInput.value.trim();
+
+  if (!cardCode || !cardSerial) {
+    showToast('❌ Vui lòng nhập đầy đủ mã thẻ và số seri!', true);
+    return;
+  }
+
+  if (!confirm('Xác nhận duyệt đơn này và gửi thẻ cho user?')) return;
+
+  try {
+    const ref = doc(db, 'rewards', orderId);
+    await updateDoc(ref, {
+      status: 'completed',
+      cardCode: cardCode,
+      cardSerial: cardSerial,
+      approvedAt: serverTimestamp()
+    });
+
+    showToast('✅ Đã duyệt đơn và gửi thẻ thành công!');
+    await loadOrders();
+
+  } catch (err) {
+    console.log(err);
+    showToast('❌ Lỗi duyệt đơn: ' + err.message, true);
+  }
+};
+
+// ===== VIEW USER ORDERS =====
+window.viewUserOrders = function(userId) {
+  document.getElementById('searchInput').value = userId;
+  document.getElementById('statusFilter').value = 'all';
+  renderOrders();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ===== TOAST =====
+window.showToast = function(msg, isError) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(function() {
+    toast.className = 'toast';
+  }, 3000);
+};
+</script>
+
+</body>
+</html>
