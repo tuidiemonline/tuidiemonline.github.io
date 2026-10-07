@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Túi Điểm Online</title>
+<title>Túi Điểm Online - Kiếm Tiền Cùng Khảo Sát</title>
 
 <meta name="monetag" content="cd5983bfc0bd42c1baad0b95e718b403">
 <script src="https://quge5.com/88/tag.min.js" data-zone="291318" async data-cfasync="false"></script>
@@ -182,19 +182,89 @@ body {
   margin-left: 8px;
 }
 
-#surveyFrame {
-  width: 100%;
-  height: 2000px;
-  border: none;
-  border-radius: 12px;
+/* Nội dung thêm cho Monetag */
+.content-section {
   background: white;
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 20px rgba(27,94,32,0.08);
 }
 
-.survey-loading {
-  text-align: center;
-  padding: 30px;
-  color: #888;
+.content-section h3 {
+  color: #1b5e20;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.content-section h3 i {
+  color: #00897b;
+}
+
+.content-section p {
+  color: #555;
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.content-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.content-section ul li {
+  color: #555;
+  font-size: 13.5px;
+  line-height: 1.7;
+  padding: 6px 0;
+  padding-left: 25px;
+  position: relative;
+}
+
+.content-section ul li::before {
+  content: '✓';
+  color: #00897b;
+  font-weight: 800;
+  position: absolute;
+  left: 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid #eee;
+  padding: 12px 0;
+}
+
+.faq-item:last-child { border-bottom: none; }
+
+.faq-q {
+  font-weight: 700;
+  color: #1b5e20;
   font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.faq-a {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 12px;
+}
+
+.footer a {
+  color: #00897b;
+  text-decoration: none;
+  margin: 0 8px;
 }
 </style>
 </head>
@@ -273,18 +343,11 @@ body {
     </div>
 
     <div class="card" style="padding: 8px;">
-      <div id="surveyLoading" class="survey-loading">
-        <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #66bb6a;"></i>
-        <p style="margin-top: 10px;">Đang tải khảo sát...</p>
+      <div id="surveyLoading" style="text-align:center;padding:30px;color:#888;">
+        <i class="fas fa-spinner fa-spin" style="font-size:24px;color:#66bb6a;"></i>
+        <p style="margin-top:10px;">Đang tải khảo sát...</p>
       </div>
-      <iframe 
-        id="surveyFrame"
-        width="100%" 
-        frameborder="0" 
-        height="2000px"
-        style="display:none;"
-        src="">
-      </iframe>
+      <iframe id="surveyFrame" width="100%" frameborder="0" height="2000px" style="display:none;border-radius:12px;" src=""></iframe>
     </div>
   </div>
 
@@ -321,19 +384,87 @@ body {
         <i class="fas fa-money-bill-wave"></i> Yêu cầu đổi thưởng
       </button>
     </div>
+  </div>
 
-    <div class="card" style="background: linear-gradient(135deg, #fff8e1, #ffecb3);">
-      <div class="card-title">
-        <i class="fas fa-crown" style="background: linear-gradient(135deg, #ffd700, #ff9800);"></i>
-        Tài khoản VIP <span class="vip-badge">SẮP RA MẮT</span>
-      </div>
-      <div class="card-desc">
-        Nâng cấp VIP để nhận:<br>
-        ✅ X2 điểm khi xem ads<br>
-        ✅ Ưu tiên khảo sát lương cao<br>
-        ✅ Rút thưởng nhanh hơn
-      </div>
+</div>
+
+<!-- NỘI DUNG THÊM CHO MONETAG -->
+<div class="container">
+
+  <div class="content-section">
+    <h3><i class="fas fa-info-circle"></i> Giới thiệu về Túi Điểm Online</h3>
+    <p>
+      <b>Túi Điểm Online</b> là nền tảng kiếm điểm thưởng trực tuyến dành cho người dùng Việt Nam.
+      Chúng tôi hợp tác với các đối tác uy tín trong lĩnh vực quảng cáo và khảo sát thị trường
+      như <b>CPX Research</b>, <b>Monetag</b> để mang đến cho bạn cơ hội kiếm điểm dễ dàng.
+    </p>
+    <p>
+      Với Túi Điểm Online, bạn có thể kiếm điểm bằng cách xem quảng cáo ngắn hoặc tham gia
+      các cuộc khảo sát thị trường. Điểm kiếm được có thể đổi thành <b>thẻ cào điện thoại</b>
+      với nhiều mệnh giá khác nhau.
+    </p>
+  </div>
+
+  <div class="content-section">
+    <h3><i class="fas fa-bullseye"></i> Hướng dẫn kiếm điểm</h3>
+    <ul>
+      <li><b>Xem quảng cáo:</b> Mỗi quảng cáo +5 điểm, tối đa 20 lần/ngày</li>
+      <li><b>Làm khảo sát:</b> Mỗi khảo sát +50 đến +500 điểm tùy độ dài</li>
+      <li><b>Mời bạn bè:</b> Nhận thêm điểm khi bạn bè đăng ký (sắp ra mắt)</li>
+      <li><b>Đổi thưởng:</b> 1.000 điểm = 10.000đ thẻ cào điện thoại</li>
+    </ul>
+  </div>
+
+  <div class="content-section">
+    <h3><i class="fas fa-question-circle"></i> Câu hỏi thường gặp (FAQ)</h3>
+
+    <div class="faq-item">
+      <div class="faq-q">❓ Tôi có thể kiếm bao nhiêu điểm mỗi ngày?</div>
+      <div class="faq-a">Bạn có thể kiếm tối đa 100 điểm từ xem quảng cáo (20 lần × 5 điểm) và 500-2000 điểm từ khảo sát mỗi ngày.</div>
     </div>
+
+    <div class="faq-item">
+      <div class="faq-q">❓ Bao lâu tôi nhận được thẻ cào?</div>
+      <div class="faq-a">Sau khi yêu cầu đổi thưởng, admin sẽ xử lý trong vòng 1-3 ngày làm việc và gửi thẻ cào qua email hoặc tin nhắn.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">❓ Điểm của tôi có mất khi đổi thiết bị không?</div>
+      <div class="faq-a">Không. Điểm được lưu trên hệ thống Firebase, bạn có thể đăng nhập lại trên thiết bị khác và vẫn giữ nguyên điểm.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">❓ Tại sao tôi không xem được quảng cáo?</div>
+      <div class="faq-a">Có thể do bạn đã đạt giới hạn 20 lần/ngày, hoặc chưa đợi đủ 2 phút giữa các lần xem. Hãy thử lại sau.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">❓ Làm sao để kiếm điểm nhanh hơn?</div>
+      <div class="faq-a">Tập trung vào khảo sát — mỗi khảo sát có thể mang lại 50-500 điểm, cao hơn nhiều so với xem quảng cáo.</div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h3><i class="fas fa-file-contract"></i> Điều khoản sử dụng</h3>
+    <ul>
+      <li>Không sử dụng tool auto, bot để kiếm điểm</li>
+      <li>Không tạo nhiều tài khoản để trục lợi</li>
+      <li>Không spam, quấy rối người dùng khác</li>
+      <li>Không gian lận trong quá trình làm khảo sát</li>
+      <li>Chúng tôi có quyền khóa tài khoản vi phạm mà không cần báo trước</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <p>© 2026 Túi Điểm Online. Bảo lưu mọi quyền.</p>
+    <p style="margin-top: 8px;">
+      <a href="#gioi-thieu">Giới thiệu</a> |
+      <a href="#dieu-khoan">Điều khoản</a> |
+      <a href="#lien-he">Liên hệ</a>
+    </p>
+    <p style="margin-top: 8px; font-size: 11px;">
+      Email: contact@tuidiemonline.com
+    </p>
   </div>
 
 </div>
@@ -360,15 +491,11 @@ let userId = null;
 let currentPoints = 0;
 let selectedReward = null;
 let lastAdTime = 0;
-let surveyLoaded = false;
 const COOLDOWN = 120;
 const AD_DURATION = 30000;
 const MAX_ADS_PER_DAY = 20;
-const CPX_SECURE_HASH = "qgt8obyspfmKgd1LwmtIzEJVgnY3mBOI";
 
-signInAnonymously(auth).catch(function(err) {
-  console.log("Lỗi:", err);
-});
+signInAnonymously(auth).catch(function(err) { console.log("Lỗi:", err); });
 
 onAuthStateChanged(auth, async function(user) {
   if (user) {
@@ -383,12 +510,7 @@ async function initUser() {
   const ref = doc(db, 'users', userId);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
-    await setDoc(ref, {
-      points: 0,
-      totalAds: 0,
-      totalEarned: 0,
-      createdAt: serverTimestamp()
-    });
+    await setDoc(ref, { points: 0, totalAds: 0, totalEarned: 0, createdAt: serverTimestamp() });
   }
 }
 
@@ -403,11 +525,9 @@ async function loadPoints() {
   }
 }
 
-
 window.watchAd = async function() {
   const btn = document.getElementById('watchBtn');
   const status = document.getElementById('status');
-
   const now = Date.now();
   const elapsed = Math.floor((now - lastAdTime) / 1000);
 
@@ -435,7 +555,6 @@ window.watchAd = async function() {
   }
 
   btn.disabled = true;
-
   let timeLeft = AD_DURATION / 1000;
   status.innerText = '⏳ Vui lòng đợi... ' + timeLeft + ' giây';
 
@@ -452,32 +571,23 @@ window.watchAd = async function() {
   setTimeout(async function() {
     clearInterval(countdown);
     status.innerText = '⏳ Đang xử lý...';
-
     setTimeout(async function() {
       try {
         const ref = doc(db, 'users', userId);
-        await updateDoc(ref, {
-          points: increment(5),
-          totalAds: increment(1),
-          totalEarned: increment(5),
-          lastAd: serverTimestamp()
-        });
+        await updateDoc(ref, { points: increment(5), totalAds: increment(1), totalEarned: increment(5), lastAd: serverTimestamp() });
         await loadPoints();
         lastAdTime = Date.now();
         todayAds++;
         localStorage.setItem('todayAds', todayAds.toString());
-
         status.innerText = '✅ Đã xem thành công! +5 điểm';
         btn.disabled = false;
         setTimeout(function() { status.innerText = ''; }, 4000);
-
       } catch (err) {
-        console.log("Lỗi cộng điểm:", err);
+        console.log(err);
         await loadPoints();
         lastAdTime = Date.now();
         todayAds++;
         localStorage.setItem('todayAds', todayAds.toString());
-
         status.innerText = '✅ Đã xem thành công! +5 điểm';
         btn.disabled = false;
         setTimeout(function() { status.innerText = ''; }, 4000);
@@ -491,10 +601,6 @@ window.switchTab = function(tab, e) {
   document.querySelectorAll('[id^="tab-"]').forEach(function(t) { t.classList.add('hidden'); });
   e.currentTarget.classList.add('active');
   document.getElementById('tab-' + tab).classList.remove('hidden');
-  
-  if (tab === 'survey') {
-    loadSurvey();
-  }
 };
 
 window.selectReward = function(amount, points) {
@@ -503,15 +609,12 @@ window.selectReward = function(amount, points) {
 };
 
 window.requestReward = async function() {
-  if (!selectedReward) {
-    alert('⚠️ Vui lòng chọn phần thưởng trước!');
-    return;
-  }
+  if (!selectedReward) { alert('⚠️ Vui lòng chọn phần thưởng trước!'); return; }
   if (currentPoints < selectedReward.points) {
     alert('❌ Bạn cần ' + selectedReward.points.toLocaleString() + ' điểm!\nHiện có: ' + currentPoints.toLocaleString() + ' điểm');
     return;
   }
-  alert('✅ Đã gửi yêu cầu đổi thưởng!\n\nAdmin sẽ liên hệ trong 1-3 ngày để gửi thẻ cào.');
+  alert('✅ Đã gửi yêu cầu đổi thưởng!\n\nAdmin sẽ liên hệ trong 1-3 ngày.');
 };
 </script>
 
