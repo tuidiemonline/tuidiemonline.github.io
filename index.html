@@ -344,7 +344,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 70px;
+  height: 75px;
+  overflow: hidden;
 }
 
 .operator-item:hover {
@@ -363,6 +364,7 @@ body {
   height: 100%;
   object-fit: contain;
   max-width: 70px;
+  max-height: 55px;
 }
 
 /* CHỌN MỆNH GIÁ */
@@ -397,6 +399,16 @@ body {
   background: linear-gradient(135deg, #1b5e20, #00897b);
   color: white;
   box-shadow: 0 4px 12px rgba(27,94,32,0.3);
+}
+
+.denom-item small {
+  font-size: 11px;
+  color: #888;
+  font-weight: 500;
+}
+
+.denom-item.selected small {
+  color: #c8e6c9;
 }
 </style>
 </head>
@@ -507,39 +519,44 @@ body {
   </div>
 
   <div id="tab-reward" class="hidden">
-    <div class="card">
-      <div class="card-title">
-        <i class="fas fa-sim-card"></i>
-        Chọn nhà mạng
-      </div>
-      <div class="card-desc">
-        Chọn nhà mạng bạn muốn nhận thẻ
-      </div>
-      <div class="operator-grid">
-        <div class="operator-item" id="op-viettel" onclick="selectOperator('Viettel', 'viettel')">
-          <img src="https://i.postimg.cc/vZFr5SVS/Viettel-Logo.png" alt="Viettel" class="operator-img">
-        </div>
-        <div class="operator-item" id="op-vinaphone" onclick="selectOperator('Vinaphone', 'vinaphone')">
-          <img src="https://i.postimg.cc/PJnD1CLP/Vinaphone-Logo.png" alt="Vinaphone" class="operator-img">
-        </div>
-        <div class="operator-item" id="op-mobifone" onclick="selectOperator('Mobifone', 'mobifone')">
-          <img src="https://i.postimg.cc/hGJQwLx6/Mobifone-Logo.png" alt="Mobifone" class="operator-img">
-        </div>
-        <div class="operator-item" id="op-garena" onclick="selectOperator('Garena', 'garena')">
-          <img src="https://i.postimg.cc/Rhm3N28S/images-(1).jpg" alt="Garena" class="operator-img">
-        </div>
-      </div>
-    </div>
-
+    
+    <!-- ĐÃ ĐẢO: CHỌN MỆNH GIÁ LÊN TRÊN -->
     <div class="card">
       <div class="card-title">
         <i class="fas fa-tags"></i>
         Chọn mệnh giá
       </div>
-      <div class="card-desc" id="operatorNote">
-        Vui lòng chọn nhà mạng trước
+      <div class="card-desc" id="denomNote">
+        Chọn mệnh giá thẻ bạn muốn đổi
       </div>
-      <div class="denom-grid" id="denomGrid"></div>
+      <div class="denom-grid" id="denomGrid">
+        <!-- Sẽ được render bằng JS -->
+      </div>
+    </div>
+
+    <!-- ĐÃ ĐẢO: CHỌN NHÀ MẠNG XUỐNG DƯỚI -->
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-sim-card"></i>
+        Chọn nhà mạng
+      </div>
+      <div class="card-desc" id="operatorNote">
+        Vui lòng chọn mệnh giá trước
+      </div>
+      <div class="operator-grid">
+        <div class="operator-item" id="op-viettel" onclick="selectOperator('Viettel', 'viettel')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Viettel_logo_2021.svg/512px-Viettel_logo_2021.svg.png" alt="Viettel" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#d32f2f;font-size:12px;\'>Viettel</span>')">
+        </div>
+        <div class="operator-item" id="op-vinaphone" onclick="selectOperator('Vinaphone', 'vinaphone')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Vinaphone_logo.png/512px-Vinaphone_logo.png" alt="Vinaphone" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#0288d1;font-size:12px;\'>Vinaphone</span>')">
+        </div>
+        <div class="operator-item" id="op-mobifone" onclick="selectOperator('Mobifone', 'mobifone')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/MobiFone_logo.png/512px-MobiFone_logo.png" alt="Mobifone" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#1565c0;font-size:12px;\'>Mobifone</span>')">
+        </div>
+        <div class="operator-item" id="op-garena" onclick="selectOperator('Garena', 'garena')">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Garena_logo.svg/512px-Garena_logo.svg.png" alt="Garena" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#e65100;font-size:12px;\'>Garena</span>')">
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -548,7 +565,7 @@ body {
         Xác nhận đổi thưởng
       </div>
       <div class="card-desc" id="confirmNote">
-        Vui lòng chọn nhà mạng + mệnh giá
+        Vui lòng chọn mệnh giá + nhà mạng
       </div>
       <button class="btn btn-light" onclick="requestReward()">
         <i class="fas fa-money-bill-wave"></i> Yêu cầu đổi thưởng
@@ -675,7 +692,7 @@ const firebaseConfig = {
   projectId: "tui-diem-online-455e2",
   storageBucket: "tui-diem-online-455e2.firebasestorage.app",
   messagingSenderId: "506486761764",
-  appId: "1:506486761764:web:d335f747ce8ab5c46dabb1"
+    appId: "1:506486761764:web:d335f747ce8ab5c46dabb1"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -686,43 +703,28 @@ let userId = null;
 let currentPoints = 0;
 let selectedReward = null;
 let selectedOperator = null;
+let selectedDenom = null;
 let lastAdTime = 0;
 const COOLDOWN = 120;
 const AD_DURATION = 30000;
 const MAX_ADS_PER_DAY = 20;
 
-const DENOM_BY_OPERATOR = {
-  'Viettel': [
-    { amount: 10000, points: 1000 },
-    { amount: 20000, points: 2000 },
-    { amount: 50000, points: 5000 },
-    { amount: 100000, points: 10000 },
-    { amount: 200000, points: 20000 },
-    { amount: 500000, points: 50000 }
-  ],
-  'Vinaphone': [
-    { amount: 10000, points: 1000 },
-    { amount: 20000, points: 2000 },
-    { amount: 50000, points: 5000 },
-    { amount: 100000, points: 10000 },
-    { amount: 200000, points: 20000 },
-    { amount: 500000, points: 50000 }
-  ],
-  'Mobifone': [
-    { amount: 10000, points: 1000 },
-    { amount: 20000, points: 2000 },
-    { amount: 50000, points: 5000 },
-    { amount: 100000, points: 10000 },
-    { amount: 200000, points: 20000 },
-    { amount: 500000, points: 50000 }
-  ],
-    'Garena': [
-    { amount: 20000, points: 2000 },
-    { amount: 50000, points: 5000 },
-    { amount: 100000, points: 10000 },
-    { amount: 200000, points: 20000 },
-    { amount: 500000, points: 50000 }
-  ]
+// Danh sách mệnh giá chung (hiển thị trước)
+const ALL_DENOMS = [10000, 20000, 50000, 100000, 200000, 500000];
+
+// Quy đổi điểm theo mệnh giá
+const POINTS_MAP = {
+  10000: 1000,
+  20000: 2000,
+  50000: 5000,
+  100000: 10000,
+  200000: 20000,
+  500000: 50000
+};
+
+// Nhà mạng không hỗ trợ mệnh giá 10k
+const OPERATOR_EXCLUDE = {
+  'Garena': [10000]
 };
 
 signInAnonymously(auth).catch(function(err) { console.log("Lỗi:", err); });
@@ -733,6 +735,7 @@ onAuthStateChanged(auth, async function(user) {
     document.getElementById('userId').innerText = "ID: " + userId.substring(0, 8) + "...";
     await initUser();
     await loadPoints();
+    renderDenoms();
   }
 });
 
@@ -754,6 +757,103 @@ async function loadPoints() {
     document.getElementById('totalEarn').innerText = data.totalEarned || 0;
   }
 }
+
+// Render danh sách mệnh giá chung
+function renderDenoms() {
+  const grid = document.getElementById('denomGrid');
+  grid.innerHTML = '';
+
+  ALL_DENOMS.forEach(function(amount) {
+    const div = document.createElement('div');
+    div.className = 'denom-item';
+    div.dataset.amount = amount;
+    div.innerHTML = amount.toLocaleString() + 'đ<br><small>' + POINTS_MAP[amount].toLocaleString() + ' điểm</small>';
+    div.onclick = function(e) { selectDenom(amount, e); };
+    grid.appendChild(div);
+  });
+}
+
+// Chọn mệnh giá
+window.selectDenom = function(amount, e) {
+  selectedDenom = amount;
+  selectedOperator = null;
+  selectedReward = null;
+
+  document.querySelectorAll('.denom-item').forEach(function(el) {
+    el.classList.remove('selected');
+  });
+  if (e) e.currentTarget.classList.add('selected');
+
+  // Reset chọn nhà mạng
+  document.querySelectorAll('.operator-item').forEach(function(el) {
+    el.classList.remove('selected');
+  });
+
+  document.getElementById('denomNote').innerHTML = 
+    '✅ Đã chọn mệnh giá: <b style="color:#1b5e20">' + amount.toLocaleString() + 'đ</b> (' + POINTS_MAP[amount].toLocaleString() + ' điểm)';
+
+  // Kiểm tra nhà mạng nào không hỗ trợ mệnh giá này
+  let excludedOperators = [];
+  for (const [op, excludes] of Object.entries(OPERATOR_EXCLUDE)) {
+    if (excludes.includes(amount)) excludedOperators.push(op);
+  }
+
+  let note = 'Vui lòng chọn nhà mạng';
+  if (excludedOperators.length > 0) {
+    note += ' (Lưu ý: ' + excludedOperators.join(', ') + ' không hỗ trợ mệnh giá này)';
+  }
+  document.getElementById('operatorNote').innerHTML = note;
+
+  updateConfirmNote();
+};
+
+// Chọn nhà mạng
+window.selectOperator = function(operatorName, operatorClass) {
+  if (!selectedDenom) {
+    alert('⚠️ Vui lòng chọn mệnh giá trước!');
+    return;
+  }
+
+  // Kiểm tra xem nhà mạng có hỗ trợ mệnh giá này không
+  const excludes = OPERATOR_EXCLUDE[operatorName] || [];
+  if (excludes.includes(selectedDenom)) {
+    alert('❌ ' + operatorName + ' không hỗ trợ mệnh giá ' + selectedDenom.toLocaleString() + 'đ!\nVui lòng chọn mệnh giá khác hoặc nhà mạng khác.');
+    return;
+  }
+
+  selectedOperator = { name: operatorName, class: operatorClass };
+
+  document.querySelectorAll('.operator-item').forEach(function(el) {
+    el.classList.remove('selected');
+  });
+  document.getElementById('op-' + operatorClass).classList.add('selected');
+
+  document.getElementById('operatorNote').innerHTML = 
+    '✅ Đã chọn nhà mạng: <b style="color:#1b5e20">' + operatorName + '</b>';
+
+  updateConfirmNote();
+};
+
+window.updateConfirmNote = function() {
+  if (selectedDenom && selectedOperator) {
+    selectedReward = {
+      amount: selectedDenom,
+      points: POINTS_MAP[selectedDenom],
+      operator: selectedOperator.name
+    };
+
+    document.getElementById('confirmNote').innerHTML = 
+      '✅ Bạn chọn: <b style="color:#1b5e20">Thẻ ' + selectedReward.operator + ' ' + 
+      selectedReward.amount.toLocaleString() + 'đ</b><br>Cần: <b>' + selectedReward.points.toLocaleString() + ' điểm</b>';
+  } else if (selectedDenom && !selectedOperator) {
+    selectedReward = null;
+    document.getElementById('confirmNote').innerHTML = 
+      '✅ Mệnh giá: <b>' + selectedDenom.toLocaleString() + 'đ</b><br>Vui lòng chọn nhà mạng';
+  } else {
+    selectedReward = null;
+    document.getElementById('confirmNote').innerHTML = 'Vui lòng chọn mệnh giá + nhà mạng';
+  }
+};
 
 window.watchAd = async function() {
   const btn = document.getElementById('watchBtn');
@@ -853,71 +953,17 @@ window.openSurvey = function() {
   window.open(url, '_blank');
 };
 
-window.selectOperator = function(operatorName, operatorClass) {
-  selectedOperator = { name: operatorName, class: operatorClass };
-
-  document.querySelectorAll('.operator-item').forEach(function(el) {
-    el.classList.remove('selected');
-  });
-  document.getElementById('op-' + operatorClass).classList.add('selected');
-
-  const denomList = DENOM_BY_OPERATOR[operatorName] || [];
-  const grid = document.getElementById('denomGrid');
-  grid.innerHTML = '';
-
-  denomList.forEach(function(item) {
-    const div = document.createElement('div');
-    div.className = 'denom-item';
-    div.innerHTML = item.amount.toLocaleString() + 'đ<br><small style="font-size:11px;color:#888;font-weight:500;">' + item.points.toLocaleString() + ' điểm</small>';
-    div.onclick = function(e) { selectDenom(item.amount, item.points, e); };
-    grid.appendChild(div);
-  });
-
-  selectedReward = null;
-
-  document.getElementById('operatorNote').innerHTML = 
-    '✅ Đã chọn: <b style="color:#1b5e20">' + operatorName + '</b>. Vui lòng chọn mệnh giá.';
-
-  updateConfirmNote();
-};
-
-window.selectDenom = function(amount, points, e) {
-  if (!selectedOperator) {
-    alert('⚠️ Vui lòng chọn nhà mạng trước!');
+window.requestReward = async function() {
+  if (!selectedDenom) {
+    alert('⚠️ Vui lòng chọn mệnh giá trước!');
     return;
   }
-
-  selectedReward = { 
-    amount: amount, 
-    points: points,
-    operator: selectedOperator.name
-  };
-
-  document.querySelectorAll('.denom-item').forEach(function(el) {
-    el.classList.remove('selected');
-  });
-
-  if (e) e.currentTarget.classList.add('selected');
-
-  updateConfirmNote();
-};
-
-window.updateConfirmNote = function() {
-  if (selectedReward && selectedReward.operator) {
-    document.getElementById('confirmNote').innerHTML = 
-      '✅ Bạn chọn: <b style="color:#1b5e20">Thẻ ' + selectedReward.operator + ' ' + 
-      selectedReward.amount.toLocaleString() + 'đ</b><br>Cần: <b>' + selectedReward.points.toLocaleString() + ' điểm</b>';
-  } else if (selectedOperator && !selectedReward) {
-    document.getElementById('confirmNote').innerHTML = 
-      '✅ Nhà mạng: <b>' + selectedOperator.name + '</b><br>Vui lòng chọn mệnh giá';
-  } else {
-    document.getElementById('confirmNote').innerHTML = 'Vui lòng chọn nhà mạng + mệnh giá';
+  if (!selectedOperator) {
+    alert('⚠️ Vui lòng chọn nhà mạng!');
+    return;
   }
-};
-
-window.requestReward = async function() {
   if (!selectedReward) {
-    alert('⚠️ Vui lòng chọn nhà mạng + mệnh giá trước!');
+    alert('⚠️ Vui lòng chọn đầy đủ thông tin!');
     return;
   }
   if (currentPoints < selectedReward.points) {
@@ -943,7 +989,16 @@ window.requestReward = async function() {
     await loadHistory();
 
     alert('✅ Đã gửi yêu cầu đổi thưởng!\n\nAdmin sẽ xử lý trong 1-3 ngày.');
+    
+    // Reset lựa chọn
     selectedReward = null;
+    selectedDenom = null;
+    selectedOperator = null;
+    document.querySelectorAll('.denom-item').forEach(function(el) { el.classList.remove('selected'); });
+    document.querySelectorAll('.operator-item').forEach(function(el) { el.classList.remove('selected'); });
+    document.getElementById('denomNote').innerHTML = 'Chọn mệnh giá thẻ bạn muốn đổi';
+    document.getElementById('operatorNote').innerHTML = 'Vui lòng chọn mệnh giá trước';
+    updateConfirmNote();
 
   } catch (err) {
     console.log(err);
@@ -1025,6 +1080,9 @@ window.showRewardDetail = async function(rewardId) {
       }
       if (data.cardSerial) {
         msg += '🔢 Số seri: ' + data.cardSerial + '\n';
+      }
+      if (data.approvedAt) {
+        msg += '📅 Ngày duyệt: ' + new Date(data.approvedAt.seconds * 1000).toLocaleString('vi-VN') + '\n';
       }
 
       alert(msg);
