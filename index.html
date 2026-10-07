@@ -544,20 +544,42 @@ body {
         Vui lòng chọn mệnh giá trước
       </div>
       <div class="operator-grid">
-        <div class="operator-item" id="op-viettel" onclick="selectOperator('Viettel', 'viettel')">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Viettel_logo_2021.svg/512px-Viettel_logo_2021.svg.png" alt="Viettel" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#d32f2f;font-size:12px;\'>Viettel</span>')">
-        </div>
-        <div class="operator-item" id="op-vinaphone" onclick="selectOperator('Vinaphone', 'vinaphone')">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Vinaphone_logo.png/512px-Vinaphone_logo.png" alt="Vinaphone" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#0288d1;font-size:12px;\'>Vinaphone</span>')">
-        </div>
-        <div class="operator-item" id="op-mobifone" onclick="selectOperator('Mobifone', 'mobifone')">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/MobiFone_logo.png/512px-MobiFone_logo.png" alt="Mobifone" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#1565c0;font-size:12px;\'>Mobifone</span>')">
-        </div>
-        <div class="operator-item" id="op-garena" onclick="selectOperator('Garena', 'garena')">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Garena_logo.svg/512px-Garena_logo.svg.png" alt="Garena" class="operator-img" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-weight:800;color:#e65100;font-size:12px;\'>Garena</span>')">
-        </div>
+  <!-- Viettel -->
+  <div class="operator-item" id="op-viettel" onclick="selectOperator('Viettel', 'viettel')">
+    <svg viewBox="0 0 100 60" class="operator-img">
+      <rect width="100" height="60" rx="6" fill="#fff"/>
+      <text x="50" y="30" font-family="Poppins, sans-serif" font-size="17" font-weight="800" fill="#d32f2f" text-anchor="middle">Viettel</text>
+      <text x="50" y="46" font-family="Poppins, sans-serif" font-size="9" fill="#888" text-anchor="middle">Viettel Telecom</text>
+    </svg>
+  </div>
+
+  <!-- Vinaphone -->
+  <div class="operator-item" id="op-vinaphone" onclick="selectOperator('Vinaphone', 'vinaphone')">
+    <svg viewBox="0 0 100 60" class="operator-img">
+      <rect width="100" height="60" rx="6" fill="#fff"/>
+      <text x="50" y="30" font-family="Poppins, sans-serif" font-size="14" font-weight="800" fill="#0288d1" text-anchor="middle">Vinaphone</text>
+      <text x="50" y="46" font-family="Poppins, sans-serif" font-size="9" fill="#888" text-anchor="middle">VNPT</text>
+    </svg>
+  </div>
+
+  <!-- Mobifone -->
+  <div class="operator-item" id="op-mobifone" onclick="selectOperator('Mobifone', 'mobifone')">
+    <svg viewBox="0 0 100 60" class="operator-img">
+      <rect width="100" height="60" rx="6" fill="#fff"/>
+      <text x="50" y="30" font-family="Poppins, sans-serif" font-size="14" font-weight="800" fill="#1565c0" text-anchor="middle">Mobifone</text>
+      <text x="50" y="46" font-family="Poppins, sans-serif" font-size="9" fill="#888" text-anchor="middle">MobiFone</text>
+    </svg>
+  </div>
+
+  <!-- Garena -->
+  <div class="operator-item" id="op-garena" onclick="selectOperator('Garena', 'garena')">
+    <svg viewBox="0 0 100 60" class="operator-img">
+      <rect width="100" height="60" rx="6" fill="#fff"/>
+      <text x="50" y="30" font-family="Poppins, sans-serif" font-size="17" font-weight="800" fill="#e65100" text-anchor="middle">Garena</text>
+      <text x="50" y="46" font-family="Poppins, sans-serif" font-size="9" fill="#888" text-anchor="middle">Garena VN</text>
+    </svg>
+  </div>
       </div>
-    </div>
 
     <div class="card">
       <div class="card-title">
