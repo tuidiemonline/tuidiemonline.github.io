@@ -4,402 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Túi Điểm Online - Kiếm Tiền Cùng Khảo Sát</title>
-
 <meta name="monetag" content="7f1d9dac3c89057dac620452d34afe28">
 <script src="https://quge5.com/88/tag.min.js" data-zone="291318" async data-cfasync="false"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-
-body {
-  background: #e8f5e9;
-  min-height: 100vh;
-  color: #333;
-  padding-bottom: 80px;
-}
-
-.header {
-  background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%);
-  padding: 25px 20px 35px;
-  color: white;
-  text-align: center;
-  border-radius: 0 0 30px 30px;
-  box-shadow: 0 8px 25px rgba(27,94,32,0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 200px;
-  height: 200px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 50%;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 15px;
-  position: relative;
-  z-index: 1;
-}
-
-.logo .icon {
-  background: linear-gradient(135deg, #a5d6a7, #66bb6a);
-  color: #1b5e20;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-}
-
-.points-box {
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 15px;
-  position: relative;
-  z-index: 1;
-}
-
+body { background: #e8f5e9; min-height: 100vh; color: #333; padding-bottom: 80px; }
+.header { background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%); padding: 25px 20px 35px; color: white; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 8px 25px rgba(27,94,32,0.25); position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%; }
+.logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 22px; font-weight: 800; margin-bottom: 15px; position: relative; z-index: 1; }
+.logo .icon { background: linear-gradient(135deg, #a5d6a7, #66bb6a); color: #1b5e20; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.points-box { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 15px; position: relative; z-index: 1; }
 .points-label { font-size: 13px; opacity: 0.9; margin-bottom: 5px; }
 .points { font-size: 44px; font-weight: 800; color: #c8e6c9; line-height: 1; }
 .user-id { font-size: 11px; opacity: 0.7; margin-top: 5px; }
-
 .container { max-width: 480px; margin: -20px auto 20px; padding: 0 15px; }
-
-.tabs {
-  display: flex;
-  background: white;
-  border-radius: 18px;
-  padding: 6px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 20px rgba(27,94,32,0.1);
-  position: relative;
-  z-index: 2;
-}
-
-.tab {
-  flex: 1;
-  padding: 12px 5px;
-  text-align: center;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  color: #888;
-  font-size: 12px;
-  transition: all 0.3s;
-}
-
+.tabs { display: flex; background: white; border-radius: 18px; padding: 6px; margin-bottom: 15px; box-shadow: 0 4px 20px rgba(27,94,32,0.1); position: relative; z-index: 2; }
+.tab { flex: 1; padding: 12px 5px; text-align: center; border-radius: 14px; cursor: pointer; font-weight: 600; color: #888; font-size: 12px; transition: all 0.3s; }
 .tab i { display: block; font-size: 18px; margin-bottom: 4px; }
 .tab.active { background: linear-gradient(135deg, #1b5e20, #00897b); color: white; }
-
 .card { background: white; border-radius: 20px; padding: 22px; margin-bottom: 15px; box-shadow: 0 4px 20px rgba(27,94,32,0.08); }
-
 .card-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: #1b5e20; margin-bottom: 10px; }
-
-.card-title i {
-  background: linear-gradient(135deg, #66bb6a, #26a69a);
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
+.card-title i { background: linear-gradient(135deg, #66bb6a, #26a69a); color: white; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
 .card-desc { color: #666; font-size: 13.5px; margin-bottom: 15px; line-height: 1.6; }
-
-.btn {
-  width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 15px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  color: white;
-  background: linear-gradient(135deg, #1b5e20, #00897b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.3s;
-  font-family: 'Poppins', sans-serif;
-}
-
+.btn { width: 100%; padding: 16px; border: none; border-radius: 15px; font-size: 15px; font-weight: 700; cursor: pointer; color: white; background: linear-gradient(135deg, #1b5e20, #00897b); display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s; font-family: 'Poppins', sans-serif; }
 .btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-light { background: linear-gradient(135deg, #66bb6a, #26a69a); }
-
 #status { text-align: center; color: #1b5e20; font-size: 14px; margin-top: 12px; min-height: 22px; font-weight: 700; }
-
 .hidden { display: none; }
-
 .stat-row { display: flex; justify-content: space-around; margin-top: 15px; }
 .stat-item { text-align: center; flex: 1; }
 .stat-item .num { font-size: 24px; font-weight: 800; color: #1b5e20; line-height: 1; }
 .stat-item .lbl { font-size: 11px; color: #888; margin-top: 4px; }
-
-.vip-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #ffd700, #ff9800);
-  color: #1b5e20;
-  padding: 3px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 800;
-  margin-left: 8px;
-}
-
-.content-section {
-  background: white;
-  border-radius: 20px;
-  padding: 22px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 20px rgba(27,94,32,0.08);
-}
-
-.content-section h3 {
-  color: #1b5e20;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
+.vip-badge { display: inline-block; background: linear-gradient(135deg, #ffd700, #ff9800); color: #1b5e20; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; margin-left: 8px; }
+.content-section { background: white; border-radius: 20px; padding: 22px; margin-bottom: 15px; box-shadow: 0 4px 20px rgba(27,94,32,0.08); }
+.content-section h3 { color: #1b5e20; font-size: 16px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .content-section h3 i { color: #00897b; }
 .content-section p { color: #555; font-size: 13.5px; line-height: 1.7; margin-bottom: 10px; }
 .content-section ul { list-style: none; padding-left: 0; }
-.content-section ul li {
-  color: #555;
-  font-size: 13.5px;
-  line-height: 1.7;
-  padding: 6px 0;
-  padding-left: 25px;
-  position: relative;
-}
-.content-section ul li::before {
-  content: '✓';
-  color: #00897b;
-  font-weight: 800;
-  position: absolute;
-  left: 0;
-}
-
+.content-section ul li { color: #555; font-size: 13.5px; line-height: 1.7; padding: 6px 0; padding-left: 25px; position: relative; }
+.content-section ul li::before { content: '✓'; color: #00897b; font-weight: 800; position: absolute; left: 0; }
 .faq-item { border-bottom: 1px solid #eee; padding: 12px 0; }
 .faq-item:last-child { border-bottom: none; }
 .faq-q { font-weight: 700; color: #1b5e20; font-size: 14px; margin-bottom: 6px; }
 .faq-a { color: #666; font-size: 13px; line-height: 1.6; }
-
 .footer { text-align: center; padding: 20px; color: #888; font-size: 12px; }
 .footer a { color: #00897b; text-decoration: none; margin: 0 8px; }
-
-.survey-note {
-  text-align: center;
-  color: #888;
-  font-size: 12px;
-  margin-top: 12px;
-  padding: 10px;
-  background: #f5f5f5;
-  border-radius: 10px;
-  line-height: 1.5;
-}
-
-.survey-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.survey-step {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: #f8fdf8;
-  border-radius: 12px;
-  border-left: 3px solid #66bb6a;
-}
-
-.survey-step .num {
-  background: linear-gradient(135deg, #1b5e20, #00897b);
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.survey-step .text {
-  color: #555;
-  font-size: 13.5px;
-  line-height: 1.5;
-}
-
-/* LỊCH SỬ RÚT TIỀN */
-.history-item {
-  padding: 14px;
-  background: #f8fdf8;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  border-left: 3px solid #66bb6a;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.history-item:hover {
-  background: #f1f8e9;
-  transform: translateX(4px);
-}
-
-.history-empty {
-  text-align: center;
-  padding: 25px;
-  color: #888;
-  font-size: 13px;
-}
-
-.history-empty i {
-  font-size: 40px;
-  color: #c8e6c9;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.history-status {
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.history-status.pending {
-  background: #fff3e0;
-  color: #ff9800;
-}
-
-.history-status.completed {
-  background: #e8f5e9;
-  color: #4CAF50;
-}
-
-/* CHỌN NHÀ MẠNG */
-.operator-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.operator-item {
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 8px 4px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 80px;
-  overflow: hidden;
-}
-
-.operator-item:hover {
-  border-color: #66bb6a;
-  transform: translateY(-2px);
-}
-
-.operator-item.selected {
-  border-color: #1b5e20;
-  background: #e8f5e9;
-  box-shadow: 0 4px 12px rgba(27,94,32,0.2);
-}
-
-.operator-logo {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  display: block;
-}
-
-.operator-name {
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.1;
-  text-align: center;
-}
-
-/* CHỌN MỆNH GIÁ */
-.denom-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.denom-item {
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 15px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-weight: 700;
-  color: #555;
-  font-size: 14px;
-}
-
-.denom-item:hover {
-  border-color: #66bb6a;
-  color: #1b5e20;
-  transform: translateY(-2px);
-}
-
-.denom-item.selected {
-  border-color: #1b5e20;
-  background: linear-gradient(135deg, #1b5e20, #00897b);
-  color: white;
-  box-shadow: 0 4px 12px rgba(27,94,32,0.3);
-}
-
-.denom-item small {
-  font-size: 11px;
-  color: #888;
-  font-weight: 500;
-}
-
-.denom-item.selected small {
-  color: #c8e6c9;
-}
+.survey-note { text-align: center; color: #888; font-size: 12px; margin-top: 12px; padding: 10px; background: #f5f5f5; border-radius: 10px; line-height: 1.5; }
+.survey-steps { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.survey-step { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fdf8; border-radius: 12px; border-left: 3px solid #66bb6a; }
+.survey-step .num { background: linear-gradient(135deg, #1b5e20, #00897b); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.survey-step .text { color: #555; font-size: 13.5px; line-height: 1.5; }
+.history-item { padding: 14px; background: #f8fdf8; border-radius: 12px; margin-bottom: 10px; border-left: 3px solid #66bb6a; cursor: pointer; transition: all 0.2s; }
+.history-item:hover { background: #f1f8e9; transform: translateX(4px); }
+.history-empty { text-align: center; padding: 25px; color: #888; font-size: 13px; }
+.history-empty i { font-size: 40px; color: #c8e6c9; margin-bottom: 10px; display: block; }
+.history-status { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+.history-status.pending { background: #fff3e0; color: #ff9800; }
+.history-status.completed { background: #e8f5e9; color: #4CAF50; }
+.operator-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.operator-item { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: 80px; overflow: hidden; }
+.operator-item:hover { border-color: #66bb6a; transform: translateY(-2px); }
+.operator-item.selected { border-color: #1b5e20; background: #e8f5e9; box-shadow: 0 4px 12px rgba(27,94,32,0.2); }
+.operator-logo { width: 40px; height: 40px; object-fit: contain; display: block; }
+.operator-name { font-size: 10px; font-weight: 800; line-height: 1.1; text-align: center; }
+.denom-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.denom-item { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all 0.3s; font-weight: 700; color: #555; font-size: 14px; }
+.denom-item:hover { border-color: #66bb6a; color: #1b5e20; transform: translateY(-2px); }
+.denom-item.selected { border-color: #1b5e20; background: linear-gradient(135deg, #1b5e20, #00897b); color: white; box-shadow: 0 4px 12px rgba(27,94,32,0.3); }
+.denom-item small { font-size: 11px; color: #888; font-weight: 500; }
+.denom-item.selected small { color: #c8e6c9; }
 </style>
 </head>
 <body>
@@ -417,304 +93,111 @@ body {
 </div>
 
 <div class="container">
-
   <div class="tabs">
-    <div class="tab active" onclick="switchTab('ads', event)">
-      <i class="fas fa-tv"></i>Xem Ads
-    </div>
-    <div class="tab" onclick="switchTab('survey', event)">
-      <i class="fas fa-clipboard-list"></i>Khảo Sát
-    </div>
-    <div class="tab" onclick="switchTab('reward', event)">
-      <i class="fas fa-gift"></i>Đổi Thưởng
-    </div>
+    <div class="tab active" onclick="switchTab('ads', event)"><i class="fas fa-tv"></i>Xem Ads</div>
+    <div class="tab" onclick="switchTab('survey', event)"><i class="fas fa-clipboard-list"></i>Khảo Sát</div>
+    <div class="tab" onclick="switchTab('reward', event)"><i class="fas fa-gift"></i>Đổi Thưởng</div>
   </div>
 
   <div id="tab-ads">
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-play-circle"></i>
-        Xem quảng cáo
-      </div>
-      <div class="card-desc">
-        Mỗi lần xem quảng cáo, bạn nhận ngay <b style="color:#00897b">+5 điểm</b>.
-        Xem tối đa <b>20 lần/ngày</b>. Đợi 2 phút giữa các lần nhé!
-      </div>
-      <button class="btn" id="watchBtn" onclick="watchAd()">
-        <i class="fas fa-play"></i> Xem quảng cáo
-      </button>
+      <div class="card-title"><i class="fas fa-play-circle"></i>Xem quảng cáo</div>
+      <div class="card-desc">Mỗi lần xem quảng cáo, bạn nhận ngay <b style="color:#00897b">+5 điểm</b>. Xem tối đa <b>20 lần/ngày</b>. Đợi 2 phút giữa các lần nhé!</div>
+      <button class="btn" id="watchBtn" onclick="watchAd()"><i class="fas fa-play"></i> Xem quảng cáo</button>
       <div id="status"></div>
     </div>
-
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-chart-line"></i>
-        Thống kê của bạn
-      </div>
+      <div class="card-title"><i class="fas fa-chart-line"></i>Thống kê của bạn</div>
       <div class="stat-row">
-        <div class="stat-item">
-          <div class="num" id="totalAds">0</div>
-          <div class="lbl">Ads đã xem</div>
-        </div>
-        <div class="stat-item">
-          <div class="num" id="totalEarn">0</div>
-          <div class="lbl">Tổng điểm</div>
-        </div>
+        <div class="stat-item"><div class="num" id="totalAds">0</div><div class="lbl">Ads đã xem</div></div>
+        <div class="stat-item"><div class="num" id="totalEarn">0</div><div class="lbl">Tổng điểm</div></div>
       </div>
     </div>
   </div>
 
   <div id="tab-survey" class="hidden">
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-clipboard-check"></i>
-        Khảo sát kiếm điểm
-      </div>
-      <div class="card-desc">
-        Bấm nút bên dưới để mở danh sách khảo sát. Mỗi khảo sát nhận
-        <b style="color:#00897b">50 - 500 điểm</b>. Thời gian 5-15 phút.
-      </div>
-      <button class="btn btn-light" onclick="openSurvey()">
-        <i class="fas fa-external-link-alt"></i> Mở khảo sát
-      </button>
-      <div class="survey-note">
-        💡 Khảo sát sẽ mở trong tab mới. Làm xong quay lại web để nhận điểm.
-      </div>
+      <div class="card-title"><i class="fas fa-clipboard-check"></i>Khảo sát kiếm điểm</div>
+      <div class="card-desc">Bấm nút bên dưới để mở danh sách khảo sát. Mỗi khảo sát nhận <b style="color:#00897b">50 - 500 điểm</b>. Thời gian 5-15 phút.</div>
+      <button class="btn btn-light" onclick="openSurvey()"><i class="fas fa-external-link-alt"></i> Mở khảo sát</button>
+      <div class="survey-note">💡 Khảo sát sẽ mở trong tab mới. Làm xong quay lại web để nhận điểm.</div>
     </div>
-
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-info-circle"></i>
-        Hướng dẫn
-      </div>
+      <div class="card-title"><i class="fas fa-info-circle"></i>Hướng dẫn</div>
       <div class="survey-steps">
-        <div class="survey-step">
-          <div class="num">1</div>
-          <div class="text">Bấm nút <b>"Mở khảo sát"</b> phía trên</div>
-        </div>
-        <div class="survey-step">
-          <div class="num">2</div>
-          <div class="text">Chọn khảo sát phù hợp (xem điểm thưởng + thời gian)</div>
-        </div>
-        <div class="survey-step">
-          <div class="num">3</div>
-          <div class="text">Làm xong → quay lại web → điểm tự cộng</div>
-        </div>
-        <div class="survey-step">
-          <div class="num">4</div>
-          <div class="text">Đổi điểm thành thẻ cào ở tab <b>Đổi Thưởng</b></div>
-        </div>
+        <div class="survey-step"><div class="num">1</div><div class="text">Bấm nút <b>"Mở khảo sát"</b> phía trên</div></div>
+        <div class="survey-step"><div class="num">2</div><div class="text">Chọn khảo sát phù hợp</div></div>
+        <div class="survey-step"><div class="num">3</div><div class="text">Làm xong → quay lại web → điểm tự cộng</div></div>
+        <div class="survey-step"><div class="num">4</div><div class="text">Đổi điểm thành thẻ cào ở tab <b>Đổi Thưởng</b></div></div>
       </div>
     </div>
   </div>
 
   <div id="tab-reward" class="hidden">
-    
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-tags"></i>
-        Chọn mệnh giá
-      </div>
-      <div class="card-desc" id="denomNote">
-        Chọn mệnh giá thẻ bạn muốn đổi
-      </div>
+      <div class="card-title"><i class="fas fa-tags"></i>Chọn mệnh giá</div>
+      <div class="card-desc" id="denomNote">Chọn mệnh giá thẻ bạn muốn đổi</div>
       <div class="denom-grid" id="denomGrid"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-sim-card"></i>
-        Chọn nhà mạng
-      </div>
-      <div class="card-desc" id="operatorNote">
-        Vui lòng chọn mệnh giá trước
-      </div>
+      <div class="card-title"><i class="fas fa-sim-card"></i>Chọn nhà mạng</div>
+      <div class="card-desc" id="operatorNote">Vui lòng chọn mệnh giá trước</div>
       <div class="operator-grid">
-        
-        <!-- Viettel -->
         <div class="operator-item" id="op-viettel" onclick="selectOperator('Viettel', 'viettel')">
-          <img class="operator-logo" 
-               src="https://cdn.jsdelivr.net/gh/finntrann/viettel-logo@main/viettel.png"
-               data-fallback="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Viettel_logo_2021.svg/240px-Viettel_logo_2021.svg.png"
-               onerror="handleLogoError(this, 'Viettel', '#d32f2f', 'V')"
-               alt="Viettel">
+          <img class="operator-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Viettel_logo_2021.svg/240px-Viettel_logo_2021.svg.png" onerror="this.src='https://via.placeholder.com/40/d32f2f/ffffff?text=V'" alt="Viettel">
           <div class="operator-name" style="color:#d32f2f;">Viettel</div>
         </div>
-
-        <!-- Vinaphone -->
         <div class="operator-item" id="op-vinaphone" onclick="selectOperator('Vinaphone', 'vinaphone')">
-          <img class="operator-logo" 
-               src="https://cdn.jsdelivr.net/gh/finntrann/viettel-logo@main/vinaphone.png"
-               data-fallback="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Vinaphone_logo.png/240px-Vinaphone_logo.png"
-               onerror="handleLogoError(this, 'Vinaphone', '#0288d1', 'V')"
-               alt="Vinaphone">
+          <img class="operator-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Vinaphone_logo.png/240px-Vinaphone_logo.png" onerror="this.src='https://via.placeholder.com/40/0288d1/ffffff?text=V'" alt="Vinaphone">
           <div class="operator-name" style="color:#0288d1;">Vinaphone</div>
         </div>
-
-        <!-- Mobifone -->
         <div class="operator-item" id="op-mobifone" onclick="selectOperator('Mobifone', 'mobifone')">
-          <img class="operator-logo" 
-               src="https://cdn.jsdelivr.net/gh/finntrann/viettel-logo@main/mobifone.png"
-               data-fallback="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/MobiFone_logo.png/240px-MobiFone_logo.png"
-               onerror="handleLogoError(this, 'Mobifone', '#1565c0', 'M')"
-               alt="Mobifone">
+          <img class="operator-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/MobiFone_logo.png/240px-MobiFone_logo.png" onerror="this.src='https://via.placeholder.com/40/1565c0/ffffff?text=M'" alt="Mobifone">
           <div class="operator-name" style="color:#1565c0;">Mobifone</div>
         </div>
-
-        <!-- Garena -->
         <div class="operator-item" id="op-garena" onclick="selectOperator('Garena', 'garena')">
-          <img class="operator-logo" 
-               src="https://cdn.jsdelivr.net/gh/finntrann/viettel-logo@main/garena.png"
-               data-fallback="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Garena_logo.svg/240px-Garena_logo.svg.png"
-               onerror="handleLogoError(this, 'Garena', '#e65100', 'G')"
-               alt="Garena">
+          <img class="operator-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Garena_logo.svg/240px-Garena_logo.svg.png" onerror="this.src='https://via.placeholder.com/40/e65100/ffffff?text=G'" alt="Garena">
           <div class="operator-name" style="color:#e65100;">Garena</div>
         </div>
-
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-check-circle"></i>
-        Xác nhận đổi thưởng
-      </div>
-      <div class="card-desc" id="confirmNote">
-        Vui lòng chọn mệnh giá + nhà mạng
-      </div>
-      <button class="btn btn-light" onclick="requestReward()">
-        <i class="fas fa-money-bill-wave"></i> Yêu cầu đổi thưởng
-      </button>
+      <div class="card-title"><i class="fas fa-check-circle"></i>Xác nhận đổi thưởng</div>
+      <div class="card-desc" id="confirmNote">Vui lòng chọn mệnh giá + nhà mạng</div>
+      <button class="btn btn-light" onclick="requestReward()"><i class="fas fa-money-bill-wave"></i> Yêu cầu đổi thưởng</button>
     </div>
 
     <div class="card">
-      <div class="card-title">
-        <i class="fas fa-history"></i>
-        Lịch sử rút tiền
-      </div>
-      <div id="historyList">
-        <div class="history-empty">
-          <i class="fas fa-inbox"></i>
-          Chưa có giao dịch nào
-        </div>
-      </div>
+      <div class="card-title"><i class="fas fa-history"></i>Lịch sử rút tiền</div>
+      <div id="historyList"><div class="history-empty"><i class="fas fa-inbox"></i>Chưa có giao dịch nào</div></div>
     </div>
 
     <div class="card" style="background: linear-gradient(135deg, #fff8e1, #ffecb3);">
-      <div class="card-title">
-        <i class="fas fa-crown" style="background: linear-gradient(135deg, #ffd700, #ff9800);"></i>
-        Tài khoản VIP <span class="vip-badge">SẮP RA MẮT</span>
-      </div>
-      <div class="card-desc">
-        Nâng cấp VIP để nhận:<br>
-        ✅ X2 điểm khi xem ads<br>
-        ✅ Ưu tiên khảo sát lương cao<br>
-        ✅ Rút thưởng nhanh hơn
-      </div>
+      <div class="card-title"><i class="fas fa-crown" style="background: linear-gradient(135deg, #ffd700, #ff9800);"></i>Tài khoản VIP <span class="vip-badge">SẮP RA MẮT</span></div>
+      <div class="card-desc">Nâng cấp VIP để nhận:<br>✅ X2 điểm khi xem ads<br>✅ Ưu tiên khảo sát lương cao<br>✅ Rút thưởng nhanh hơn</div>
     </div>
   </div>
-
 </div>
 
 <div class="container">
-
   <div class="content-section">
-    <h3><i class="fas fa-info-circle"></i> Giới thiệu về Túi Điểm Online</h3>
-    <p>
-      <b>Túi Điểm Online</b> là nền tảng kiếm điểm thưởng trực tuyến dành cho người dùng Việt Nam.
-      Chúng tôi hợp tác với các đối tác uy tín trong lĩnh vực quảng cáo và khảo sát thị trường
-      như <b>CPX Research</b>, <b>Monetag</b> để mang đến cho bạn cơ hội kiếm điểm dễ dàng.
-    </p>
-    <p>
-      Với Túi Điểm Online, bạn có thể kiếm điểm bằng cách xem quảng cáo ngắn hoặc tham gia
-      các cuộc khảo sát thị trường. Điểm kiếm được có thể đổi thành <b>thẻ cào điện thoại</b>
-      với nhiều mệnh giá khác nhau.
-    </p>
+    <h3><i class="fas fa-info-circle"></i>Giới thiệu về Túi Điểm Online</h3>
+    <p><b>Túi Điểm Online</b> là nền tảng kiếm điểm thưởng trực tuyến dành cho người dùng Việt Nam.</p>
   </div>
-
   <div class="content-section">
-    <h3><i class="fas fa-bullseye"></i> Hướng dẫn kiếm điểm</h3>
+    <h3><i class="fas fa-bullseye"></i>Hướng dẫn kiếm điểm</h3>
     <ul>
       <li><b>Xem quảng cáo:</b> Mỗi quảng cáo +5 điểm, tối đa 20 lần/ngày</li>
-      <li><b>Làm khảo sát:</b> Mỗi khảo sát +50 đến +500 điểm tùy độ dài</li>
-      <li><b>Mời bạn bè:</b> Nhận thêm điểm khi bạn bè đăng ký (sắp ra mắt)</li>
-      <li><b>Đổi thưởng:</b> 1.000 điểm = 10.000đ thẻ cào điện thoại</li>
+      <li><b>Làm khảo sát:</b> Mỗi khảo sát +50 đến +500 điểm</li>
+      <li><b>Đổi thưởng:</b> 1.000 điểm = 10.000đ thẻ cào</li>
     </ul>
   </div>
-
-  <div class="content-section">
-    <h3><i class="fas fa-question-circle"></i> Câu hỏi thường gặp (FAQ)</h3>
-
-    <div class="faq-item">
-      <div class="faq-q">❓ Tôi có thể kiếm bao nhiêu điểm mỗi ngày?</div>
-      <div class="faq-a">Bạn có thể kiếm tối đa 100 điểm từ xem quảng cáo (20 lần × 5 điểm) và 500-2000 điểm từ khảo sát mỗi ngày.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">❓ Bao lâu tôi nhận được thẻ cào?</div>
-      <div class="faq-a">Sau khi yêu cầu đổi thưởng, admin sẽ xử lý trong vòng 1-3 ngày làm việc và gửi thẻ cào qua email hoặc tin nhắn.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">❓ Điểm của tôi có mất khi đổi thiết bị không?</div>
-      <div class="faq-a">Không. Điểm được lưu trên hệ thống Firebase, bạn có thể đăng nhập lại trên thiết bị khác và vẫn giữ nguyên điểm.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">❓ Tại sao tôi không xem được quảng cáo?</div>
-      <div class="faq-a">Có thể do bạn đã đạt giới hạn 20 lần/ngày, hoặc chưa đợi đủ 2 phút giữa các lần xem. Hãy thử lại sau.</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">❓ Làm sao để kiếm điểm nhanh hơn?</div>
-      <div class="faq-a">Tập trung vào khảo sát — mỗi khảo sát có thể mang lại 50-500 điểm, cao hơn nhiều so với xem quảng cáo.</div>
-    </div>
-  </div>
-
-  <div class="content-section">
-    <h3><i class="fas fa-file-contract"></i> Điều khoản sử dụng</h3>
-    <ul>
-      <li>Không sử dụng tool auto, bot để kiếm điểm</li>
-      <li>Không tạo nhiều tài khoản để trục lợi</li>
-      <li>Không spam, quấy rối người dùng khác</li>
-      <li>Không gian lận trong quá trình làm khảo sát</li>
-      <li>Chúng tôi có quyền khóa tài khoản vi phạm mà không cần báo trước</li>
-    </ul>
-  </div>
-
   <div class="footer">
     <p>© 2026 Túi Điểm Online. Bảo lưu mọi quyền.</p>
-    <p style="margin-top: 8px;">
-      <a href="#gioi-thieu">Giới thiệu</a> |
-      <a href="#dieu-khoan">Điều khoản</a> |
-      <a href="#lien-he">Liên hệ</a>
-    </p>
-    <p style="margin-top: 8px; font-size: 11px;">
-      Email: contact@tuidiemonline.com
-    </p>
   </div>
-
 </div>
-
-<script>
-// ========== HÀM XỬ LÝ LỖI ẢNH (CHẠY TRƯỚC KHI FIREBASE LOAD) ==========
-window.handleLogoError = function(img, name, color, letter) {
-  // Bước 1: Thử ảnh dự phòng (Wikipedia)
-  if (img.src !== img.dataset.fallback) {
-    img.src = img.dataset.fallback;
-    return;
-  }
-  // Bước 2: Nếu cả ảnh dự phòng cũng lỗi → vẽ SVG trực tiếp
-  const svg = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
-      '<circle cx="50" cy="50" r="45" fill="' + color + '"/>' +
-            '<text x="50" y="65" font-family="Arial" font-size="50" font-weight="bold" fill="white" text-anchor="middle">' + letter + '</text>' +
-    '</svg>'
-  );
-  img.src = svg;
-  img.onerror = null;
-};
-</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
@@ -745,19 +228,16 @@ const AD_DURATION = 30000;
 const MAX_ADS_PER_DAY = 20;
 
 const ALL_DENOMS = [10000, 20000, 50000, 100000, 200000, 500000];
+const POINTS_MAP = { 10000: 1000, 20000: 2000, 50000: 5000, 100000: 10000, 200000: 20000, 500000: 50000 };
+const OPERATOR_EXCLUDE = { 'Garena': [10000] };
 
-const POINTS_MAP = {
-  10000: 1000,
-  20000: 2000,
-  50000: 5000,
-  100000: 10000,
-  200000: 20000,
-  500000: 50000
-};
-
-const OPERATOR_EXCLUDE = {
-  'Garena': [10000]
-};
+// ===== HÀM ĐỌC FIELD LINH HOẠT =====
+function getField(obj, ...keys) {
+  for (const k of keys) {
+    if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
+  }
+  return undefined;
+}
 
 signInAnonymously(auth).catch(function(err) { console.log("Lỗi:", err); });
 
@@ -783,17 +263,16 @@ async function loadPoints() {
   const snap = await getDoc(doc(db, 'users', userId));
   if (snap.exists()) {
     const data = snap.data();
-    currentPoints = data.points || 0;
+    currentPoints = getField(data, 'points', 'điểm', 'Điểm') || 0;
     document.getElementById('points').innerText = currentPoints;
-    document.getElementById('totalAds').innerText = data.totalAds || 0;
-    document.getElementById('totalEarn').innerText = data.totalEarned || 0;
+    document.getElementById('totalAds').innerText = getField(data, 'totalAds', 'tổng số quảng cáo', 'Tổng số quảng cáo') || 0;
+    document.getElementById('totalEarn').innerText = getField(data, 'totalEarned', 'tổng số tiền kiếm được') || 0;
   }
 }
 
 function renderDenoms() {
   const grid = document.getElementById('denomGrid');
   grid.innerHTML = '';
-
   ALL_DENOMS.forEach(function(amount) {
     const div = document.createElement('div');
     div.className = 'denom-item';
@@ -808,73 +287,41 @@ window.selectDenom = function(amount, e) {
   selectedDenom = amount;
   selectedOperator = null;
   selectedReward = null;
-
-  document.querySelectorAll('.denom-item').forEach(function(el) {
-    el.classList.remove('selected');
-  });
+  document.querySelectorAll('.denom-item').forEach(function(el) { el.classList.remove('selected'); });
   if (e) e.currentTarget.classList.add('selected');
-
-  document.querySelectorAll('.operator-item').forEach(function(el) {
-    el.classList.remove('selected');
-  });
-
-  document.getElementById('denomNote').innerHTML = 
-    '✅ Đã chọn mệnh giá: <b style="color:#1b5e20">' + amount.toLocaleString() + 'đ</b> (' + POINTS_MAP[amount].toLocaleString() + ' điểm)';
-
+  document.querySelectorAll('.operator-item').forEach(function(el) { el.classList.remove('selected'); });
+  document.getElementById('denomNote').innerHTML = '✅ Đã chọn mệnh giá: <b style="color:#1b5e20">' + amount.toLocaleString() + 'đ</b> (' + POINTS_MAP[amount].toLocaleString() + ' điểm)';
   let excludedOperators = [];
   for (const [op, excludes] of Object.entries(OPERATOR_EXCLUDE)) {
     if (excludes.includes(amount)) excludedOperators.push(op);
   }
-
   let note = 'Vui lòng chọn nhà mạng';
-  if (excludedOperators.length > 0) {
-    note += ' (Lưu ý: ' + excludedOperators.join(', ') + ' không hỗ trợ mệnh giá này)';
-  }
+  if (excludedOperators.length > 0) note += ' (Lưu ý: ' + excludedOperators.join(', ') + ' không hỗ trợ mệnh giá này)';
   document.getElementById('operatorNote').innerHTML = note;
-
   updateConfirmNote();
 };
 
 window.selectOperator = function(operatorName, operatorClass) {
-  if (!selectedDenom) {
-    alert('⚠️ Vui lòng chọn mệnh giá trước!');
-    return;
-  }
-
+  if (!selectedDenom) { alert('⚠️ Vui lòng chọn mệnh giá trước!'); return; }
   const excludes = OPERATOR_EXCLUDE[operatorName] || [];
   if (excludes.includes(selectedDenom)) {
-    alert('❌ ' + operatorName + ' không hỗ trợ mệnh giá ' + selectedDenom.toLocaleString() + 'đ!\nVui lòng chọn mệnh giá khác hoặc nhà mạng khác.');
+    alert('❌ ' + operatorName + ' không hỗ trợ mệnh giá ' + selectedDenom.toLocaleString() + 'đ!');
     return;
   }
-
   selectedOperator = { name: operatorName, class: operatorClass };
-
-  document.querySelectorAll('.operator-item').forEach(function(el) {
-    el.classList.remove('selected');
-  });
+  document.querySelectorAll('.operator-item').forEach(function(el) { el.classList.remove('selected'); });
   document.getElementById('op-' + operatorClass).classList.add('selected');
-
-  document.getElementById('operatorNote').innerHTML = 
-    '✅ Đã chọn nhà mạng: <b style="color:#1b5e20">' + operatorName + '</b>';
-
+  document.getElementById('operatorNote').innerHTML = '✅ Đã chọn nhà mạng: <b style="color:#1b5e20">' + operatorName + '</b>';
   updateConfirmNote();
 };
 
 window.updateConfirmNote = function() {
   if (selectedDenom && selectedOperator) {
-    selectedReward = {
-      amount: selectedDenom,
-      points: POINTS_MAP[selectedDenom],
-      operator: selectedOperator.name
-    };
-
-    document.getElementById('confirmNote').innerHTML = 
-      '✅ Bạn chọn: <b style="color:#1b5e20">Thẻ ' + selectedReward.operator + ' ' + 
-      selectedReward.amount.toLocaleString() + 'đ</b><br>Cần: <b>' + selectedReward.points.toLocaleString() + ' điểm</b>';
+    selectedReward = { amount: selectedDenom, points: POINTS_MAP[selectedDenom], operator: selectedOperator.name };
+        document.getElementById('confirmNote').innerHTML = '✅ Bạn chọn: <b style="color:#1b5e20">Thẻ ' + selectedReward.operator + ' ' + selectedReward.amount.toLocaleString() + 'đ</b><br>Cần: <b>' + selectedReward.points.toLocaleString() + ' điểm</b>';
   } else if (selectedDenom && !selectedOperator) {
     selectedReward = null;
-    document.getElementById('confirmNote').innerHTML = 
-      '✅ Mệnh giá: <b>' + selectedDenom.toLocaleString() + 'đ</b><br>Vui lòng chọn nhà mạng';
+    document.getElementById('confirmNote').innerHTML = '✅ Mệnh giá: <b>' + selectedDenom.toLocaleString() + 'đ</b><br>Vui lòng chọn nhà mạng';
   } else {
     selectedReward = null;
     document.getElementById('confirmNote').innerHTML = 'Vui lòng chọn mệnh giá + nhà mạng';
@@ -886,7 +333,6 @@ window.watchAd = async function() {
   const status = document.getElementById('status');
   const now = Date.now();
   const elapsed = Math.floor((now - lastAdTime) / 1000);
-
   if (lastAdTime > 0 && elapsed < COOLDOWN) {
     const remaining = COOLDOWN - elapsed;
     const mins = Math.floor(remaining / 60);
@@ -894,36 +340,19 @@ window.watchAd = async function() {
     status.innerText = '❌ Bạn phải đợi ' + mins + ' phút ' + secs + ' giây nữa!';
     return;
   }
-
   const today = new Date().toDateString();
   const lastDate = localStorage.getItem('lastAdDate');
   let todayAds = parseInt(localStorage.getItem('todayAds') || '0');
-
-  if (lastDate !== today) {
-    todayAds = 0;
-    localStorage.setItem('lastAdDate', today);
-    localStorage.setItem('todayAds', '0');
-  }
-
-  if (todayAds >= MAX_ADS_PER_DAY) {
-    status.innerText = '⚠️ Hôm nay đã đủ ' + MAX_ADS_PER_DAY + ' ads. Quay lại ngày mai!';
-    return;
-  }
-
+  if (lastDate !== today) { todayAds = 0; localStorage.setItem('lastAdDate', today); localStorage.setItem('todayAds', '0'); }
+  if (todayAds >= MAX_ADS_PER_DAY) { status.innerText = '⚠️ Hôm nay đã đủ ' + MAX_ADS_PER_DAY + ' ads. Quay lại ngày mai!'; return; }
   btn.disabled = true;
   let timeLeft = AD_DURATION / 1000;
   status.innerText = '⏳ Vui lòng đợi... ' + timeLeft + ' giây';
-
   const countdown = setInterval(function() {
     timeLeft--;
-    if (timeLeft <= 0) {
-      clearInterval(countdown);
-      status.innerText = '⏳ Đang xử lý...';
-    } else {
-      status.innerText = '⏳ Vui lòng đợi... ' + timeLeft + ' giây';
-    }
+    if (timeLeft <= 0) { clearInterval(countdown); status.innerText = '⏳ Đang xử lý...'; }
+    else { status.innerText = '⏳ Vui lòng đợi... ' + timeLeft + ' giây'; }
   }, 1000);
-
   setTimeout(async function() {
     clearInterval(countdown);
     status.innerText = '⏳ Đang xử lý...';
@@ -957,46 +386,23 @@ window.switchTab = function(tab, e) {
   document.querySelectorAll('[id^="tab-"]').forEach(function(t) { t.classList.add('hidden'); });
   e.currentTarget.classList.add('active');
   document.getElementById('tab-' + tab).classList.remove('hidden');
-
-  if (tab === 'reward' && userId) {
-    loadHistory();
-  }
+  if (tab === 'reward' && userId) loadHistory();
 };
 
 window.openSurvey = function() {
-  if (!userId) {
-    alert('⏳ Vui lòng đợi vài giây để hệ thống kết nối!');
-    return;
-  }
-
-  const url = "https://offers.cpx-research.com/index.php" +
-    "?app_id=36947" +
-    "&ext_user_id=" + userId +
-    "&username=" +
-    "&email=" +
-    "&subid_1=&subid_2";
-
+  if (!userId) { alert('⏳ Vui lòng đợi vài giây để hệ thống kết nối!'); return; }
+  const url = "https://offers.cpx-research.com/index.php?app_id=36947&ext_user_id=" + userId + "&username=&email=&subid_1=&subid_2";
   window.open(url, '_blank');
 };
 
 window.requestReward = async function() {
-  if (!selectedDenom) {
-    alert('⚠️ Vui lòng chọn mệnh giá trước!');
-    return;
-  }
-  if (!selectedOperator) {
-    alert('⚠️ Vui lòng chọn nhà mạng!');
-    return;
-  }
-  if (!selectedReward) {
-    alert('⚠️ Vui lòng chọn đầy đủ thông tin!');
-    return;
-  }
+  if (!selectedDenom) { alert('⚠️ Vui lòng chọn mệnh giá trước!'); return; }
+  if (!selectedOperator) { alert('⚠️ Vui lòng chọn nhà mạng!'); return; }
+  if (!selectedReward) { alert('⚠️ Vui lòng chọn đầy đủ thông tin!'); return; }
   if (currentPoints < selectedReward.points) {
     alert('❌ Bạn cần ' + selectedReward.points.toLocaleString() + ' điểm!\nHiện có: ' + currentPoints.toLocaleString() + ' điểm');
     return;
   }
-
   try {
     const rewardRef = doc(collection(db, 'rewards'));
     await setDoc(rewardRef, {
@@ -1007,15 +413,11 @@ window.requestReward = async function() {
       status: 'pending',
       createdAt: serverTimestamp()
     });
-
     const userRef = doc(db, 'users', userId);
     await updateDoc(userRef, { points: increment(-selectedReward.points) });
-
     await loadPoints();
     await loadHistory();
-
     alert('✅ Đã gửi yêu cầu đổi thưởng!\n\nAdmin sẽ xử lý trong 1-3 ngày.');
-    
     selectedReward = null;
     selectedDenom = null;
     selectedOperator = null;
@@ -1024,7 +426,6 @@ window.requestReward = async function() {
     document.getElementById('denomNote').innerHTML = 'Chọn mệnh giá thẻ bạn muốn đổi';
     document.getElementById('operatorNote').innerHTML = 'Vui lòng chọn mệnh giá trước';
     updateConfirmNote();
-
   } catch (err) {
     console.log(err);
     alert('❌ Có lỗi, vui lòng thử lại!');
@@ -1034,38 +435,33 @@ window.requestReward = async function() {
 window.loadHistory = async function() {
   const list = document.getElementById('historyList');
   if (!list) return;
-
   try {
     const q = query(collection(db, 'rewards'), where('userId', '==', userId));
     const snapshot = await getDocs(q);
-
     if (snapshot.empty) {
       list.innerHTML = '<div class="history-empty"><i class="fas fa-inbox"></i>Chưa có giao dịch nào</div>';
       return;
     }
-
     let items = [];
-    snapshot.forEach(function(d) {
-      items.push({ id: d.id, data: d.data() });
-    });
-
+    snapshot.forEach(function(d) { items.push({ id: d.id, data: d.data() }); });
     items.sort(function(a, b) {
       const ta = a.data.createdAt ? a.data.createdAt.seconds : 0;
       const tb = b.data.createdAt ? b.data.createdAt.seconds : 0;
       return tb - ta;
     });
-
     let html = '';
     items.forEach(function(item) {
       const d = item.data;
-      const statusText = d.status === 'completed' ? 'Thành công' : 'Đang xử lý';
-      const statusClass = d.status === 'completed' ? 'completed' : 'pending';
+      const st = getField(d, 'status', 'trạng thái', 'Trạng thái') || 'pending';
+      const statusText = st === 'completed' ? 'Thành công' : 'Đang xử lý';
+      const statusClass = st === 'completed' ? 'completed' : 'pending';
       const dateStr = d.createdAt ? new Date(d.createdAt.seconds * 1000).toLocaleString('vi-VN') : '';
-
+      const amount = getField(d, 'amount', 'số lượng', 'Số lượng') || 0;
+      const operator = getField(d, 'operator', 'người vận hành', 'Người vận hành') || '';
       html += '<div class="history-item" onclick="showRewardDetail(\'' + item.id + '\')">' +
         '<div style="display:flex;justify-content:space-between;align-items:center;">' +
           '<div>' +
-            '<div style="font-weight:700;color:#1b5e20;font-size:14px;">💳 Thẻ ' + (d.operator || '') + ' ' + d.amount.toLocaleString() + 'đ</div>' +
+            '<div style="font-weight:700;color:#1b5e20;font-size:14px;">💳 Thẻ ' + operator + ' ' + amount.toLocaleString() + 'đ</div>' +
             '<div style="font-size:11px;color:#888;margin-top:4px;">' + dateStr + '</div>' +
           '</div>' +
           '<div style="display:flex;align-items:center;gap:8px;">' +
@@ -1075,9 +471,7 @@ window.loadHistory = async function() {
         '</div>' +
       '</div>';
     });
-
     list.innerHTML = html;
-
   } catch (err) {
     console.log(err);
     list.innerHTML = '<div class="history-empty"><i class="fas fa-exclamation-triangle"></i>Không tải được lịch sử</div>';
@@ -1088,32 +482,37 @@ window.showRewardDetail = async function(rewardId) {
   try {
     const ref = doc(db, 'rewards', rewardId);
     const snap = await getDoc(ref);
-
-    if (!snap.exists()) {
-      alert('❌ Không tìm thấy giao dịch!');
-      return;
-    }
-
+    if (!snap.exists()) { alert('❌ Không tìm thấy giao dịch!'); return; }
     const data = snap.data();
-
-    if (data.status === 'completed') {
+    const st = getField(data, 'status', 'trạng thái', 'Trạng thái') || 'pending';
+    const amount = getField(data, 'amount', 'số lượng', 'Số lượng') || 0;
+    const operator = getField(data, 'operator', 'người vận hành', 'Người vận hành') || '';
+    
+    // Đọc mã thẻ — thử TẤT CẢ các tên có thể
+    const cardCode = getField(data, 
+      'cardCode', 'Mã thẻ', 'mã thẻ', 'Mã', 'mã', 'maThe', 'ma', 'code', 'Code', 'ma_the', 'mathe'
+    );
+    // Đọc số seri — thử TẤT CẢ các tên có thể
+    const cardSerial = getField(data, 
+      'cardSerial', 'Số seri', 'số seri', 'Seri', 'seri', 'soSeri', 'so_seri', 'serial', 'Serial', 'soseri'
+    );
+    
+    if (st === 'completed') {
       let msg = '✅ ĐÃ XỬ LÝ THÀNH CÔNG!\n\n';
-      msg += '💳 Loại thẻ: ' + (data.operator || 'Thẻ cào') + ' ' + data.amount.toLocaleString() + 'đ\n\n';
-
-      if (data.cardCode) msg += '📝 Mã thẻ: ' + data.cardCode + '\n';
-      if (data.cardSerial) msg += '🔢 Số seri: ' + data.cardSerial + '\n';
+      msg += '💳 Loại thẻ: ' + operator + ' ' + amount.toLocaleString() + 'đ\n\n';
+      if (cardCode) msg += '📝 Mã thẻ: ' + cardCode + '\n';
+      if (cardSerial) msg += '🔢 Số seri: ' + cardSerial + '\n';
       if (data.approvedAt) msg += '📅 Ngày duyệt: ' + new Date(data.approvedAt.seconds * 1000).toLocaleString('vi-VN') + '\n';
-
+      if (!cardCode && !cardSerial) msg += '\n⚠️ Admin chưa nhập mã thẻ. Vui lòng chờ!';
       alert(msg);
     } else {
       let msg = '⏳ ĐANG XỬ LÝ\n\n';
-      msg += '💳 Thẻ: ' + (data.operator || '') + ' ' + data.amount.toLocaleString() + 'đ\n';
+      msg += '💳 Thẻ: ' + operator + ' ' + amount.toLocaleString() + 'đ\n';
       msg += '📅 Ngày yêu cầu: ' + (data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('vi-VN') : '') + '\n\n';
       msg += 'Admin sẽ gửi thẻ trong 1-3 ngày làm việc.\n';
       msg += 'Vui lòng quay lại kiểm tra sau!';
       alert(msg);
     }
-
   } catch (err) {
     console.log(err);
     alert('❌ Lỗi tải chi tiết!');
