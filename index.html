@@ -1154,7 +1154,8 @@ window.showRewardDetail = async function(rewardId) {
     const cardCode = getField(data, 'cardCode', 'Mã thẻ', 'mã thẻ', 'Mã', 'mã', 'maThe', 'ma', 'code', 'Code');
     const cardSerial = getField(data, 'cardSerial', 'Số seri', 'số seri', 'Seri', 'seri', 'soSeri', 'serial', 'Serial');
     const createdAt = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('vi-VN') : '';
-    const approvedAt = data.approvedAt ? new Date(data.approvedAt.seconds * 1000).toLocaleString('vi-VN') : '';
+    const approvedAtRaw = getField(data, 'approvedAt', 'Ngày nhận thẻ', 'ngày nhận thẻ', 'Ngày nhận', 'ngày nhận', 'Ngay nhan the', 'ngay nhan the');
+const approvedAt = approvedAtRaw ? new Date(approvedAtRaw.seconds * 1000).toLocaleString('vi-VN') : '';
     
     const isCompleted = st === 'completed';
     
