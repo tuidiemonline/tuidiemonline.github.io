@@ -1,0 +1,2907 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Túi Điểm Online - Kiếm Tiền Cùng Khảo Sát</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background: #e8f5e9; min-height: 100vh; color: #333; padding-bottom: 100px; }
+
+#loadingScreen { position: fixed; inset: 0; background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%); z-index: 9999999; display: flex; align-items: center; justify-content: center; flex-direction: column; color: white; transition: opacity .4s; }
+#loadingScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+#loadingScreen .ld-logo { width: 90px; height: 90px; background: linear-gradient(135deg, #66bb6a, #26a69a); border-radius: 26px; display: flex; align-items: center; justify-content: center; font-size: 45px; margin-bottom: 22px; animation: ldPulse 1.2s ease-in-out infinite; }
+@keyframes ldPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
+#loadingScreen .ld-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+#loadingScreen .ld-sub { font-size: 13px; opacity: .85; margin-bottom: 30px; }
+#loadingScreen .ld-progress-wrap { width: 240px; height: 6px; background: rgba(255,255,255,.15); border-radius: 10px; overflow: hidden; }
+#loadingScreen .ld-progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #a5d6a7, #66bb6a, #c8e6c9); background-size: 200% 100%; border-radius: 10px; transition: width .1s; animation: ldShine 1.2s linear infinite; }
+@keyframes ldShine { 0%{background-position:0% 50%;} 100%{background-position:200% 50%;} }
+#loadingScreen .ld-percent { font-size: 13px; font-weight: 700; color: #c8e6c9; margin-top: 12px; letter-spacing: 1.5px; }
+
+#landingScreen { position: fixed; inset: 0; background: linear-gradient(135deg, #1b5e20 0%, #00897b 50%, #004d40 100%); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; transition: opacity .4s; }
+.landing-box { max-width: 440px; width: 100%; text-align: center; color: white; }
+.landing-logo { width: 100px; height: 100px; background: linear-gradient(135deg, #66bb6a, #26a69a); border-radius: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 50px; box-shadow: 0 15px 40px rgba(0,0,0,.3), 0 0 0 8px rgba(255,255,255,.1); animation: landingPulse 2s ease infinite; }
+@keyframes landingPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+.landing-title { font-size: 30px; font-weight: 800; margin-bottom: 8px; text-shadow: 0 4px 15px rgba(0,0,0,.3); }
+.landing-sub { font-size: 15px; opacity: .9; margin-bottom: 30px; line-height: 1.6; }
+.landing-features { background: rgba(255,255,255,.12); border-radius: 20px; padding: 20px; margin-bottom: 24px; text-align: left; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.15); }
+.landing-feature { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.1); }
+.landing-feature:last-child { border-bottom: none; }
+.landing-feature .lf-icon { width: 42px; height: 42px; border-radius: 12px; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.landing-feature .lf-title { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.landing-feature .lf-desc { font-size: 12px; opacity: .85; line-height: 1.4; }
+.landing-btn { width: 100%; padding: 18px; border: none; border-radius: 16px; font-size: 16px; font-weight: 800; cursor: pointer; color: #1b5e20; background: linear-gradient(135deg, #c8e6c9, #a5d6a7); display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Poppins',sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,.3); transition: all .3s; margin-bottom: 12px; }
+.landing-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,.4); }
+.landing-note { font-size: 11.5px; opacity: .7; line-height: 1.5; }
+
+#loginScreen { position: fixed; inset: 0; background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%); z-index: 999998; display: none; align-items: center; justify-content: center; padding: 20px; }
+.login-box { background: white; border-radius: 28px; padding: 40px 28px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,.3); }
+.login-logo { width: 80px; height: 80px; background: linear-gradient(135deg, #66bb6a, #26a69a); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px; color: white; }
+.login-title { font-size: 24px; font-weight: 800; color: #1b5e20; margin-bottom: 8px; }
+.login-desc { font-size: 14px; color: #666; margin-bottom: 30px; line-height: 1.6; }
+.google-btn { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 14px; background: white; font-size: 15px; font-weight: 700; color: #333; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: 'Poppins',sans-serif; transition: all .3s; }
+.google-btn:hover { border-color: #1b5e20; background: #f8fdf8; }
+.login-note { font-size: 11px; color: #999; margin-top: 20px; line-height: 1.5; }
+
+#settingsOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(6px); z-index: 99999; display: none; align-items: flex-end; justify-content: center; }
+#settingsOverlay.show { display: flex; }
+.settings-sheet { background: white; width: 100%; max-width: 480px; border-radius: 28px 28px 0 0; padding: 20px 20px 30px; animation: sheetUp .4s cubic-bezier(.34,1.56,.64,1); max-height: 85vh; overflow-y: auto; }
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.sheet-handle { width: 50px; height: 5px; background: #e0e0e0; border-radius: 5px; margin: 0 auto 20px; }
+.sheet-user { display: flex; align-items: center; gap: 14px; padding: 15px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 16px; margin-bottom: 20px; cursor: pointer; }
+.sheet-user img { width: 55px; height: 55px; border-radius: 50%; border: 3px solid white; object-fit: cover; }
+.sheet-user .su-info { flex: 1; min-width: 0; }
+.sheet-user .su-name { font-size: 15px; font-weight: 800; color: #1b5e20; margin-bottom: 3px; }
+.sheet-user .su-email { font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.su-switch-icon { color: #1b5e20; font-size: 18px; opacity: .6; }
+.sheet-item { display: flex; align-items: center; gap: 14px; padding: 16px 14px; border-radius: 14px; cursor: pointer; transition: all .2s; margin-bottom: 6px; text-decoration: none; color: inherit; }
+.sheet-item .si-icon { width: 42px; height: 42px; border-radius: 12px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #1b5e20; flex-shrink: 0; }
+.sheet-item .si-text { flex: 1; font-size: 15px; font-weight: 600; color: #333; }
+.sheet-item .si-arrow { color: #ccc; font-size: 14px; }
+.sheet-logout { width: 100%; padding: 16px; margin-top: 10px; background: linear-gradient(135deg, #f44336, #d32f2f); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Poppins',sans-serif; }
+
+.container { max-width: 480px; margin: 15px auto 20px; padding: 0 15px; }
+.card { background: white; border-radius: 20px; padding: 22px; margin-bottom: 15px; box-shadow: 0 4px 20px rgba(27,94,32,.08); }
+.card-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: #1b5e20; margin-bottom: 10px; }
+.card-title i { background: linear-gradient(135deg, #66bb6a, #26a69a); color: white; width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.card-title.diamond i { background: linear-gradient(135deg, #9C27B0, #6A1B9A); }
+.card-desc { color: #666; font-size: 13.5px; margin-bottom: 15px; line-height: 1.6; }
+.btn { width: 100%; padding: 16px; border: none; border-radius: 15px; font-size: 15px; font-weight: 700; cursor: pointer; color: white; background: linear-gradient(135deg, #1b5e20, #00897b); display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .3s; font-family: 'Poppins',sans-serif; }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-light { background: linear-gradient(135deg, #66bb6a, #26a69a); }
+.btn-diamond { background: linear-gradient(135deg, #9C27B0, #6A1B9A); }
+.btn-danger { background: linear-gradient(135deg, #d32f2f, #b71c1c); }
+#status { text-align: center; color: #1b5e20; font-size: 14px; margin-top: 12px; min-height: 22px; font-weight: 700; }
+.hidden { display: none !important; }
+.stat-row { display: flex; justify-content: space-around; margin-top: 15px; }
+.stat-item { text-align: center; flex: 1; }
+.stat-item .num { font-size: 24px; font-weight: 800; color: #1b5e20; line-height: 1; }
+.stat-item .lbl { font-size: 11px; color: #888; margin-top: 4px; }
+.footer { text-align: center; padding: 20px; color: #888; font-size: 12px; }
+
+.parallel-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.parallel-cards .card { padding: 16px 12px; margin-bottom: 0; display: flex; flex-direction: column; }
+.parallel-cards .card-title { font-size: 13.5px; margin-bottom: 8px; gap: 6px; }
+.parallel-cards .card-title i { width: 28px; height: 28px; font-size: 13px; }
+.parallel-cards .card-desc { font-size: 11.5px; margin-bottom: 12px; line-height: 1.5; flex: 1; }
+.parallel-cards .btn { padding: 12px 8px; font-size: 12.5px; border-radius: 12px; }
+
+.survey-steps { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.survey-step { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fdf8; border-radius: 12px; border-left: 3px solid #66bb6a; }
+.survey-step .num { background: linear-gradient(135deg, #1b5e20, #00897b); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+.survey-step .text { color: #555; font-size: 13.5px; line-height: 1.5; }
+
+.operator-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.operator-item { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 8px 4px; text-align: center; cursor: pointer; transition: all .3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: 80px; }
+.operator-item.selected { border-color: #1b5e20; background: #e8f5e9; box-shadow: 0 4px 12px rgba(27,94,32,.2); }
+.operator-logo { width: 40px; height: 40px; object-fit: contain; }
+.operator-name { font-size: 10px; font-weight: 800; line-height: 1.1; }
+.denom-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.denom-item { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 15px 8px; text-align: center; cursor: pointer; transition: all .3s; font-weight: 700; color: #555; font-size: 14px; }
+.denom-item.selected { border-color: #1b5e20; background: linear-gradient(135deg, #1b5e20, #00897b); color: white; box-shadow: 0 4px 12px rgba(27,94,32,.3); }
+.denom-item small { font-size: 11px; color: #888; font-weight: 500; }
+.denom-item.selected small { color: #c8e6c9; }
+
+.history-header { background: linear-gradient(135deg, #ff5722, #ff8a65); border-radius: 24px; padding: 24px 22px; color: white; text-align: center; margin-bottom: 18px; box-shadow: 0 8px 25px rgba(255,87,34,.3); }
+.history-header .hh-label { font-size: 13px; opacity: .9; margin-bottom: 8px; font-weight: 600; }
+.history-header .hh-total { font-size: 42px; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+.history-header .hh-unit { font-size: 20px; font-weight: 700; margin-left: 4px; }
+.history-header .hh-sub { font-size: 11.5px; opacity: .9; font-weight: 500; }
+.history-empty { text-align: center; padding: 40px 25px; color: #888; font-size: 13px; background: white; border-radius: 18px; }
+.history-item { padding: 16px; background: white; border-radius: 16px; margin-bottom: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; border-left: 4px solid #66bb6a; }
+.history-item.pending { border-left-color: #ff9800; }
+.history-item.completed { border-left-color: #4CAF50; }
+.history-item .hi-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #66bb6a, #26a69a); color: white; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.history-item .hi-content { flex: 1; min-width: 0; }
+.history-item .hi-title { font-size: 14px; font-weight: 800; color: #1b5e20; margin-bottom: 4px; }
+.history-item .hi-date { font-size: 11px; color: #888; font-weight: 500; }
+.history-item .hi-status { padding: 5px 11px; border-radius: 8px; font-size: 10.5px; font-weight: 800; }
+.history-item .hi-status.pending { background: #fff3e0; color: #ff9800; }
+.history-item .hi-status.completed { background: #e8f5e9; color: #4CAF50; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 12px; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: white; border-radius: 28px; max-width: 540px; width: 100%; overflow: hidden; max-height: 95vh; overflow-y: auto; margin: auto; }
+.modal-header { padding: 32px 22px 24px; text-align: center; position: relative; }
+.modal-header.success { background: linear-gradient(135deg, #4CAF50, #2e7d32); }
+.modal-header.pending { background: linear-gradient(135deg, #ff9800, #f57c00); }
+.modal-close-btn { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.25); border: 2px solid rgba(255,255,255,.5); color: white; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; }
+.modal-header .status-icon { width: 76px; height: 76px; background: rgba(255,255,255,.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 38px; color: white; margin: 0 auto 14px; border: 4px solid rgba(255,255,255,.4); }
+.modal-header h2 { color: white; font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.modal-header p { color: rgba(255,255,255,.95); font-size: 12.5px; }
+.modal-body { padding: 22px 20px; }
+.info-row { display: flex; align-items: center; gap: 14px; padding: 15px; background: #f8fdf8; border-radius: 16px; margin-bottom: 12px; border-left: 4px solid #66bb6a; }
+.info-row.highlight { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-left-color: #ff9800; }
+.info-row.success-row { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left-color: #4CAF50; }
+.info-row .icon-box { width: 46px; height: 46px; border-radius: 13px; background: linear-gradient(135deg, #66bb6a, #26a69a); color: white; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
+.info-row.highlight .icon-box { background: linear-gradient(135deg, #ffd700, #ff9800); }
+.info-row.success-row .icon-box { background: linear-gradient(135deg, #4CAF50, #2e7d32); }
+.info-row .info-content { flex: 1; min-width: 0; }
+.info-row .info-label { font-size: 11px; color: #888; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+.info-row .info-value { font-size: 15px; font-weight: 800; color: #1b5e20; word-break: break-all; font-family: 'Courier New', monospace; letter-spacing: 1.5px; }
+.info-row.highlight .info-value { color: #e65100; font-size: 17px; letter-spacing: 2px; }
+.info-row .info-value.text-value { font-family: 'Poppins',sans-serif; font-size: 14px; letter-spacing: 0; font-weight: 700; }
+.info-row .copy-btn { background: #e8f5e9; color: #1b5e20; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.pending-note { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-radius: 14px; padding: 16px; margin-top: 4px; display: flex; gap: 12px; align-items: flex-start; border-left: 4px solid #ff9800; }
+.pending-note i { color: #ff9800; font-size: 20px; margin-top: 2px; }
+.pending-note div { color: #e65100; font-size: 12.5px; line-height: 1.6; font-weight: 600; }
+
+.notify-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
+.notify-overlay.show { display: flex; }
+.notify-box { background: white; border-radius: 24px; max-width: 400px; width: 100%; overflow: hidden; animation: notifyIn .4s cubic-bezier(.34,1.56,.64,1); text-align: center; }
+@keyframes notifyIn { from { transform: scale(.8) translateY(30px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+.notify-icon-wrap { padding: 28px 20px 24px; background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%); }
+.notify-icon-wrap.diamond-bg { background: linear-gradient(135deg, #9C27B0, #6A1B9A); }
+.notify-icon { width: 70px; height: 70px; background: rgba(255,255,255,.2); border: 3px solid rgba(255,255,255,.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; margin: 0 auto; }
+.notify-sub { font-size: 13px; color: white; text-align: center; margin-top: 12px; opacity: .95; }
+.notify-sub:empty { display: none; }
+.notify-body { padding: 22px 22px 20px; }
+.notify-title { font-size: 19px; font-weight: 800; color: #1b5e20; margin-bottom: 6px; }
+.notify-list { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 14px; padding: 12px 14px; margin-bottom: 18px; text-align: left; border-left: 4px solid #4CAF50; max-height: 220px; overflow-y: auto; }
+.notify-list-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 4px; border-bottom: 1px dashed rgba(46,125,50,.2); font-size: 13px; color: #2e7d32; font-weight: 600; }
+.notify-list-item:last-child { border-bottom: none; }
+.notify-list-item .nl-left { display: flex; align-items: center; gap: 10px; }
+.notify-list-item .nl-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #4CAF50, #2e7d32); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.notify-list-item .nl-time { font-size: 10.5px; color: #666; font-weight: 500; display: block; margin-top: 2px; }
+.notify-list-item .nl-points { font-size: 15px; font-weight: 800; color: #1b5e20; }
+.notify-list-empty { text-align: center; color: #666; font-size: 13px; padding: 20px 10px; font-style: italic; }
+.notify-btn { width: 100%; padding: 15px; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; color: white; background: linear-gradient(135deg, #1b5e20 0%, #00897b 100%); font-family: 'Poppins',sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.notify-btn.diamond-btn { background: linear-gradient(135deg, #9C27B0, #6A1B9A); }
+.code-box { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px dashed #ff9800; border-radius: 14px; padding: 16px; margin-bottom: 18px; text-align: center; }
+.code-label { font-size: 11px; color: #e65100; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.code-value { font-size: 18px; font-weight: 800; color: #e65100; font-family: 'Courier New', monospace; letter-spacing: 2px; word-break: break-all; }
+.copied-toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(200px); background: linear-gradient(135deg, #1b5e20, #00897b); color: white; padding: 14px 24px; border-radius: 14px; font-weight: 700; font-size: 13.5px; z-index: 99999; display: flex; align-items: center; gap: 8px; transition: all .4s; opacity: 0; visibility: hidden; pointer-events: none; }
+.copied-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
+.game-item { display: flex; align-items: center; gap: 14px; padding: 16px; background: linear-gradient(135deg, #f8fdf8, #e8f5e9); border-radius: 16px; margin-bottom: 12px; cursor: pointer; transition: all .3s; border: 2px solid transparent; position: relative; }
+.game-icon { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; flex-shrink: 0; }
+.game-info { flex: 1; min-width: 0; }
+.game-name { font-size: 15px; font-weight: 800; color: #1b5e20; margin-bottom: 4px; }
+.game-desc { font-size: 12px; color: #666; line-height: 1.4; }
+.game-badge { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #ff5722, #e64a19); color: white; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 8px; }
+
+.game-hud { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: linear-gradient(135deg, #0a0a1a, #1a1a2e); color: white; font-weight: 700; font-size: 13px; }
+.game-hud .hud-item { display: flex; align-items: center; gap: 6px; font-weight: 800; }
+.game-hud .hud-diamond { background: linear-gradient(135deg, #9C27B0, #6A1B9A); padding: 5px 12px; border-radius: 20px; font-size: 13px; }
+.game-hud .hud-timer { background: linear-gradient(135deg, #d32f2f, #b71c1c); padding: 5px 12px; border-radius: 20px; font-size: 13px; }
+
+.game-history-item { display: flex; flex-direction: column; padding: 16px; background: white; border-radius: 16px; margin-bottom: 10px; border-left: 4px solid #4CAF50; }
+.game-history-item.lose { border-left-color: #f44336; }
+.game-history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.game-history-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; background: linear-gradient(135deg, #4CAF50, #2e7d32); color: white; }
+.game-history-item.lose .game-history-icon { background: linear-gradient(135deg, #f44336, #b71c1c); }
+.game-history-title { font-size: 13px; font-weight: 800; color: #333; }
+.game-history-time { font-size: 10.5px; color: #888; font-weight: 500; }
+.game-history-amount { text-align: right; }
+.game-history-amount .amt { font-size: 15px; font-weight: 800; color: #4CAF50; }
+.game-history-item.lose .game-history-amount .amt { color: #f44336; }
+.game-history-amount .lbl { font-size: 10px; color: #888; font-weight: 600; }
+.room-tags { background: linear-gradient(135deg,#ffebee,#ffcdd2); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; border-left: 3px solid #f44336; }
+.room-tags.safe { background: linear-gradient(135deg,#e8f5e9,#c8e6c9); border-left-color: #4CAF50; }
+.room-tags .rt-label { font-size: 11px; font-weight: 800; color: #b71c1c; margin-bottom: 6px; text-transform: uppercase; }
+.room-tags.safe .rt-label { color: #1b5e20; }
+.room-tags .rt-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.room-tags .rt-tag { background: white; color: #b71c1c; padding: 4px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 700; border: 1.5px solid #f44336; }
+.room-tags.safe .rt-tag { color: #1b5e20; border-color: #4CAF50; }
+.room-tags .rt-my-pick { margin-top: 8px; padding: 8px 12px; background: #f5f5f5; border-radius: 8px; font-size: 11.5px; color: #555; font-weight: 600; }
+
+.game-history-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.game-stat-box { background: linear-gradient(135deg, #f8fdf8, #e8f5e9); border-radius: 14px; padding: 14px 8px; text-align: center; border: 2px solid #c8e6c9; }
+.game-stat-box.diamond { background: linear-gradient(135deg,#f3e5f5,#e1bee7); border-color: #ce93d8; }
+.game-stat-num { font-size: 22px; font-weight: 800; color: #1b5e20; }
+.game-stat-box.diamond .game-stat-num { color: #6A1B9A; }
+.game-stat-lbl { font-size: 10.5px; color: #666; margin-top: 3px; font-weight: 700; text-transform: uppercase; }
+
+.pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.pack-item { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 10px 4px; text-align: center; cursor: pointer; transition: all .3s; font-weight: 700; color: #555; font-size: 12px; }
+.pack-item.selected { border-color: #9C27B0; background: linear-gradient(135deg, #9C27B0, #6A1B9A); color: white; }
+.pack-item small { font-size: 10px; color: #888; font-weight: 500; display: block; margin-top: 3px; }
+.pack-item.selected small { color: #e1bee7; }
+
+.wallet-tabs { display: flex; background: #f5f5f5; border-radius: 12px; padding: 4px; margin-bottom: 14px; }
+.wallet-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 700; color: #888; border-radius: 10px; cursor: pointer; }
+.wallet-tab.active { background: white; color: #1b5e20; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+.wallet-tab-content { display: none; }
+.wallet-tab-content.active { display: block; }
+
+#profileOverlay { position: fixed; inset: 0; background: #f5f5f5; z-index: 99999; display: none; overflow-y: auto; padding-bottom: 100px; }
+#profileOverlay.show { display: block; }
+.profile-wrap { max-width: 480px; margin: 0 auto; background: #f5f5f5; min-height: 100vh; padding-bottom: 20px; position: relative; }
+.profile-header { padding: 24px 20px 16px; text-align: center; }
+.profile-header .ph-avatar { width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 10px; object-fit: cover; display: block; }
+.profile-header .ph-name { font-size: 17px; font-weight: 800; color: #1b5e20; margin-bottom: 3px; }
+.profile-header .ph-email { font-size: 12px; color: #888; }
+.profile-close-x { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,.08); border: none; color: #333; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
+.wallet-card { background: #0a0a1a; border-radius: 20px; padding: 20px 22px; margin: 0 16px 20px; color: white; text-align: left; }
+.wallet-card .wc-label { font-size: 13px; color: rgba(255,255,255,.7); font-weight: 500; margin-bottom: 14px; }
+.wallet-card .wc-amount-row { display: flex; align-items: flex-end; gap: 6px; cursor: pointer; }
+.wallet-card .wc-amount { font-size: 36px; font-weight: 800; line-height: 1; }
+.wallet-card .wc-unit { font-size: 15px; font-weight: 600; color: rgba(255,255,255,.85); margin-bottom: 4px; }
+.wallet-card .wc-toggle { font-size: 14px; color: rgba(255,255,255,.7); margin-bottom: 6px; }
+.profile-actions { display: flex; justify-content: center; gap: 60px; margin-bottom: 24px; padding: 0 16px; }
+.profile-action { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+.profile-action .pa-icon { width: 60px; height: 60px; border-radius: 50%; background: #0a0a1a; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.profile-action .pa-label { font-size: 13.5px; font-weight: 600; color: #333; }
+.profile-menu-list { background: white; border-radius: 16px; margin: 0 16px 16px; overflow: hidden; }
+.profile-menu-item { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+.profile-menu-item:last-child { border-bottom: none; }
+.profile-menu-item .pmi-icon { width: 38px; height: 38px; border-radius: 10px; background: #e8f5e9; color: #1b5e20; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.profile-menu-item .pmi-text { flex: 1; font-size: 15px; font-weight: 600; color: #333; }
+.profile-menu-item .pmi-arrow { color: #ccc; font-size: 14px; }
+
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-around; padding: 8px 0 12px; box-shadow: 0 -4px 20px rgba(0,0,0,.08); z-index: 9998; }
+.bn-item { flex: 1; text-align: center; cursor: pointer; color: #888; transition: all .3s; padding: 4px; }
+.bn-item i { font-size: 20px; display: block; margin-bottom: 3px; }
+.bn-item .bn-label { font-size: 10.5px; font-weight: 700; }
+.bn-item.active { color: #1b5e20; }
+.bn-item.active i { transform: scale(1.15); }
+.bn-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc; margin: 0 auto 3px; display: block; }
+.bn-item.active .bn-avatar { border-color: #1b5e20; }
+
+#gameContainer { width: 100%; background: #1a1a2a; }
+#gameContainer canvas { display: block; width: 100% !important; height: auto !important; }
+
+.rest-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; }
+.rest-overlay.show { display: flex; }
+.rest-box { text-align: center; color: white; padding: 30px; }
+.rest-sub { font-size: 18px; color: #fff; font-weight: 600; margin-bottom: 30px; opacity: 0.9; }
+.rest-timer { font-size: 90px; font-weight: 900; color: #ffd700; text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,215,0,0.4); animation: timerPulse 1s ease infinite; }
+@keyframes timerPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+</style>
+</head>
+<body>
+
+<script>
+  if (sessionStorage.getItem('tuidiem_loaded') === '1') {
+    document.write('<style>#loadingScreen{display:none !important;}</style>');
+  } else {
+    sessionStorage.setItem('tuidiem_loaded', '1');
+  }
+</script>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="ld-logo">💰</div>
+  <div class="ld-title">Túi Điểm Online</div>
+  <div class="ld-sub" id="ldStatus">Đang khởi tạo...</div>
+  <div class="ld-progress-wrap"><div class="ld-progress-bar" id="ldProgressBar"></div></div>
+  <div class="ld-percent" id="ldPercent">0%</div>
+</div>
+
+<!-- LANDING -->
+<div id="landingScreen">
+  <div class="landing-box">
+    <div class="landing-logo">💰</div>
+    <div class="landing-title">Túi Điểm Online</div>
+    <div class="landing-sub">Kiếm điểm mỗi ngày — Đổi thưởng hấp dẫn</div>
+    <div class="landing-features">
+      <div class="landing-feature"><div class="lf-icon">🖐️</div><div><div class="lf-title">Điểm danh nhận điểm</div><div class="lf-desc">Mỗi ngày bấm nhận điểm miễn phí</div></div></div>
+      <div class="landing-feature"><div class="lf-icon">📋</div><div><div class="lf-title">Khảo sát kiếm thưởng</div><div class="lf-desc">Làm khảo sát nhận 50-500 điểm</div></div></div>
+      <div class="landing-feature"><div class="lf-icon">🎮</div><div><div class="lf-title">Chơi game nhận kim cương</div><div class="lf-desc">Trốn thoát kẻ sát nhân hấp dẫn</div></div></div>
+      <div class="landing-feature"><div class="lf-icon">🎁</div><div><div class="lf-title">Đổi thẻ cào & rút tiền</div><div class="lf-desc">Viettel, VinaPhone, MobiFone, Garena</div></div></div>
+    </div>
+    <button class="landing-btn" onclick="startApp()"><i class="fas fa-rocket"></i> Bắt đầu ngay</button>
+    <div class="landing-note">Bằng cách bấm "Bắt đầu ngay", bạn đồng ý với<br>Điều khoản sử dụng và Chính sách bảo mật</div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">💰</div>
+    <h1 class="login-title">Túi Điểm Online</h1>
+    <p class="login-desc">Đăng nhập để bắt đầu kiếm điểm<br>và đổi thưởng ngay hôm nay!</p>
+    <button id="googleLoginBtn" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 22px; height: 22px;">
+      Đăng nhập bằng Google
+    </button>
+    <p class="login-note">Bằng cách đăng nhập, bạn đồng ý với<br>Điều khoản sử dụng và Chính sách bảo mật</p>
+  </div>
+</div>
+
+<!-- SETTINGS MENU -->
+<div id="settingsOverlay" onclick="closeSettingsBg(event)">
+  <div class="settings-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-user" onclick="switchAccount()">
+      <img id="sAvatar" src="https://via.placeholder.com/55" alt="Avatar">
+      <div class="su-info">
+        <div class="su-name" id="sName">Người dùng</div>
+        <div class="su-email" id="sEmail">email@gmail.com</div>
+      </div>
+      <i class="fas fa-exchange-alt su-switch-icon"></i>
+    </div>
+    <a class="sheet-item" onclick="showPointHistory()" style="cursor:pointer;">
+      <div class="si-icon"><i class="fas fa-bell"></i></div>
+      <div class="si-text">Thông báo</div>
+      <i class="fas fa-chevron-right si-arrow"></i>
+    </a>
+    <a class="sheet-item" href="https://zalo.me/0965479975" target="_blank">
+      <div class="si-icon"><i class="fas fa-headset"></i></div>
+      <div class="si-text">Liên hệ hỗ trợ</div>
+      <i class="fas fa-chevron-right si-arrow"></i>
+    </a>
+    <button class="sheet-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+  </div>
+</div>
+
+<!-- Hidden elements -->
+<div style="display:none;">
+  <div id="points">0</div>
+  <div id="diamonds">0</div>
+  <div id="userId">Đang kết nối...</div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+  <!-- TAB ĐIỂM DANH -->
+  <div id="tab-ads">
+    <div class="parallel-cards">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-hand-pointer"></i>Điểm danh</div>
+        <div class="card-desc">Bấm mỗi 50 phút, nhận <b style="color:#00897b">+24 điểm</b>. Tối đa 20 lần/ngày.</div>
+        <button class="btn" id="watchBtn" onclick="claimPoints()"><i class="fas fa-hand-pointer"></i> Điểm danh</button>
+        <div id="status"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-clipboard-check"></i>Khảo sát</div>
+        <div class="card-desc">Làm khảo sát nhận <b style="color:#00897b">50-500 điểm</b> mỗi lần.</div>
+        <button class="btn btn-light" onclick="openSurvey()"><i class="fas fa-external-link-alt"></i> Mở khảo sát</button>
+        <button class="btn" onclick="openZaloPopup()" style="margin-top:8px;background:linear-gradient(135deg, #0068ff, #0084ff);"><i class="fas fa-comment-dots"></i> Nhận key</button>
+      </div>
+    </div>
+    <div class="parallel-cards">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-history" style="background:linear-gradient(135deg,#2196F3,#1976D2);"></i>Lịch sử</div>
+        <div class="card-desc">Xem tất cả điểm bạn đã nhận được.</div>
+        <button class="btn" onclick="showPointHistory()" style="background:linear-gradient(135deg, #2196F3, #1976D2);"><i class="fas fa-list"></i> Xem lịch sử</button>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-key" style="background:linear-gradient(135deg,#9C27B0,#7B1FA2);"></i>Nhập mã</div>
+        <div class="card-desc">Dán key admin gửi để nhận điểm.</div>
+        <button class="btn" onclick="showEnterCode()" style="background:linear-gradient(135deg, #9C27B0, #7B1FA2);"><i class="fas fa-key"></i> Nhập mã</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="fas fa-chart-line"></i>Thống kê hôm nay</div>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num" id="totalAds">0</div><div class="lbl">Lần nhận</div></div>
+        <div class="stat-item"><div class="num" id="totalEarn">0</div><div class="lbl">Tổng điểm</div></div>
+        <div class="stat-item"><div class="num" id="todayPoints">0</div><div class="lbl">Điểm hôm nay</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="fas fa-info-circle"></i>Hướng dẫn khảo sát</div>
+      <div class="survey-steps">
+        <div class="survey-step"><div class="num">1</div><div class="text">Bấm nút <b>"Mở khảo sát"</b></div></div>
+        <div class="survey-step"><div class="num">2</div><div class="text">Chọn khảo sát và làm</div></div>
+        <div class="survey-step"><div class="num">3</div><div class="text">Làm xong → quay lại app</div></div>
+        <div class="survey-step"><div class="num">4</div><div class="text">Bấm <b>"Nhận key qua Zalo"</b></div></div>
+        <div class="survey-step"><div class="num">5</div><div class="text">Copy ID → gửi admin</div></div>
+        <div class="survey-step"><div class="num">6</div><div class="text">Nhận key → nhập mã xác nhận</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB CHƠI GAME -->
+  <div id="tab-game" class="hidden">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-gamepad"></i>Danh sách trò chơi</div>
+      <div class="card-desc">Chọn game bạn muốn chơi. Càng chơi nhiều, càng có cơ hội nhận kim cương!</div>
+      <div class="game-item" onclick="openGame('survival')">
+        <div class="game-icon" style="background:linear-gradient(135deg,#d32f2f,#b71c1c);"><i class="fas fa-skull"></i></div>
+        <div class="game-info">
+          <div class="game-name">Trốn Thoát Kẻ Sát Nhân</div>
+          <div class="game-desc">Đặt cược kim cương, trốn khỏi sát thủ</div>
+        </div>
+        <div class="game-badge">HOT</div>
+      </div>
+      <div class="game-item" style="opacity:.5;pointer-events:none;">
+        <div class="game-icon" style="background:linear-gradient(135deg,#9e9e9e,#616161);"><i class="fas fa-clock"></i></div>
+        <div class="game-info">
+          <div class="game-name">Sắp ra mắt...</div>
+          <div class="game-desc">Nhiều game mới đang được phát triển</div>
+        </div>
+        <div class="game-badge" style="background:#9e9e9e;">SOON</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB SINH TỒN -->
+  <div id="tab-survival" class="hidden">
+    <div class="card" style="padding:0;overflow:hidden;border:2px solid #9C27B0;border-radius:20px;position:relative;">
+      <div class="game-hud">
+        <div class="hud-item"><i class="fas fa-skull" style="color:#ff2a2a;"></i><span>TRỐN THOÁT</span></div>
+        <div class="hud-timer" id="hudTimer">⏱️ 60s</div>
+        <div class="hud-diamond">💎 <span id="hudDiamonds">0</span></div>
+      </div>
+      <div id="gameContainer"></div>
+      <div class="rest-overlay" id="restOverlay">
+        <div class="rest-box">
+          <div class="rest-sub">Vòng tiếp theo bắt đầu sau:</div>
+          <div class="rest-timer" id="restTimer">30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:#6A1B9A;"><i class="fas fa-chart-line" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"></i>Thống Kê</div>
+      <div class="game-history-stats">
+        <div class="game-stat-box"><div class="game-stat-num" id="statTotalGames">0</div><div class="game-stat-lbl">Ván chơi</div></div>
+        <div class="game-stat-box"><div class="game-stat-num" id="statWins" style="color:#4CAF50;">0</div><div class="game-stat-lbl">Thắng</div></div>
+        <div class="game-stat-box diamond"><div class="game-stat-num" id="statNetProfit">0</div><div class="game-stat-lbl">Lợi nhuận</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+            <div class="card-title" style="color:#6A1B9A;"><i class="fas fa-list" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"></i>Lịch Sử Gần Đây</div>
+      <div id="survivalHistory"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:#6A1B9A;"><i class="fas fa-trophy" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"></i>Bảng Xếp Hạng</div>
+      <div id="bxhList"></div>
+    </div>
+  </div>
+
+  <!-- TAB KIM CƯƠNG -->
+  <div id="tab-diamond" class="hidden">
+    <div class="card" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border:2px solid #9C27B0;">
+      <div class="card-title diamond" style="color:#6A1B9A;"><i class="fas fa-gem"></i>Kim Cương Tím</div>
+      <div style="background:white;border-radius:14px;padding:16px;text-align:center;margin-bottom:14px;">
+        <div style="font-size:11px;color:#666;font-weight:700;text-transform:uppercase;">Số dư kim cương</div>
+        <div style="font-size:38px;font-weight:800;color:#6A1B9A;" id="diamondBalance">0</div>
+      </div>
+      <div style="background:white;border-radius:14px;padding:14px;margin-bottom:12px;border-left:4px solid #673AB7;">
+        <div style="font-size:14px;font-weight:800;color:#6A1B9A;margin-bottom:8px;"><i class="fas fa-bolt"></i> Nạp kim cương</div>
+        <div style="font-size:12px;color:#666;margin-bottom:8px;">📌 Nạp tối thiểu: <b>50,000đ</b></div>
+        <div class="pack-grid" id="diamondPackGrid">
+          <div class="pack-item" data-pack="50000" data-diamond="50000">50,000đ<small>+50,000 💎</small></div>
+          <div class="pack-item" data-pack="100000" data-diamond="100000">100,000đ<small>+100,000 💎</small></div>
+          <div class="pack-item" data-pack="200000" data-diamond="200000">200,000đ<small>+200,000 💎</small></div>
+          <div class="pack-item" data-pack="500000" data-diamond="500000">500,000đ<small>+500,000 💎</small></div>
+          <div class="pack-item" data-pack="1000000" data-diamond="1000000">1,000,000đ<small>+1,000,000 💎</small></div>
+          <div class="pack-item" data-pack="2000000" data-diamond="2000000">2,000,000đ<small>+2,000,000 💎</small></div>
+        </div>
+        <button class="btn btn-diamond" onclick="openDeposit()" style="margin-top:12px;"><i class="fas fa-qrcode"></i> Nạp ngay</button>
+      </div>
+      <div style="background:white;border-radius:14px;padding:14px;border-left:4px solid #FF9800;">
+        <div style="font-size:14px;font-weight:800;color:#6A1B9A;margin-bottom:8px;"><i class="fas fa-exchange-alt"></i> Đổi điểm ↔ kim cương</div>
+        <div style="font-size:12.5px;color:#555;margin-bottom:10px;">Tỷ lệ: <b>1,000 điểm = 1 💎</b></div>
+        <div style="display:flex;gap:8px;">
+          <input type="number" id="convertPoints" placeholder="Nhập điểm..." style="flex:1;padding:12px;border:2px solid #e0e0e0;border-radius:12px;font-weight:700;text-align:center;">
+          <button class="btn btn-diamond" onclick="convertPointsToDiamond()" style="width:auto;padding:12px 20px;">Đổi 💎</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title diamond" style="color:#6A1B9A;"><i class="fas fa-history"></i>Lịch sử kim cương</div>
+      <div id="diamondHistory"></div>
+    </div>
+  </div>
+
+  <!-- TAB ĐỔI THƯỞNG -->
+  <div id="tab-reward" class="hidden">
+    <div class="wallet-tabs" style="margin-bottom:16px;">
+      <div class="wallet-tab active" onclick="switchRewardTab('card', event)">🎁 Đổi Thẻ Cào</div>
+      <div class="wallet-tab" onclick="switchRewardTab('cash', event)">💵 Rút Tiền Mặt</div>
+    </div>
+
+    <div class="wallet-tab-content active" id="reward-content-card">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-sim-card"></i>Chọn nhà mạng</div>
+        <div class="card-desc">Dùng <b style="color:#00897b">💰 Điểm</b> để đổi thẻ cào</div>
+        <div class="operator-grid" id="operatorGrid">
+          <div class="operator-item selected" data-op="viettel"><img src="https://i.postimg.cc/vZFr5SVS/Viettel-Logo.png" class="operator-logo" onerror="this.style.display='none'"><div class="operator-name" style="color:#ee0033">Viettel</div></div>
+          <div class="operator-item" data-op="vinaphone"><img src="https://i.postimg.cc/PJnD1CLP/Vinaphone-Logo.png" class="operator-logo" onerror="this.style.display='none'"><div class="operator-name" style="color:#0072bc">VinaPhone</div></div>
+          <div class="operator-item" data-op="mobifone"><img src="https://i.postimg.cc/hGJQwLx6/Mobifone-Logo.png" class="operator-logo" onerror="this.style.display='none'"><div class="operator-name" style="color:#005baa">MobiFone</div></div>
+          <div class="operator-item" data-op="garena"><img src="https://i.postimg.cc/Rhm3N28S/images-(1).jpg" class="operator-logo" onerror="this.style.display='none'"><div class="operator-name" style="color:#f37021">Garena</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-tags"></i>Chọn mệnh giá</div>
+        <div class="card-desc">Đã chọn: <b id="selectedOpName" style="color:#00897b">Viettel</b></div>
+        <div class="denom-grid" id="denomGrid"></div>
+        <button class="btn" onclick="redeem()" style="margin-top:16px"><i class="fas fa-gift"></i> Đổi thưởng ngay</button>
+        <div id="redeemStatus" style="text-align:center;color:#1b5e20;font-size:13px;margin-top:10px;min-height:20px;font-weight:700;"></div>
+      </div>
+      <div class="history-header">
+        <div class="hh-label">💸 Tổng điểm đã tiêu</div>
+        <div class="hh-total"><span id="totalSpent">0</span><span class="hh-unit">điểm</span></div>
+        <div class="hh-sub">Tổng <span id="totalOrders">0</span> giao dịch</div>
+      </div>
+      <div id="historyList"></div>
+    </div>
+
+    <div class="wallet-tab-content" id="reward-content-cash">
+      <div class="card" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border:2px solid #9C27B0;">
+        <div class="card-title diamond" style="color:#6A1B9A;"><i class="fas fa-money-bill-wave"></i>Rút Tiền Mặt</div>
+        <div style="background:white;border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+          <div style="font-size:11px;color:#666;font-weight:700;">💎 Kim cương khả dụng</div>
+          <div style="font-size:28px;font-weight:800;color:#7B1FA2;" id="cashDiamonds">0</div>
+        </div>
+        <div style="background:white;border-radius:14px;padding:14px;font-size:12.5px;color:#555;line-height:1.8;">
+          <b style="color:#6A1B9A;">📌 Quy định:</b><br>
+          • Tối thiểu 100,000đ<br>
+          • Tối đa 500,000đ<br>
+          • Xử lý 24h
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-university"></i>Thông tin nhận tiền</div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12.5px;font-weight:700;color:#1b5e20;margin-bottom:6px;">Ngân hàng</label>
+          <select id="cashBank" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:12px;font-family:'Poppins',sans-serif;font-size:14px;background:white;color:#333;">
+            <option value="">-- Chọn ngân hàng --</option>
+            <option>Vietcombank</option><option>Vietinbank</option><option>BIDV</option><option>Agribank</option>
+            <option>Techcombank</option><option>MBBank</option><option>ACB</option><option>VPBank</option>
+            <option>TPBank</option><option>Sacombank</option><option>VIB</option><option>SHB</option>
+          </select>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12.5px;font-weight:700;color:#1b5e20;margin-bottom:6px;">Số tài khoản</label>
+          <input type="text" id="cashAccount" placeholder="Nhập số tài khoản..." style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:12px;font-weight:700;text-align:center;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12.5px;font-weight:700;color:#1b5e20;margin-bottom:6px;">Tên chủ TK (không dấu)</label>
+          <input type="text" id="cashName" placeholder="VD: NGUYEN VAN A" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:12px;font-weight:700;text-align:center;text-transform:uppercase;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="display:block;font-size:12.5px;font-weight:700;color:#1b5e20;margin-bottom:6px;">Số tiền (100,000đ - 500,000đ)</label>
+          <input type="number" id="cashAmount" placeholder="VD: 100000" min="100000" max="500000" step="10000" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:12px;font-weight:700;text-align:center;" oninput="updateCashPreview()">
+        </div>
+        <div id="cashPreview" style="background:#f3e5f5;border-radius:12px;padding:12px;margin-bottom:14px;text-align:center;font-size:13px;color:#6A1B9A;font-weight:700;display:none;">
+          Cần <span id="cashPreviewDiamond">0</span> 💎 để rút <span id="cashPreviewMoney">0</span>đ
+        </div>
+        <button class="btn btn-diamond" onclick="submitCashWithdrawal()"><i class="fas fa-paper-plane"></i> Yêu cầu rút tiền</button>
+        <div id="cashStatus" style="text-align:center;font-size:13px;font-weight:700;margin-top:10px;min-height:20px;"></div>
+      </div>
+      <div class="card">
+        <div class="card-title diamond" style="color:#6A1B9A;"><i class="fas fa-history"></i>Lịch sử rút tiền</div>
+        <div id="cashHistory"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="padding-bottom:100px;">© 2026 Túi Điểm Online - Kiếm tiền cùng khảo sát</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottomNav">
+  <div class="bn-item active" onclick="switchBottomNav('ads', this)">
+    <i class="fas fa-hand-pointer"></i>
+    <div class="bn-label">Điểm Danh</div>
+  </div>
+  <div class="bn-item" onclick="switchBottomNav('game', this)">
+    <i class="fas fa-gamepad"></i>
+    <div class="bn-label">Chơi Game</div>
+  </div>
+  <div class="bn-item" onclick="openProfile()">
+    <img class="bn-avatar" id="navAvatar" src="https://via.placeholder.com/55" alt="Tôi">
+    <div class="bn-label">Tôi</div>
+  </div>
+</div>
+
+<!-- PROFILE FULLSCREEN -->
+<div id="profileOverlay">
+  <div class="profile-wrap">
+    <button class="profile-close-x" onclick="closeProfile()"><i class="fas fa-times"></i></button>
+    <div class="profile-header">
+      <img class="ph-avatar" id="profileAvatar" src="https://via.placeholder.com/70" alt="Avatar">
+      <div class="ph-name" id="profileName">Guest</div>
+      <div class="ph-email" id="profileEmail">ID: ...</div>
+    </div>
+    <div class="wallet-card" onclick="toggleWalletMode()">
+      <div class="wc-label">Tài sản của tôi</div>
+      <div class="wc-amount-row">
+        <div class="wc-amount" id="profileWalletAmount">0</div>
+        <div class="wc-unit" id="profileWalletUnit">💰</div>
+        <div class="wc-toggle">▼</div>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <div class="profile-action" onclick="closeProfile();openDeposit();">
+        <div class="pa-icon"><i class="fas fa-arrow-down"></i></div>
+        <div class="pa-label">Nạp</div>
+      </div>
+      <div class="profile-action" onclick="closeProfile();goToCashWithdrawal();">
+        <div class="pa-icon"><i class="fas fa-arrow-up"></i></div>
+        <div class="pa-label">Rút</div>
+      </div>
+    </div>
+    <div class="profile-menu-list">
+      <div class="profile-menu-item" onclick="closeProfile();openSettings();">
+        <div class="pmi-icon"><i class="fas fa-cog"></i></div>
+        <div class="pmi-text">Cài đặt</div>
+        <i class="fas fa-chevron-right pmi-arrow"></i>
+      </div>
+      <div class="profile-menu-item" onclick="closeProfile();showPointHistory();">
+        <div class="pmi-icon" style="background:#e3f2fd;color:#2196f3;"><i class="fas fa-bell"></i></div>
+        <div class="pmi-text">Thông báo</div>
+        <i class="fas fa-chevron-right pmi-arrow"></i>
+      </div>
+      <div class="profile-menu-item" onclick="closeProfile();logoutUser();">
+        <div class="pmi-icon" style="background:#ffebee;color:#f44336;"><i class="fas fa-sign-out-alt"></i></div>
+        <div class="pmi-text" style="color:#f44336;">Đăng xuất</div>
+        <i class="fas fa-chevron-right pmi-arrow"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal-box">
+    <div class="modal-header success" id="modalHeader">
+      <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <div class="status-icon" id="modalIcon"><i class="fas fa-check"></i></div>
+      <h2 id="modalTitle">Đổi thưởng thành công!</h2>
+      <p id="modalSub">Vui lòng chờ hệ thống xử lý</p>
+    </div>
+    <div class="modal-body">
+      <div class="info-row"><div class="icon-box"><i class="fas fa-sim-card"></i></div><div class="info-content"><div class="info-label">Loại thẻ</div><div class="info-value text-value" id="mOp">Viettel 10.000đ</div></div></div>
+      <div class="info-row"><div class="icon-box"><i class="fas fa-calendar-alt"></i></div><div class="info-content"><div class="info-label">Ngày yêu cầu</div><div class="info-value text-value" id="mTime">--</div></div></div>
+      <div class="info-row success-row" id="mReceiveRow"><div class="icon-box"><i class="fas fa-gift"></i></div><div class="info-content"><div class="info-label" style="color:#2e7d32;">🎉 Ngày nhận thẻ</div><div class="info-value text-value" id="mReceiveTime" style="color:#1b5e20;">--</div></div></div>
+      <div class="info-row highlight" id="mCodeRow"><div class="icon-box"><i class="fas fa-key"></i></div><div class="info-content"><div class="info-label">Mã thẻ</div><div class="info-value" id="mCode">—</div></div><button class="copy-btn" onclick="copyText('mCode')"><i class="fas fa-copy"></i></button></div>
+      <div class="info-row highlight" id="mSeriRow"><div class="icon-box"><i class="fas fa-hashtag"></i></div><div class="info-content"><div class="info-label">Số Seri</div><div class="info-value" id="mSeri">—</div></div><button class="copy-btn" onclick="copyText('mSeri')"><i class="fas fa-copy"></i></button></div>
+      <div class="pending-note" id="mPendingNote"><i class="fas fa-clock"></i><div>Đơn hàng đang được xử lý. Thẻ sẽ được gửi sau 1-5 phút.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFY MODAL -->
+<div class="notify-overlay" id="notifyOverlay">
+  <div class="notify-box">
+    <div class="notify-icon-wrap" id="notifyIconWrap">
+      <div class="notify-icon" id="notifyIcon"><i class="fas fa-hourglass-half"></i></div>
+      <div class="notify-sub" id="notifySub"></div>
+    </div>
+    <div class="notify-body">
+      <div class="code-box" id="codeBox" style="display:none;">
+        <div class="code-label" id="codeLabel">📋 Mã gửi cho Admin</div>
+        <div class="code-value" id="codeValue">—</div>
+      </div>
+      <div class="notify-list" id="notifyList"></div>
+      <button class="notify-btn" id="notifyBtn" onclick="closeNotify()"><i class="fas fa-check-circle"></i> Đã hiểu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ENTER CODE MODAL -->
+<div class="notify-overlay" id="enterCodeOverlay">
+  <div class="notify-box">
+    <div class="notify-icon-wrap"><div class="notify-icon"><i class="fas fa-key"></i></div><div class="notify-sub">Dán key mà admin đã gửi cho bạn</div></div>
+    <div class="notify-body">
+      <input type="text" id="confirmCodeInput" placeholder="Dán key vào đây..." style="width:100%;padding:14px;border:2px solid #e0e0e0;border-radius:12px;font-size:14px;margin-bottom:14px;text-align:center;font-weight:700;letter-spacing:1px;color:#1b5e20;">
+      <button class="notify-btn" onclick="submitConfirmCode()"><i class="fas fa-check-circle"></i> Xác nhận</button>
+      <button class="notify-btn" onclick="closeEnterCode()" style="margin-top:8px;background:linear-gradient(135deg,#999,#666);"><i class="fas fa-times-circle"></i> Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- SWITCH ACCOUNT MODAL -->
+<div class="notify-overlay" id="switchAccountOverlay">
+  <div class="notify-box">
+    <div class="notify-icon-wrap"><div class="notify-icon"><i class="fas fa-exchange-alt"></i></div><div class="notify-sub">Bạn sẽ được đăng xuất khỏi tài khoản hiện tại</div></div>
+    <div class="notify-body">
+      <div class="notify-title">🔄 Chuyển đổi tài khoản?</div>
+      <div style="color:#666;font-size:13.5px;line-height:1.6;margin:12px 0 20px;text-align:left;">Bạn có thể chọn tài khoản Google khác.<br><b style="color:#1b5e20;">Điểm của bạn vẫn được lưu an toàn.</b></div>
+      <button class="notify-btn" onclick="confirmSwitchAccount()"><i class="fas fa-check-circle"></i> Đồng ý chuyển</button>
+      <button class="notify-btn" onclick="closeSwitchAccount()" style="margin-top:8px;background:linear-gradient(135deg,#999,#666);"><i class="fas fa-times-circle"></i> Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="notify-overlay" id="logoutOverlay">
+  <div class="notify-box">
+    <div class="notify-icon-wrap"><div class="notify-icon"><i class="fas fa-sign-out-alt"></i></div><div class="notify-sub">Bạn sẽ thoát khỏi ứng dụng</div></div>
+    <div class="notify-body">
+      <div class="notify-title">👋 Đăng xuất?</div>
+      <div style="color:#666;font-size:13.5px;line-height:1.6;margin:12px 0 20px;text-align:left;">Bạn có chắc muốn đăng xuất?<br><b style="color:#1b5e20;">Điểm vẫn được lưu vào tài khoản Google.</b></div>
+      <button class="notify-btn" onclick="confirmLogout()" style="background:linear-gradient(135deg,#f44336,#d32f2f);"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+      <button class="notify-btn" onclick="closeLogout()" style="margin-top:8px;background:linear-gradient(135deg,#999,#666);"><i class="fas fa-times-circle"></i> Hủy</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div class="notify-overlay" id="depositOverlay">
+  <div class="notify-box" style="border:2px solid #9C27B0;max-width:440px;">
+    <div class="notify-icon-wrap diamond-bg"><div class="notify-icon"><i class="fas fa-gem"></i></div><div class="notify-sub">Nạp kim cương tím</div></div>
+    <div class="notify-body" style="max-height:70vh;overflow-y:auto;">
+      <div class="pack-grid" id="depositPackGrid" style="margin-bottom:14px;">
+        <div class="pack-item" data-pack="50000" data-diamond="50000">50,000đ<small>+50,000 💎</small></div>
+        <div class="pack-item" data-pack="100000" data-diamond="100000">100,000đ<small>+100,000 💎</small></div>
+        <div class="pack-item" data-pack="200000" data-diamond="200000">200,000đ<small>+200,000 💎</small></div>
+        <div class="pack-item" data-pack="500000" data-diamond="500000">500,000đ<small>+500,000 💎</small></div>
+        <div class="pack-item" data-pack="1000000" data-diamond="1000000">1,000,000đ<small>+1,000,000 💎</small></div>
+        <div class="pack-item" data-pack="2000000" data-diamond="2000000">2,000,000đ<small>+2,000,000 💎</small></div>
+      </div>
+      <div class="code-box" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-color:#9C27B0;">
+        <div class="code-label" style="color:#6A1B9A;">💎 Số kim cương sẽ nhận</div>
+        <div class="code-value" style="color:#6A1B9A;" id="depositDiamondAmount">0</div>
+      </div>
+      <div class="info-row" style="border-left-color:#9C27B0;">
+        <div class="icon-box" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"><i class="fas fa-money-bill"></i></div>
+        <div class="info-content"><div class="info-label">Số tiền cần thanh toán</div><div class="info-value text-value" id="depositMoneyAmount" style="color:#6A1B9A;">0đ</div></div>
+      </div>
+      <div style="background:#fff8e1;border-radius:12px;padding:12px;margin-bottom:14px;font-size:12.5px;color:#e65100;line-height:1.6;text-align:left;">
+                <b>📌 Hướng dẫn nạp:</b><br>
+        1. Chuyển khoản đến STK bên dưới<br>
+        2. Ghi nội dung: <b id="depositNote">NAP [ID]</b><br>
+        3. Gửi bill cho admin qua Zalo<br>
+        4. Kim cương sẽ được cộng trong 5-10 phút
+      </div>
+      <div class="info-row highlight" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left-color:#9C27B0;">
+        <div class="icon-box" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"><i class="fas fa-university"></i></div>
+        <div class="info-content"><div class="info-label">Ngân hàng</div><div class="info-value text-value">Vietinbank</div></div>
+      </div>
+      <div class="info-row highlight" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left-color:#9C27B0;">
+        <div class="icon-box" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"><i class="fas fa-credit-card"></i></div>
+        <div class="info-content"><div class="info-label">Số tài khoản</div><div class="info-value text-value" id="bankAccountNumber">106881088831</div></div>
+        <button class="copy-btn" onclick="copyText('bankAccountNumber')" style="background:white;color:#9C27B0;"><i class="fas fa-copy"></i></button>
+      </div>
+      <div class="info-row highlight" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left-color:#9C27B0;">
+        <div class="icon-box" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"><i class="fas fa-user"></i></div>
+        <div class="info-content"><div class="info-label">Chủ tài khoản</div><div class="info-value text-value">NGUYEN HOANG MINH QUAN</div></div>
+      </div>
+      <button class="notify-btn diamond-btn" onclick="closeDeposit()" style="margin-top:14px;"><i class="fas fa-check-circle"></i> Đã hiểu</button>
+    </div>
+  </div>
+</div>
+
+<div class="copied-toast" id="copiedToast"><i class="fas fa-check-circle"></i> <span>Đã copy!</span></div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC-tyoeWEJRvh9dVDoRXmeItJteGDiSkpA",
+    authDomain: "tui-diem-online-455e2.firebaseapp.com",
+    projectId: "tui-diem-online-455e2",
+    storageBucket: "tui-diem-online-455e2.firebasestorage.app",
+    messagingSenderId: "506486761764",
+    appId: "1:506486761764:web:d335f747ce8ab5c46dabb1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.fbAuth = auth;
+  window.fbDb = db;
+  window.fbGoogleProvider = GoogleAuthProvider;
+  window.fbSignInWithPopup = signInWithPopup;
+  window.fbSignOut = signOut;
+  window.fbOnAuthStateChanged = onAuthStateChanged;
+  window.fbDoc = doc;
+  window.fbGetDoc = getDoc;
+  window.fbSetDoc = setDoc;
+  window.fbUpdateDoc = updateDoc;
+  window.fbIncrement = increment;
+</script>
+
+<script>
+// ===== BIẾN TOÀN CỤC =====
+let userPoints = parseInt(localStorage.getItem('userPoints')) || 0;
+let userDiamonds = parseInt(localStorage.getItem('userDiamonds')) || 0;
+let userHistory = JSON.parse(localStorage.getItem('userHistory')) || [];
+let diamondHistory = JSON.parse(localStorage.getItem('diamondHistory')) || [];
+let totalAdsWatched = parseInt(localStorage.getItem('totalAdsWatched')) || 0;
+let todayPoints = parseInt(localStorage.getItem('todayPoints')) || 0;
+let diamondEarnedToday = parseInt(localStorage.getItem('diamondEarnedToday')) || 0;
+
+const RATE = 1;
+const CPX_APP_ID = '36947';
+const MAX_CLAIMS_PER_DAY = 20;
+const DAILY_POINT_LIMIT = 475;
+const CLAIM_COOLDOWN_MS = 50 * 60 * 1000;
+const POINTS_PER_CLAIM = 24;
+const DIAMOND_EXCHANGE_RATE = 1000;
+
+const API_URL = 'https://tuidiem-bot.vercel.app/api/webhook';
+const ZALO_ADMIN = '0965479975';
+
+let userId = localStorage.getItem('userId') || '';
+let currentFirebaseUid = localStorage.getItem('firebaseUid') || '';
+
+const DENOMS = {
+  viettel:   [10000, 20000, 50000, 100000, 200000, 500000],
+  vinaphone: [10000, 20000, 50000, 100000, 200000, 500000],
+  mobifone:  [10000, 20000, 50000, 100000, 200000, 500000],
+  garena:    [20000, 50000, 100000, 200000, 500000]
+};
+const OP_NAMES = { viettel: 'Viettel', vinaphone: 'VinaPhone', mobifone: 'MobiFone', garena: 'Garena' };
+let currentOp = 'viettel';
+let currentDenom = 10000;
+let diamondSelectedPack = null;
+let walletMode = localStorage.getItem('walletMode') || 'point';
+
+// ===== SPRITE URLs =====
+const SPRITES = {
+  cao: 'https://i.postimg.cc/gnpz8PNq/player-stand.png',
+  meo: 'https://i.postimg.cc/KR5Z5sHB/grok-1791800197754.png',
+  sanGach: 'https://i.postimg.cc/JGQ1Qd2j/tile-floor-stone.png',
+  ban: 'https://i.postimg.cc/K1NDxFsP/01-ban.png',
+  ghe: 'https://i.postimg.cc/VJRWm1HD/02-ghe.png',
+  ke: 'https://i.postimg.cc/BjgB4swN/03-tu-ke-sach.png',
+  cay: 'https://i.postimg.cc/cvmB0Z5F/04-cay-canh.png',
+  da: 'https://i.postimg.cc/yJ8XN5wX/da.png',
+  binhTamGiac: 'https://i.postimg.cc/VSkBNT3K/dreamina-2026-10-12-3485-Tach-12-anh-ra.jpg',
+  binhCuuHoa: 'https://i.postimg.cc/DWwdzDtY/dreamina-2026-10-12-4893-Tach-12-anh-ra.jpg',
+  ongNghiem: 'https://i.postimg.cc/XZYcvhTH/dreamina-2026-10-12-5374-Tach-tu-binh-mau-tim.jpg',
+  denBaoDong: 'https://i.postimg.cc/Jyzchg9Y/dreamina-2026-10-12-6725-Tach-12-anh-ra.jpg',
+  exit: 'https://i.postimg.cc/Jyzchg9Q/file-0000000065748211a38b4a417f777cc6.png',
+  kinhHienVi: 'https://i.postimg.cc/94QtfSvy/kinh-hien-vi.png',
+  mangNhen: 'https://i.postimg.cc/06ydN3Ln/mang-nhen.png',
+  xuong: 'https://i.postimg.cc/t14tgfLh/xuong.png',
+  thung: 'https://i.postimg.cc/Yhxpxysv/tile-box.png',
+  cua: 'https://i.postimg.cc/kBCJKdfN/tile-door.png',
+  duoc: 'https://i.postimg.cc/FdmfRJf8/Chat-GPT-Image-18-08-31-12-thg-10-2026.png'
+};
+
+// ===== TIỆN ÍCH =====
+function getTodayVN() {
+  const now = new Date();
+  const vnTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+  return vnTime.toISOString().slice(0, 10);
+}
+function getTimeStr() {
+  const now = new Date();
+  return `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} ${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}`;
+}
+
+function startApp() {
+  const landing = document.getElementById('landingScreen');
+  if (landing) { landing.style.opacity = '0'; setTimeout(() => { landing.style.display = 'none'; }, 400); }
+  localStorage.setItem('landingSeen', '1');
+}
+
+// ===== KHỞI TẠO =====
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('landingSeen') === '1') {
+    const landing = document.getElementById('landingScreen');
+    if (landing) landing.style.display = 'none';
+  }
+  updateUserIdUI();
+  updatePointsUI();
+  renderDenoms();
+  renderHistory();
+  setupOperators();
+  initDiamondPacks();
+  initDepositPacks();
+  renderCashHistory();
+  updateCashDiamondsUI();
+  document.getElementById('tab-ads').classList.remove('hidden');
+
+  document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+    try {
+      const provider = new window.fbGoogleProvider();
+      await window.fbSignInWithPopup(window.fbAuth, provider);
+    } catch (error) { alert('Lỗi đăng nhập: ' + error.message); }
+  });
+  waitForFirebase();
+});
+
+function waitForFirebase() {
+  let progress = 0;
+  const progressBar = document.getElementById('ldProgressBar');
+  const percentText = document.getElementById('ldPercent');
+  const statusText = document.getElementById('ldStatus');
+  const statuses = [{at:0,text:'Đang khởi tạo'},{at:25,text:'Đang kết nối máy chủ'},{at:55,text:'Đang tải dữ liệu'},{at:80,text:'Sắp xong'}];
+  const progressInterval = setInterval(() => {
+    progress += Math.random() * 10 + 5;
+    if (progress > 95) progress = 95;
+    if (progressBar) progressBar.style.width = progress + '%';
+    if (percentText) percentText.textContent = Math.floor(progress) + '%';
+    for (let i = statuses.length - 1; i >= 0; i--) {
+      if (progress >= statuses[i].at && statusText) { statusText.textContent = statuses[i].text; break; }
+    }
+  }, 60);
+  window._progressInterval = progressInterval;
+
+  if (typeof window.fbAuth === 'undefined' || typeof window.fbOnAuthStateChanged !== 'function') {
+    setTimeout(waitForFirebase, 100); return;
+  }
+  checkAuth();
+}
+
+function generateUserIdFromUid(uid) {
+  if (!uid) return 'ID' + Math.random().toString(36).substring(2, 10).toUpperCase();
+  return 'ID' + uid.slice(-8).toUpperCase();
+}
+
+function updateUserIdUI() {
+  const display = userId ? userId.replace('ID', '') : '...';
+  const el = document.getElementById('userId');
+  if (el) el.textContent = 'ID: ' + display;
+}
+
+function checkAuth() {
+  window.fbOnAuthStateChanged(window.fbAuth, async (user) => {
+    const loading = document.getElementById('loadingScreen');
+    if (loading && loading.style.display !== 'none') {
+      if (window._progressInterval) clearInterval(window._progressInterval);
+      const progressBar = document.getElementById('ldProgressBar');
+      const percentText = document.getElementById('ldPercent');
+      if (progressBar) progressBar.style.width = '100%';
+      if (percentText) percentText.textContent = '100%';
+      setTimeout(() => {
+        loading.classList.add('hide');
+        setTimeout(() => { loading.style.display = 'none'; }, 400);
+      }, 250);
+    }
+
+    if (user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      currentFirebaseUid = user.uid;
+      localStorage.setItem('firebaseUid', user.uid);
+      userId = generateUserIdFromUid(user.uid);
+      localStorage.setItem('userId', userId);
+      updateUserIdUI();
+      const avatar = user.photoURL || 'https://via.placeholder.com/55';
+      document.getElementById('sAvatar').src = avatar;
+      document.getElementById('sName').textContent = user.displayName || 'Người dùng';
+      document.getElementById('sEmail').textContent = user.email || '';
+      document.getElementById('navAvatar').src = avatar;
+      await loadUserData(user.uid);
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+      currentFirebaseUid = '';
+    }
+  });
+}
+
+async function loadUserData(uid) {
+  try {
+    const userRef = window.fbDoc(window.fbDb, "users", uid);
+    const userSnap = await window.fbGetDoc(userRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      userPoints = data.points || 0;
+      userDiamonds = data.diamonds || 0;
+      userHistory = data.history || [];
+      diamondHistory = data.diamondHistory || [];
+      totalAdsWatched = data.totalAdsWatched || 0;
+      todayPoints = data.todayPoints || 0;
+      diamondEarnedToday = data.diamondEarnedToday || 0;
+      const today = getTodayVN();
+      if (data.lastPlayDate !== today) { todayPoints = 0; diamondEarnedToday = 0; }
+    } else {
+      await window.fbSetDoc(userRef, {
+        points: 0, diamonds: 0, history: [], diamondHistory: [],
+        totalAdsWatched: 0, todayPoints: 0, diamondEarnedToday: 0,
+        lastPlayDate: getTodayVN(), createdAt: new Date().toISOString()
+      });
+      userPoints = 0; userDiamonds = 0; userHistory = []; diamondHistory = [];
+      totalAdsWatched = 0; todayPoints = 0; diamondEarnedToday = 0;
+    }
+    saveLocalState();
+    updatePointsUI();
+    renderHistory();
+  } catch (error) { console.error("Lỗi load:", error); }
+}
+
+function saveLocalState() {
+  localStorage.setItem('userPoints', userPoints);
+  localStorage.setItem('userDiamonds', userDiamonds);
+  localStorage.setItem('userHistory', JSON.stringify(userHistory));
+  localStorage.setItem('diamondHistory', JSON.stringify(diamondHistory));
+  localStorage.setItem('totalAdsWatched', totalAdsWatched);
+  localStorage.setItem('todayPoints', todayPoints);
+  localStorage.setItem('diamondEarnedToday', diamondEarnedToday);
+}
+
+async function saveUserData() {
+  if (!currentFirebaseUid) return;
+  try {
+    const userRef = window.fbDoc(window.fbDb, "users", currentFirebaseUid);
+    await window.fbUpdateDoc(userRef, {
+      points: userPoints, diamonds: userDiamonds, history: userHistory,
+      diamondHistory: diamondHistory, totalAdsWatched: totalAdsWatched,
+      todayPoints: todayPoints, diamondEarnedToday: diamondEarnedToday,
+      lastPlayDate: getTodayVN()
+    });
+  } catch (error) { console.error("Lỗi lưu:", error); }
+}
+
+// ===== SETTINGS =====
+function openSettings() { document.getElementById('settingsOverlay').classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeSettingsBg(e) { if (e.target.id === 'settingsOverlay') { document.getElementById('settingsOverlay').classList.remove('show'); document.body.style.overflow = ''; } }
+function switchAccount() { document.getElementById('settingsOverlay').classList.remove('show'); document.getElementById('switchAccountOverlay').classList.add('show'); }
+function closeSwitchAccount() { document.getElementById('switchAccountOverlay').classList.remove('show'); }
+
+async function confirmSwitchAccount() {
+  document.getElementById('switchAccountOverlay').classList.remove('show');
+  try {
+    await window.fbSignOut(window.fbAuth);
+    setTimeout(async () => {
+      try {
+        const provider = new window.fbGoogleProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        await window.fbSignInWithPopup(window.fbAuth, provider);
+      } catch (error) {
+        if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') alert('Lỗi: ' + error.message);
+      }
+    }, 400);
+  } catch (error) { alert('Lỗi: ' + error.message); }
+}
+
+function logoutUser() { document.getElementById('settingsOverlay').classList.remove('show'); document.getElementById('logoutOverlay').classList.add('show'); }
+function closeLogout() { document.getElementById('logoutOverlay').classList.remove('show'); }
+
+function confirmLogout() {
+  localStorage.removeItem('survivalState');
+  window.fbSignOut(window.fbAuth).then(() => { localStorage.clear(); sessionStorage.removeItem('tuidiem_loaded'); location.reload(); });
+}
+
+// ===== UI UPDATE =====
+function updatePointsUI() {
+  const pointsEl = document.getElementById('points');
+  const diamondsEl = document.getElementById('diamonds');
+  if (pointsEl) pointsEl.textContent = userPoints.toLocaleString('vi-VN');
+  if (diamondsEl) diamondsEl.textContent = userDiamonds.toLocaleString('vi-VN');
+  const totalEarnEl = document.getElementById('totalEarn');
+  if (totalEarnEl) totalEarnEl.textContent = userPoints;
+  const totalAdsEl = document.getElementById('totalAds');
+  if (totalAdsEl) totalAdsEl.textContent = totalAdsWatched;
+  const todayPointsEl = document.getElementById('todayPoints');
+  if (todayPointsEl) todayPointsEl.textContent = todayPoints;
+  const spent = userHistory.reduce((s, h) => s + ((h.amount || 0) * RATE), 0);
+  const totalSpentEl = document.getElementById('totalSpent');
+  if (totalSpentEl) totalSpentEl.textContent = spent.toLocaleString('vi-VN');
+  const totalOrdersEl = document.getElementById('totalOrders');
+  if (totalOrdersEl) totalOrdersEl.textContent = userHistory.length;
+  updateDiamondUI();
+  updateProfileWalletUI();
+  updateCashDiamondsUI();
+  updateHUD();
+}
+
+function updateDiamondUI() {
+  const balanceEl = document.getElementById('diamondBalance');
+  if (balanceEl) balanceEl.textContent = userDiamonds.toLocaleString('vi-VN');
+  const cashEl = document.getElementById('cashDiamonds');
+  if (cashEl) cashEl.textContent = userDiamonds.toLocaleString('vi-VN');
+  renderDiamondHistory();
+}
+
+function updateProfileWalletUI() {
+  const amountEl = document.getElementById('profileWalletAmount');
+  const unitEl = document.getElementById('profileWalletUnit');
+  if (!amountEl) return;
+  if (walletMode === 'point') { amountEl.textContent = userPoints.toLocaleString('vi-VN'); unitEl.textContent = '💰'; }
+  else { amountEl.textContent = userDiamonds.toLocaleString('vi-VN'); unitEl.textContent = '💎'; }
+}
+function toggleWalletMode() { walletMode = walletMode === 'point' ? 'diamond' : 'point'; localStorage.setItem('walletMode', walletMode); updateProfileWalletUI(); }
+
+function openProfile() {
+  const navAva = document.getElementById('navAvatar');
+  document.getElementById('profileAvatar').src = navAva ? navAva.src : 'https://via.placeholder.com/70';
+  document.getElementById('profileName').textContent = document.getElementById('sName').textContent || 'Guest';
+  document.getElementById('profileEmail').textContent = 'ID: ' + (userId.replace('ID', '') || '...');
+  updateProfileWalletUI();
+  document.getElementById('profileOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeProfile() { document.getElementById('profileOverlay').classList.remove('show'); document.body.style.overflow = ''; }
+
+// ===== ĐIỂM DANH =====
+function claimPoints() {
+  const btn = document.getElementById('watchBtn');
+  const statusEl = document.getElementById('status');
+  const today = getTodayVN();
+  if (todayPoints >= DAILY_POINT_LIMIT) { statusEl.style.color = '#f44336'; statusEl.textContent = `❌ Hôm nay đã đạt giới hạn ${DAILY_POINT_LIMIT} điểm.`; return; }
+  const claimLog = JSON.parse(localStorage.getItem('claimLog')) || {};
+  claimLog[today] = claimLog[today] || 0;
+  if (claimLog[today] >= MAX_CLAIMS_PER_DAY) { statusEl.style.color = '#f44336'; statusEl.textContent = `❌ Đã nhận đủ ${MAX_CLAIMS_PER_DAY} lần hôm nay.`; return; }
+  const lastClaim = parseInt(localStorage.getItem('lastClaim')) || 0;
+  const elapsed = Date.now() - lastClaim;
+  if (elapsed < CLAIM_COOLDOWN_MS) {
+    const mins = Math.floor((CLAIM_COOLDOWN_MS - elapsed) / 60000);
+    const secs = Math.floor(((CLAIM_COOLDOWN_MS - elapsed) % 60000) / 1000);
+    statusEl.style.color = '#f44336'; statusEl.textContent = `⏳ Đợi thêm ${mins}p ${secs}s.`; return;
+  }
+  btn.disabled = true; statusEl.style.color = '#1b5e20'; statusEl.textContent = 'Đang xử lý...';
+  setTimeout(async () => {
+    const remaining = DAILY_POINT_LIMIT - todayPoints;
+    const pointsToAdd = Math.min(POINTS_PER_CLAIM, remaining);
+    userPoints += pointsToAdd; todayPoints += pointsToAdd; totalAdsWatched += 1;
+    claimLog[today] += 1;
+    let diamondMsg = '';
+    if (claimLog[today] % 5 === 0) {
+      userDiamonds += 1; diamondEarnedToday += 1;
+      diamondHistory.unshift({ amount: 1, reason: 'Điểm danh', time: getTimeStr() });
+      diamondHistory = diamondHistory.slice(0, 30);
+      diamondMsg = ' +1 💎';
+    }
+    const logs = JSON.parse(localStorage.getItem('pointLogs')) || [];
+    logs.unshift({ points: pointsToAdd, time: getTimeStr() });
+    localStorage.setItem('pointLogs', JSON.stringify(logs.slice(0, 50)));
+    localStorage.setItem('claimLog', JSON.stringify(claimLog));
+    localStorage.setItem('lastClaim', Date.now());
+    saveLocalState(); updatePointsUI();
+    statusEl.style.color = '#1b5e20';
+    statusEl.textContent = `✅ +${pointsToAdd} điểm${diamondMsg}!`;
+    startCooldownDisplay();
+    await saveUserData();
+  }, 1500);
+}
+
+let cooldownInterval = null;
+function startCooldownDisplay() {
+  if (cooldownInterval) clearInterval(cooldownInterval);
+  const statusEl = document.getElementById('status');
+  const btn = document.getElementById('watchBtn');
+  btn.disabled = true;
+  cooldownInterval = setInterval(() => {
+    const lastClaim = parseInt(localStorage.getItem('lastClaim')) || 0;
+    const elapsed = Date.now() - lastClaim;
+    const remaining = CLAIM_COOLDOWN_MS - elapsed;
+    if (remaining <= 0) {
+      clearInterval(cooldownInterval); btn.disabled = false;
+      statusEl.textContent = '✅ Có thể điểm danh tiếp!'; return;
+    }
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    statusEl.textContent = `⏳ Có thể nhận sau ${mins}p ${secs}s`;
+  }, 1000);
+}
+
+// ===== KHẢO SÁT =====
+function openSurvey() { window.open(`https://offers.cpx-research.com/index.php?app_id=${CPX_APP_ID}&ext_user_id=${userId}`, '_blank'); }
+
+function openZaloPopup() {
+  const displayId = userId.replace('ID', '');
+  document.getElementById('notifyIconWrap').className = 'notify-icon-wrap';
+  document.getElementById('notifyIcon').innerHTML = '<i class="fas fa-comment-dots"></i>';
+  document.getElementById('notifySub').textContent = 'Copy ID và gửi cho admin qua Zalo';
+  document.getElementById('codeBox').style.display = 'block';
+  document.getElementById('codeLabel').textContent = '📋 ID CỦA BẠN';
+  document.getElementById('codeValue').textContent = displayId;
+  document.getElementById('notifyList').innerHTML = `<div style="padding:12px 4px;color:#666;font-size:12.5px;line-height:1.7;text-align:left;"><b style="color:#1b5e20;">Các bước:</b><br>1. Tap vào ID để copy<br>2. Bấm <b>"Mở Zalo chat Admin"</b><br>3. Dán ID và gửi admin<br>4. Chờ admin gửi key</div>`;
+  const btn = document.getElementById('notifyBtn');
+  btn.className = 'notify-btn';
+  btn.innerHTML = '<i class="fas fa-comment-dots"></i> Mở Zalo chat Admin';
+  btn.onclick = goToZalo;
+  const codeValueEl = document.getElementById('codeValue');
+  codeValueEl.style.cursor = 'pointer';
+  codeValueEl.onclick = () => {
+    navigator.clipboard.writeText(displayId).then(() => {
+      codeValueEl.textContent = '✅ Đã copy: ' + displayId;
+      setTimeout(() => { codeValueEl.textContent = displayId; }, 1500);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = displayId; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      codeValueEl.textContent = '✅ Đã copy: ' + displayId;
+      setTimeout(() => { codeValueEl.textContent = displayId; }, 1500);
+    });
+  };
+  document.getElementById('notifyOverlay').classList.add('show');
+}
+
+function goToZalo() { window.open(`https://zalo.me/${ZALO_ADMIN}`, '_blank'); closeNotify(); }
+
+function showPointHistory() {
+  const logs = JSON.parse(localStorage.getItem('pointLogs')) || [];
+  document.getElementById('notifyIconWrap').className = 'notify-icon-wrap';
+  document.getElementById('notifyIcon').innerHTML = '<i class="fas fa-history"></i>';
+  document.getElementById('notifySub').textContent = '';
+  document.getElementById('codeBox').style.display = 'none';
+  const list = document.getElementById('notifyList');
+  if (logs.length === 0) { list.innerHTML = `<div class="notify-list-empty">Chưa có điểm nào được cộng</div>`; }
+  else {
+    list.innerHTML = logs.slice(0, 20).map(log => `<div class="notify-list-item"><div class="nl-left"><div class="nl-icon"><i class="fas fa-plus"></i></div><div><strong>+${log.points} điểm</strong><span class="nl-time">${log.time}</span></div></div><div class="nl-points">+${log.points}</div></div>`).join('');
+  }
+  const btn = document.getElementById('notifyBtn');
+  btn.className = 'notify-btn';
+  btn.innerHTML = '<i class="fas fa-check-circle"></i> Đã hiểu';
+  btn.onclick = closeNotify;
+  document.getElementById('notifyOverlay').classList.add('show');
+}
+
+function closeNotify() {
+  document.getElementById('notifyOverlay').classList.remove('show');
+  document.getElementById('notifySub').textContent = '';
+  document.getElementById('codeBox').style.display = 'none';
+}
+
+function showEnterCode() { document.getElementById('confirmCodeInput').value = ''; document.getElementById('enterCodeOverlay').classList.add('show'); }
+function closeEnterCode() { document.getElementById('enterCodeOverlay').classList.remove('show'); }
+
+async function submitConfirmCode() {
+  const code = document.getElementById('confirmCodeInput').value.trim();
+  if (!code) { alert('Vui lòng nhập key!'); return; }
+  const myUserId = userId.replace('ID', '');
+  try {
+    const res = await fetch(`${API_URL}?action=verify&key=${encodeURIComponent(code)}&userId=${encodeURIComponent(myUserId)}`);
+    const data = await res.json();
+    if (!data.valid) { alert('❌ ' + (data.error || 'Key không hợp lệ!')); return; }
+    userPoints += data.points; todayPoints += data.points;
+    const diamondsFromSurvey = Math.floor(data.points / 100);
+    if (diamondsFromSurvey > 0) {
+      userDiamonds += diamondsFromSurvey; diamondEarnedToday += diamondsFromSurvey;
+      diamondHistory.unshift({ amount: diamondsFromSurvey, reason: 'Khảo sát', time: getTimeStr() });
+      diamondHistory = diamondHistory.slice(0, 30);
+    }
+    const logs = JSON.parse(localStorage.getItem('pointLogs')) || [];
+    logs.unshift({ points: data.points, time: getTimeStr() });
+    localStorage.setItem('pointLogs', JSON.stringify(logs.slice(0, 50)));
+    saveLocalState(); updatePointsUI(); closeEnterCode();
+    await saveUserData();
+    document.getElementById('notifyIconWrap').className = 'notify-icon-wrap';
+    document.getElementById('notifyIcon').innerHTML = '<i class="fas fa-check"></i>';
+    document.getElementById('notifySub').textContent = `Bạn đã được cộng ${data.points} điểm`;
+    document.getElementById('codeBox').style.display = 'none';
+    document.getElementById('notifyList').innerHTML = `<div class="notify-list-item"><div class="nl-left"><div class="nl-icon"><i class="fas fa-plus"></i></div><div><strong>+${data.points} điểm</strong><span class="nl-time">${getTimeStr()}</span></div></div><div class="nl-points">+${data.points}</div></div>`;
+    const btn = document.getElementById('notifyBtn');
+    btn.className = 'notify-btn';
+    btn.innerHTML = '<i class="fas fa-check-circle"></i> Đã hiểu';
+    btn.onclick = closeNotify;
+    document.getElementById('notifyOverlay').classList.add('show');
+  } catch (err) { alert('❌ Lỗi kết nối server: ' + err.message); }
+}
+
+// ===== ĐỔI THẺ CÀO =====
+function setupOperators() {
+  document.querySelectorAll('.operator-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.operator-item').forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      currentOp = item.dataset.op;
+      document.getElementById('selectedOpName').textContent = OP_NAMES[currentOp];
+      renderDenoms();
+    });
+  });
+}
+
+function renderDenoms() {
+  const grid = document.getElementById('denomGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const list = DENOMS[currentOp];
+  currentDenom = list[0];
+  list.forEach((amount, idx) => {
+    const div = document.createElement('div');
+    div.className = 'denom-item' + (idx === 0 ? ' selected' : '');
+    div.innerHTML = `${(amount/1000)}.000đ<br><small>${(amount * RATE).toLocaleString('vi-VN')} điểm</small>`;
+    div.onclick = () => {
+      document.querySelectorAll('#denomGrid .denom-item').forEach(d => d.classList.remove('selected'));
+      div.classList.add('selected'); currentDenom = amount;
+    };
+    grid.appendChild(div);
+  });
+}
+
+async function redeem() {
+  const cost = currentDenom * RATE;
+  const statusEl = document.getElementById('redeemStatus');
+  if (userPoints < cost) { statusEl.style.color = '#f44336'; statusEl.textContent = `❌ Cần ${cost.toLocaleString('vi-VN')} điểm, có ${userPoints.toLocaleString('vi-VN')} điểm.`; return; }
+  userPoints -= cost; saveLocalState();
+  const code = Array.from({length: 10}, () => Math.floor(Math.random()*10)).join(' ');
+  const seri = Date.now().toString().slice(-10).split('').join(' ');
+  const now = new Date();
+  const timeStr = `${now.getDate().toString().padStart(2,'0')}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  const order = { id: 'DH' + Date.now(), op: currentOp, opName: OP_NAMES[currentOp], amount: currentDenom, code, seri, time: timeStr, receiveTime: null, status: 'pending' };
+  userHistory.unshift(order); saveLocalState(); updatePointsUI(); renderHistory();
+  statusEl.style.color = '#4CAF50'; statusEl.textContent = '✅ Đổi thưởng thành công!';
+  setTimeout(() => statusEl.textContent = '', 3000);
+  showOrderModal(order);
+  await saveUserData();
+  setTimeout(async () => {
+    const now2 = new Date();
+    const receiveStr = `${now2.getDate().toString().padStart(2,'0')}/${(now2.getMonth()+1).toString().padStart(2,'0')}/${now2.getFullYear()} ${now2.getHours().toString().padStart(2,'0')}:${now2.getMinutes().toString().padStart(2,'0')}:${now2.getSeconds().toString().padStart(2,'0')}`;
+    const idx = userHistory.findIndex(o => o.id === order.id);
+    if (idx !== -1) {
+      userHistory[idx].status = 'completed';
+      userHistory[idx].receiveTime = receiveStr;
+      saveLocalState(); renderHistory();
+      if (document.getElementById('orderModal').classList.contains('show')) showOrderModal(userHistory[idx]);
+      await saveUserData();
+    }
+  }, 3000);
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!list) return;
+  if (userHistory.length === 0) { list.innerHTML = `<div class="history-empty"><i class="fas fa-inbox"></i>Chưa có đơn đổi thưởng nào.</div>`; return; }
+  list.innerHTML = userHistory.map((order, idx) => {
+    const isPending = order.status === 'pending';
+    return `<div class="history-item ${isPending ? 'pending' : 'completed'}" onclick="showOrderModalByIndex(${idx})"><div class="hi-icon"><i class="fas fa-sim-card"></i></div><div class="hi-content"><div class="hi-title">Thẻ ${order.opName} - ${(order.amount/1000)}.000đ</div><div class="hi-date"><i class="far fa-clock"></i> ${order.time}</div></div><div class="hi-status ${order.status}">${isPending ? 'Đang xử lý' : 'Thành công'}</div></div>`;
+  }).join('');
+}
+
+function showOrderModalByIndex(idx) { if (userHistory[idx]) showOrderModal(userHistory[idx]); }
+
+function showOrderModal(order) {
+  const modal = document.getElementById('orderModal');
+  const header = document.getElementById('modalHeader');
+  const icon = document.getElementById('modalIcon');
+  const title = document.getElementById('modalTitle');
+  const sub = document.getElementById('modalSub');
+  const receiveRow = document.getElementById('mReceiveRow');
+  const isPending = order.status === 'pending';
+  header.className = 'modal-header ' + (isPending ? 'pending' : 'success');
+  icon.innerHTML = isPending ? '<i class="fas fa-clock"></i>' : '<i class="fas fa-check"></i>';
+  title.textContent = isPending ? 'Đang xử lý' : 'Xử lý thành công!';
+  sub.textContent = isPending ? 'Mã thẻ sẽ được gửi cho bạn' : 'Mã thẻ đã được gửi cho bạn';
+  document.getElementById('mOp').textContent = `${order.opName} ${(order.amount/1000)}.000đ`;
+  document.getElementById('mTime').textContent = order.time;
+  document.getElementById('mCode').textContent = order.code;
+  document.getElementById('mSeri').textContent = order.seri;
+  if (isPending) { receiveRow.style.display = 'none'; document.getElementById('mPendingNote').style.display = 'flex'; }
+  else { receiveRow.style.display = 'flex'; document.getElementById('mReceiveTime').textContent = order.receiveTime || order.time; document.getElementById('mPendingNote').style.display = 'none'; }
+  modal.classList.add('show');
+}
+
+function closeModal() { document.getElementById('orderModal').classList.remove('show'); }
+
+// ===== KIM CƯƠNG =====
+function initDiamondPacks() {
+  const grid = document.getElementById('diamondPackGrid');
+  if (grid) {
+    grid.querySelectorAll('.pack-item').forEach(item => {
+      item.onclick = () => {
+        grid.querySelectorAll('.pack-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        diamondSelectedPack = { money: parseInt(item.dataset.pack), diamond: parseInt(item.dataset.diamond) };
+      };
+    });
+  }
+}
+
+function initDepositPacks() {
+  const grid = document.getElementById('depositPackGrid');
+  if (grid) {
+    grid.querySelectorAll('.pack-item').forEach(item => {
+      item.onclick = () => {
+        grid.querySelectorAll('.pack-item').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        diamondSelectedPack = { money: parseInt(item.dataset.pack), diamond: parseInt(item.dataset.diamond) };
+        document.getElementById('depositDiamondAmount').textContent = '+' + diamondSelectedPack.diamond.toLocaleString('vi-VN') + ' 💎';
+        document.getElementById('depositMoneyAmount').textContent = diamondSelectedPack.money.toLocaleString('vi-VN') + 'đ';
+        const displayId = userId.replace('ID', '');
+        document.getElementById('depositNote').textContent = 'NAP ' + displayId;
+      };
+    });
+    grid.querySelectorAll('.pack-item')[0].classList.add('selected');
+    diamondSelectedPack = { money: 50000, diamond: 50000 };
+  }
+}
+
+function convertPointsToDiamond() {
+  const pointsInput = document.getElementById('convertPoints');
+  const points = parseInt(pointsInput.value) || 0;
+  if (points < DIAMOND_EXCHANGE_RATE) { alert(`Tối thiểu ${DIAMOND_EXCHANGE_RATE} điểm để đổi!`); return; }
+  if (points > userPoints) { alert(`Bạn chỉ có ${userPoints.toLocaleString('vi-VN')} điểm.`); return; }
+  const diamondsToAdd = Math.floor(points / DIAMOND_EXCHANGE_RATE);
+  const pointsUsed = diamondsToAdd * DIAMOND_EXCHANGE_RATE;
+  userPoints -= pointsUsed;
+  userDiamonds += diamondsToAdd;
+  diamondHistory.unshift({ amount: diamondsToAdd, reason: `Đổi ${pointsUsed} điểm`, time: getTimeStr() });
+  diamondHistory = diamondHistory.slice(0, 30);
+  saveLocalState(); updatePointsUI();
+  pointsInput.value = '';
+  alert(`✅ Đổi thành công! Nhận ${diamondsToAdd} 💎`);
+  saveUserData();
+}
+
+function openDeposit() {
+  const displayId = userId.replace('ID', '');
+  document.getElementById('depositNote').textContent = 'NAP ' + displayId;
+  if (diamondSelectedPack) {
+    document.getElementById('depositDiamondAmount').textContent = '+' + diamondSelectedPack.diamond.toLocaleString('vi-VN') + ' 💎';
+    document.getElementById('depositMoneyAmount').textContent = diamondSelectedPack.money.toLocaleString('vi-VN') + 'đ';
+  }
+  document.getElementById('depositOverlay').classList.add('show');
+}
+function closeDeposit() { document.getElementById('depositOverlay').classList.remove('show'); }
+
+function renderDiamondHistory() {
+  const list = document.getElementById('diamondHistory');
+  if (!list) return;
+  if (diamondHistory.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:20px;color:#888;font-size:12px;">Chưa có giao dịch kim cương nào</div>`;
+    return;
+  }
+  list.innerHTML = diamondHistory.map(h => {
+    const isMinus = h.amount < 0;
+    return `<div class="notify-list-item" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-left-color:#9C27B0;"><div class="nl-left"><div class="nl-icon" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"><i class="fas fa-gem"></i></div><div><strong style="color:#6A1B9A;">${isMinus ? '' : '+'}${h.amount.toLocaleString('vi-VN')} 💎</strong><span class="nl-time">${h.reason} • ${h.time}</span></div></div><div class="nl-points" style="color:${isMinus ? '#f44336' : '#6A1B9A'};">${isMinus ? '' : '+'}${h.amount.toLocaleString('vi-VN')}</div></div>`;
+  }).join('');
+}
+
+// ===== RÚT TIỀN MẶT =====
+const CASH_CONFIG = { MIN: 100000, MAX: 500000, RATE: 1 };
+
+function updateCashDiamondsUI() {
+  const el = document.getElementById('cashDiamonds');
+  if (el) el.textContent = userDiamonds.toLocaleString('vi-VN');
+}
+
+function updateCashPreview() {
+  const amountInput = document.getElementById('cashAmount');
+  const preview = document.getElementById('cashPreview');
+  const diamondEl = document.getElementById('cashPreviewDiamond');
+  const moneyEl = document.getElementById('cashPreviewMoney');
+  const amount = parseInt(amountInput.value) || 0;
+  if (amount >= CASH_CONFIG.MIN && amount <= CASH_CONFIG.MAX) {
+    const diamondsNeeded = amount * CASH_CONFIG.RATE;
+    diamondEl.textContent = diamondsNeeded.toLocaleString('vi-VN');
+    moneyEl.textContent = amount.toLocaleString('vi-VN');
+    preview.style.display = 'block';
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function goToCashWithdrawal() {
+  document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('tab-reward').classList.remove('hidden');
+  document.querySelectorAll('#tab-reward .wallet-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#tab-reward .wallet-tab-content').forEach(c => c.classList.remove('active'));
+  const tabs = document.querySelectorAll('#tab-reward .wallet-tab');
+  if (tabs[1]) tabs[1].classList.add('active');
+  const cashContent = document.getElementById('reward-content-cash');
+  if (cashContent) cashContent.classList.add('active');
+  updateCashDiamondsUI();
+}
+
+async function submitCashWithdrawal() {
+  const bank = document.getElementById('cashBank').value;
+  const account = document.getElementById('cashAccount').value.trim();
+  const name = document.getElementById('cashName').value.trim();
+  const amount = parseInt(document.getElementById('cashAmount').value) || 0;
+  const statusEl = document.getElementById('cashStatus');
+  if (!bank) { statusEl.style.color = '#f44336'; statusEl.textContent = '❌ Vui lòng chọn ngân hàng!'; return; }
+  if (!account || account.length < 6) { statusEl.style.color = '#f44336'; statusEl.textContent = '❌ Vui lòng nhập số tài khoản hợp lệ!'; return; }
+  if (!name || name.length < 3) { statusEl.style.color = '#f44336'; statusEl.textContent = '❌ Vui lòng nhập tên chủ tài khoản!'; return; }
+  if (amount < CASH_CONFIG.MIN) { statusEl.style.color = '#f44336'; statusEl.textContent = `❌ Tối thiểu ${CASH_CONFIG.MIN.toLocaleString('vi-VN')}đ!`; return; }
+  if (amount > CASH_CONFIG.MAX) { statusEl.style.color = '#f44336'; statusEl.textContent = `❌ Tối đa ${CASH_CONFIG.MAX.toLocaleString('vi-VN')}đ!`; return; }
+  const diamondsNeeded = amount * CASH_CONFIG.RATE;
+  if (diamondsNeeded > userDiamonds) {
+    statusEl.style.color = '#f44336';
+    statusEl.textContent = `❌ Cần ${diamondsNeeded.toLocaleString('vi-VN')} 💎, có ${userDiamonds.toLocaleString('vi-VN')} 💎.`;
+    return;
+  }
+  if (!confirm(`Bạn muốn rút ${amount.toLocaleString('vi-VN')}đ về:\n\nNgân hàng: ${bank}\nSTK: ${account}\nChủ TK: ${name}\n\nSẽ trừ ${diamondsNeeded.toLocaleString('vi-VN')} 💎.`)) return;
+  userDiamonds -= diamondsNeeded;
+  saveLocalState(); updatePointsUI();
+  const withdrawalHistory = JSON.parse(localStorage.getItem('withdrawalHistory')) || [];
+  const timeStr = getTimeStr();
+  withdrawalHistory.unshift({ id: 'RT' + Date.now(), bank, account, name, amount, diamonds: diamondsNeeded, time: timeStr, status: 'pending' });
+  localStorage.setItem('withdrawalHistory', JSON.stringify(withdrawalHistory.slice(0, 30)));
+  diamondHistory.unshift({ amount: -diamondsNeeded, reason: `Rút ${amount.toLocaleString('vi-VN')}đ về ${bank}`, time: timeStr });
+  diamondHistory = diamondHistory.slice(0, 30);
+  localStorage.setItem('diamondHistory', JSON.stringify(diamondHistory));
+  saveLocalState(); updatePointsUI(); renderCashHistory();
+  document.getElementById('cashBank').value = '';
+  document.getElementById('cashAccount').value = '';
+  document.getElementById('cashName').value = '';
+  document.getElementById('cashAmount').value = '';
+  document.getElementById('cashPreview').style.display = 'none';
+  statusEl.style.color = '#4CAF50';
+  statusEl.textContent = '✅ Yêu cầu rút tiền đã gửi!';
+  await saveUserData();
+  setTimeout(() => { alert(`✅ Yêu cầu rút tiền đã gửi!\n\nNgân hàng: ${bank}\nSTK: ${account}\nSố tiền: ${amount.toLocaleString('vi-VN')}đ\n\nVui lòng gửi thông tin cho admin qua Zalo ${ZALO_ADMIN}.`); }, 500);
+}
+
+function renderCashHistory() {
+  const list = document.getElementById('cashHistory');
+  if (!list) return;
+  const history = JSON.parse(localStorage.getItem('withdrawalHistory')) || [];
+  if (history.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:20px;color:#888;font-size:12px;">Chưa có yêu cầu rút tiền nào</div>`;
+    return;
+  }
+    list.innerHTML = history.map(h => `<div class="history-item ${h.status === 'pending' ? 'pending' : 'completed'}" style="border-left-color:#9C27B0;"><div class="hi-icon" style="background:linear-gradient(135deg,#9C27B0,#6A1B9A);"><i class="fas fa-money-bill-wave"></i></div><div class="hi-content"><div class="hi-title">Rút ${h.amount.toLocaleString('vi-VN')}đ - ${h.bank}</div><div class="hi-date"><i class="far fa-clock"></i> ${h.time}</div></div><div class="hi-status ${h.status}" style="background:#f3e5f5;color:#6A1B9A;">${h.status === 'pending' ? 'Đang xử lý' : 'Thành công'}</div></div>`).join('');
+}
+
+// ============================================================
+// ==================== GAME PHASER ============================
+// ============================================================
+let phaserGame = null;
+let gameScene = null;
+
+const GAME_W = 450;
+const GAME_H = 720;
+
+// ===== CẤU HÌNH MẶT BẰNG =====
+const WALL = 12;
+const MAP_X = 10;
+const MAP_Y = 65;
+const MAP_BOTTOM = 545;
+const MAP_W = GAME_W - MAP_X * 2;
+const MAP_H = MAP_BOTTOM - MAP_Y;
+
+// 2 cột phòng + 1 hành lang dọc giữa
+const CORRIDOR = 40;
+const ROOM_W = (MAP_W - CORRIDOR - WALL * 2) / 2;
+const ROOM_H = (MAP_H - CORRIDOR - WALL * 2) / 2;
+
+// Vị trí 4 phòng
+const R1_X = MAP_X + WALL;
+const R2_X = R1_X + ROOM_W + CORRIDOR;
+const R_TOP_Y = MAP_Y + WALL;
+const R_BOT_Y = R_TOP_Y + ROOM_H + CORRIDOR;
+
+// Tâm hành lang
+const CORRIDOR_V_X = GAME_W / 2;
+const CORRIDOR_H_Y = R_TOP_Y + ROOM_H + CORRIDOR / 2;
+
+const DOOR_ENTRANCE = { x: GAME_W / 2, y: MAP_BOTTOM - 40 };
+
+const ROOMS_CONFIG = [
+  {
+    id: 1, name: 'HẦM NGẦM', emoji: '🕳️',
+    x: R1_X, y: R_TOP_Y, w: ROOM_W, h: ROOM_H,
+    floorColor: 0x4a5a4a,
+    doorSide: 'bottom',
+    doorX: R1_X + ROOM_W / 2,
+    doorY: R_TOP_Y + ROOM_H,
+    decor: [
+      { key: 'duoc', x: 0.25, y: 0.3, size: 26 },
+      { key: 'xuong', x: 0.75, y: 0.3, size: 30 },
+      { key: 'da', x: 0.25, y: 0.75, size: 30 },
+      { key: 'mangNhen', x: 0.75, y: 0.75, size: 34 }
+    ]
+  },
+  {
+    id: 2, name: 'KHO BÍ MẬT', emoji: '📦',
+    x: R2_X, y: R_TOP_Y, w: ROOM_W, h: ROOM_H,
+    floorColor: 0x5a4a3a,
+    doorSide: 'bottom',
+    doorX: R2_X + ROOM_W / 2,
+    doorY: R_TOP_Y + ROOM_H,
+    decor: [
+      { key: 'ke', x: 0.25, y: 0.3, size: 32 },
+      { key: 'ghe', x: 0.75, y: 0.3, size: 28 },
+      { key: 'ban', x: 0.25, y: 0.75, size: 32 },
+      { key: 'thung', x: 0.75, y: 0.75, size: 30 }
+    ]
+  },
+  {
+    id: 3, name: 'PHÒNG THÍ NGHIỆM', emoji: '🧪',
+    x: R1_X, y: R_BOT_Y, w: ROOM_W, h: ROOM_H,
+    floorColor: 0x4a4a5a,
+    doorSide: 'top',
+    doorX: R1_X + ROOM_W / 2,
+    doorY: R_BOT_Y,
+    decor: [
+      { key: 'ban', x: 0.25, y: 0.3, size: 32 },
+      { key: 'kinhHienVi', x: 0.75, y: 0.3, size: 30 },
+      { key: 'binhTamGiac', x: 0.25, y: 0.75, size: 26 },
+      { key: 'ongNghiem', x: 0.75, y: 0.75, size: 26 }
+    ]
+  },
+  {
+    id: 4, name: 'LỐI THOÁT HIỂM', emoji: '🏃',
+    x: R2_X, y: R_BOT_Y, w: ROOM_W, h: ROOM_H,
+    floorColor: 0x5a5a3a,
+    doorSide: 'top',
+    doorX: R2_X + ROOM_W / 2,
+    doorY: R_BOT_Y,
+    decor: [
+      { key: 'cua', x: 0.25, y: 0.3, size: 34 },
+      { key: 'exit', x: 0.75, y: 0.3, size: 34 },
+      { key: 'denBaoDong', x: 0.25, y: 0.75, size: 30 },
+      { key: 'binhCuuHoa', x: 0.75, y: 0.75, size: 30 }
+    ]
+  }
+];
+
+const ROOM_NAMES = ['Hầm Ngầm', 'Kho Bí Mật', 'Phòng Thí Nghiệm', 'Lối Thoát Hiểm'];
+
+// Màu nhân vật NPC + Player
+const NPC_COLORS = [
+  { main: 0xff9944, eye: 0x000000 },
+  { main: 0x9999ff, eye: 0x000000 },
+  { main: 0xaa6633, eye: 0x000000 },
+  { main: 0xffffff, eye: 0xff0000 }
+];
+const PLAYER_COLORS = [0x00cc66, 0xff6666, 0x6699ff, 0xffcc66, 0xcc66ff, 0x66ffcc, 0xff99cc, 0x99ff66];
+
+// ===== GAME STATE =====
+let survivalBet = 0;
+let betConfirmed = false;
+let survivalSelectedRoom = null;
+let roomPools = JSON.parse(localStorage.getItem('roomPools')) || { 1: 0, 2: 0, 3: 0, 4: 0 };
+let myCurrentBet = { roomId: null, amount: 0 };
+
+let gameState = {
+  phase: 'idle',
+  killerRooms: [],
+  safeRooms: [],
+  countdown: 60,
+  selectedRoom: null,
+  startTime: 0,
+  restStartTime: 0,
+  revealingStartTime: 0
+};
+
+let survivalHistory = JSON.parse(localStorage.getItem('survivalHistory')) || [];
+
+// ===== KHỞI TẠO PHASER =====
+function initPhaserGame() {
+  if (phaserGame) return;
+  const config = {
+    type: Phaser.AUTO,
+    width: GAME_W,
+    height: GAME_H,
+    parent: 'gameContainer',
+    backgroundColor: '#1a1a2e',
+    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_HORIZONTALLY },
+    scene: { preload: preloadGame, create: createGame, update: updateGame }
+  };
+  phaserGame = new Phaser.Game(config);
+}
+
+function preloadGame() {
+  const scene = this;
+  Object.keys(SPRITES).forEach(key => {
+    scene.load.image(key, SPRITES[key]);
+  });
+  scene.load.on('loaderror', (file) => { console.warn('Không load được:', file.key); });
+}
+
+// ===== HÀM TẠO NHÂN VẬT HÌNH KHỐI =====
+function createCharacterSprite(scene, x, y, colorMain, colorEye) {
+  const container = scene.add.container(x, y);
+  const body = scene.add.circle(0, 0, 20, colorMain);
+  body.setStrokeStyle(3, 0x000000, 0.5);
+  const earL = scene.add.triangle(-11, -18, 0, 10, 8, -6, -8, -6, colorMain);
+  earL.setStrokeStyle(2, 0x000000, 0.5);
+  const earR = scene.add.triangle(11, -18, 0, 10, 8, -6, -8, -6, colorMain);
+  earR.setStrokeStyle(2, 0x000000, 0.5);
+  const eyeL = scene.add.circle(-6, -3, 4, 0xffffff);
+  const pupilL = scene.add.circle(-6, -2, 2, 0x000000);
+  const eyeR = scene.add.circle(6, -3, 4, 0xffffff);
+  const pupilR = scene.add.circle(6, -2, 2, 0x000000);
+  const nose = scene.add.circle(0, 5, 2.5, colorEye);
+  container.add([body, earL, earR, eyeL, pupilL, eyeR, pupilR, nose]);
+  return container;
+}
+
+// ===== VẼ SCENE =====
+function createGame() {
+  const scene = this;
+  gameScene = scene;
+  scene.rooms = [];
+  scene.roomCharacters = [];
+  scene.roomBadges = {};
+  scene.playerArrow = null;
+  scene.playerName = null;
+  scene.playerSprites = [];
+
+  scene.add.rectangle(GAME_W / 2, GAME_H / 2, GAME_W, GAME_H, 0x0a0a1a).setDepth(-100);
+
+  // ===== SÀN HÀNH LANG CHỮ THẬP =====
+  const corridorV = scene.add.rectangle(CORRIDOR_V_X, MAP_Y + MAP_H / 2, CORRIDOR, MAP_H, 0x9a9aaa);
+  corridorV.setDepth(-50);
+
+  const corridorH = scene.add.rectangle(MAP_X + MAP_W / 2, CORRIDOR_H_Y, MAP_W, CORRIDOR, 0x9a9aaa);
+  corridorH.setDepth(-50);
+
+  const corridorTileV = scene.add.tileSprite(CORRIDOR_V_X, MAP_Y + MAP_H / 2, CORRIDOR, MAP_H, 'sanGach');
+  corridorTileV.setAlpha(0.6).setTint(0xb0b0c0).setDepth(-49);
+
+  const corridorTileH = scene.add.tileSprite(MAP_X + MAP_W / 2, CORRIDOR_H_Y, MAP_W, CORRIDOR, 'sanGach');
+  corridorTileH.setAlpha(0.6).setTint(0xb0b0c0).setDepth(-49);
+
+  // Viền hành lang
+  const corridorBorder = scene.add.graphics();
+  corridorBorder.lineStyle(2, 0xd0d0e0, 0.9);
+  corridorBorder.strokeRect(CORRIDOR_V_X - CORRIDOR / 2, MAP_Y, CORRIDOR, MAP_H);
+  corridorBorder.strokeRect(MAP_X, CORRIDOR_H_Y - CORRIDOR / 2, MAP_W, CORRIDOR);
+  corridorBorder.setDepth(-48);
+
+  // Vạch vàng
+  const dashLine = scene.add.graphics();
+  dashLine.lineStyle(3, 0xffd700, 0.9);
+  for (let y = MAP_Y + 20; y < MAP_BOTTOM - 20; y += 22) {
+    dashLine.lineBetween(CORRIDOR_V_X, y, CORRIDOR_V_X, y + 14);
+  }
+  for (let x = MAP_X + 25; x < MAP_X + MAP_W - 25; x += 22) {
+    dashLine.lineBetween(x, CORRIDOR_H_Y, x + 14, CORRIDOR_H_Y);
+  }
+  dashLine.setDepth(-47);
+
+  // ===== TƯỜNG BAO NGOÀI =====
+  const wallColor = 0x1a1a2e;
+  const wallEdge = 0x6a6a8a;
+
+  scene.add.rectangle(MAP_X + MAP_W / 2, MAP_Y + WALL / 2, MAP_W, WALL, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(MAP_X + MAP_W / 2, MAP_BOTTOM - WALL / 2, MAP_W, WALL, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(MAP_X + WALL / 2, MAP_Y + MAP_H / 2, WALL, MAP_H, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(MAP_X + MAP_W - WALL / 2, MAP_Y + MAP_H / 2, WALL, MAP_H, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+
+  // Tường trong
+  scene.add.rectangle(CORRIDOR_V_X - CORRIDOR / 2 - WALL / 2, R_TOP_Y + ROOM_H / 2, WALL, ROOM_H, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(CORRIDOR_V_X + CORRIDOR / 2 + WALL / 2, R_TOP_Y + ROOM_H / 2, WALL, ROOM_H, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(CORRIDOR_V_X - CORRIDOR / 2 - WALL / 2, R_BOT_Y + ROOM_H / 2, WALL, ROOM_H, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(CORRIDOR_V_X + CORRIDOR / 2 + WALL / 2, R_BOT_Y + ROOM_H / 2, WALL, ROOM_H, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+
+  scene.add.rectangle(R1_X + ROOM_W / 2, CORRIDOR_H_Y - CORRIDOR / 2 - WALL / 2, ROOM_W, WALL, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(R1_X + ROOM_W / 2, CORRIDOR_H_Y + CORRIDOR / 2 + WALL / 2, ROOM_W, WALL, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(R2_X + ROOM_W / 2, CORRIDOR_H_Y - CORRIDOR / 2 - WALL / 2, ROOM_W, WALL, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+  scene.add.rectangle(R2_X + ROOM_W / 2, CORRIDOR_H_Y + CORRIDOR / 2 + WALL / 2, ROOM_W, WALL, wallColor).setStrokeStyle(2, wallEdge, 1).setDepth(-10);
+
+  // ===== VẼ 4 PHÒNG =====
+  ROOMS_CONFIG.forEach(cfg => {
+    const floor = scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w, cfg.h, cfg.floorColor);
+    floor.setDepth(-5);
+
+    const floorTile = scene.add.tileSprite(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w, cfg.h, 'sanGach');
+    floorTile.setAlpha(0.5).setDepth(-4);
+
+    scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + 16, cfg.w - 10, 26, 0x000000, 0.9).setDepth(9);
+    scene.add.text(cfg.x + cfg.w / 2, cfg.y + 16, cfg.emoji + ' ' + cfg.name, {
+      fontFamily: 'Poppins, sans-serif', fontSize: '11px', fontStyle: 'bold', color: '#ffffff'
+    }).setOrigin(0.5).setDepth(10);
+
+    cfg.decor.forEach(d => {
+      if (scene.textures.exists(d.key)) {
+        const item = scene.add.image(cfg.x + cfg.w * d.x, cfg.y + cfg.h * d.y, d.key);
+        item.setDisplaySize(d.size, d.size).setDepth(5).setAlpha(0.95);
+      }
+    });
+
+    const hitArea = scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w - 6, cfg.h - 6, 0xffffff, 0);
+    hitArea.setInteractive({ useHandCursor: true });
+    hitArea.on('pointerdown', () => onRoomClick(cfg.id));
+    hitArea.setDepth(30);
+
+    // Cửa phòng
+    const DOOR_W = 44;
+    const DOOR_H = 10;
+    if (cfg.doorSide === 'bottom') {
+      scene.add.rectangle(cfg.doorX, cfg.doorY - DOOR_H / 2 + 1, DOOR_W, DOOR_H, 0xffd700, 0.95)
+        .setStrokeStyle(2, 0xff8800, 1).setDepth(11);
+      scene.add.rectangle(cfg.doorX, cfg.doorY + 12, DOOR_W + 20, 16, 0xffd700, 0.2).setDepth(8);
+    } else {
+      scene.add.rectangle(cfg.doorX, cfg.doorY + DOOR_H / 2 - 1, DOOR_W, DOOR_H, 0xffd700, 0.95)
+        .setStrokeStyle(2, 0xff8800, 1).setDepth(11);
+      scene.add.rectangle(cfg.doorX, cfg.doorY - 12, DOOR_W + 20, 16, 0xffd700, 0.2).setDepth(8);
+    }
+
+    scene.rooms.push({ cfg, floor, hitArea, aura: null });
+  });
+
+  // ===== NHÂN VẬT CỐ ĐỊNH (HÌNH KHỐI) =====
+  ROOMS_CONFIG.forEach((cfg, idx) => {
+    const colors = NPC_COLORS[idx % 4];
+    const char = createCharacterSprite(scene, cfg.x + cfg.w / 2, cfg.y + cfg.h / 2 + 15, colors.main, colors.eye);
+    char.setDepth(15);
+    char.baseY = char.y;
+    char.roomId = cfg.id;
+
+    scene.tweens.add({
+      targets: char,
+      y: char.baseY - 4,
+      duration: 700 + idx * 100,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      delay: idx * 150
+    });
+    scene.roomCharacters.push(char);
+  });
+
+  // ===== KILLER =====
+  scene.killerSprite = createCharacterSprite(scene, DOOR_ENTRANCE.x, DOOR_ENTRANCE.y, 0x880000, 0xff0000);
+  scene.killerSprite.setDepth(22);
+  scene.killerSprite.setVisible(false);
+
+  // ===== CỬA CHÍNH (KHÔNG VIỀN VÀNG) =====
+  const doorBg = scene.add.rectangle(DOOR_ENTRANCE.x, DOOR_ENTRANCE.y, 90, 46, 0x1a1a2e);
+  doorBg.setDepth(14);
+
+  const doorLeft = scene.add.rectangle(DOOR_ENTRANCE.x - 22, DOOR_ENTRANCE.y, 20, 38, 0x6a4a2a);
+  doorLeft.setStrokeStyle(2, 0x3a2a1a, 1).setDepth(15);
+
+  const doorRight = scene.add.rectangle(DOOR_ENTRANCE.x + 22, DOOR_ENTRANCE.y, 20, 38, 0x6a4a2a);
+  doorRight.setStrokeStyle(2, 0x3a2a1a, 1).setDepth(15);
+
+  scene.add.circle(DOOR_ENTRANCE.x - 14, DOOR_ENTRANCE.y, 2, 0xcccccc).setDepth(16);
+  scene.add.circle(DOOR_ENTRANCE.x + 14, DOOR_ENTRANCE.y, 2, 0xcccccc).setDepth(16);
+
+  scene.doorLeft = doorLeft;
+  scene.doorRight = doorRight;
+  scene.doorBg = doorBg;
+
+  // ===== NÚT LỊCH SỬ =====
+  const btnHistory = scene.add.rectangle(GAME_W - 78, MAP_BOTTOM + 58, 130, 32, 0x1a1a2e)
+    .setStrokeStyle(2, 0xff9800, 0.9).setDepth(50).setInteractive({ useHandCursor: true });
+  scene.add.text(GAME_W - 78, MAP_BOTTOM + 58, '📜 Lịch sử', {
+    fontFamily: 'Poppins, sans-serif', fontSize: '13px', fontStyle: 'bold', color: '#ff9800'
+  }).setOrigin(0.5).setDepth(51);
+  btnHistory.on('pointerover', () => btnHistory.setFillStyle(0x2a2a3e));
+  btnHistory.on('pointerout', () => btnHistory.setFillStyle(0x1a1a2e));
+  btnHistory.on('pointerdown', () => showHistoryModal());
+
+  // ===== UI CƯỢC =====
+  const betUI_Y = GAME_H - 55;
+
+  const betBtnBg = scene.add.rectangle(105, betUI_Y, 145, 45, 0x1a1a2e)
+    .setStrokeStyle(2, 0x9C27B0, 1).setDepth(50).setInteractive({ useHandCursor: true });
+  const betBtnText = scene.add.text(105, betUI_Y, '💎 10,000 ▼', {
+    fontFamily: 'Poppins, sans-serif', fontSize: '14px', fontStyle: 'bold', color: '#ffffff'
+  }).setOrigin(0.5).setDepth(51);
+  betBtnBg.on('pointerdown', () => toggleBetDropdown(scene));
+
+  const confirmBtnBg = scene.add.rectangle(315, betUI_Y, 165, 45, 0xffd699)
+    .setStrokeStyle(2, 0xffb347, 1).setDepth(50).setInteractive({ useHandCursor: true });
+  const confirmBtnText = scene.add.text(315, betUI_Y - 5, 'ĐẶT KIM CƯƠNG', {
+    fontFamily: 'Poppins, sans-serif', fontSize: '13px', fontStyle: 'bold', color: '#1a1a2e'
+  }).setOrigin(0.5).setDepth(51);
+  const confirmBtnSub = scene.add.text(315, betUI_Y + 11, 'Cược: 10,000 💎', {
+    fontFamily: 'Poppins, sans-serif', fontSize: '10px', color: '#666'
+  }).setOrigin(0.5).setDepth(51);
+
+  confirmBtnBg.on('pointerdown', () => {
+    if (confirmBtnBg.getData('disabled')) return;
+    if (gameState.phase !== 'betting' && gameState.phase !== 'idle') return;
+    confirmBet();
+  });
+
+  scene.betUI = {
+    betBtnBg, betBtnText, confirmBtnBg, confirmBtnText, confirmBtnSub,
+    dropdownOpen: false, dropdownItems: []
+  };
+
+  updateHUD();
+  renderSurvivalHistory();
+  renderBXH();
+  updateGameStats();
+  updateAllBadges(scene);
+
+  setTimeout(() => autoStartRound(), 1500);
+}
+
+// ===== AURA & BADGE =====
+function clearAllAuras(scene) {
+  if (!scene) return;
+  scene.rooms.forEach(r => {
+    if (r.aura) { r.aura.destroy(); r.aura = null; }
+  });
+  scene.children.list.forEach(child => {
+    if (child.getData && child.getData('isAura')) child.destroy();
+    if (child.getData && child.getData('isHighlight')) child.destroy();
+  });
+  if (scene.playerSprites) {
+    scene.playerSprites.forEach(p => p.destroy());
+    scene.playerSprites = [];
+  }
+  scene.playerArrow = null;
+  scene.playerName = null;
+}
+
+function updateRoomBadge(scene, cfg) {
+  if (!scene.roomBadges) scene.roomBadges = {};
+  if (scene.roomBadges[cfg.id]) {
+    scene.roomBadges[cfg.id].bg.destroy();
+    scene.roomBadges[cfg.id].text.destroy();
+    delete scene.roomBadges[cfg.id];
+  }
+  const total = roomPools[cfg.id] || 0;
+  if (total === 0) return;
+
+  let display;
+  if (total >= 1000) display = (total / 1000).toFixed(1).replace('.', ',') + 'k';
+  else display = total.toString();
+
+  const badgeX = cfg.x + 55;
+  const badgeY = cfg.y + cfg.h - 18;
+
+  const bg = scene.add.graphics();
+  bg.fillStyle(0x1a3a6a, 0.95);
+  bg.fillRoundedRect(badgeX - 35, badgeY - 11, 70, 22, 11);
+  bg.lineStyle(1.5, 0x4a7ac0, 1);
+  bg.strokeRoundedRect(badgeX - 35, badgeY - 11, 70, 22, 11);
+  bg.setDepth(13);
+
+  const text = scene.add.text(badgeX, badgeY, '💎 ' + display, {
+    fontFamily: 'Poppins, sans-serif', fontSize: '11px', fontStyle: 'bold', color: '#ffffff'
+  }).setOrigin(0.5).setDepth(14);
+
+  scene.roomBadges[cfg.id] = { bg, text };
+}
+
+function updateAllBadges(scene) {
+  if (!scene) return;
+  ROOMS_CONFIG.forEach(cfg => updateRoomBadge(scene, cfg));
+}
+
+// ===== VẼ NHIỀU PLAYER TRONG PHÒNG =====
+function renderPlayersInRoom(scene, roomId) {
+  if (scene.playerSprites) {
+    scene.playerSprites.forEach(p => p.destroy());
+  }
+  scene.playerSprites = [];
+
+  const cfg = ROOMS_CONFIG.find(r => r.id === roomId);
+  if (!cfg) return;
+
+  const pool = roomPools[roomId] || 0;
+  const baseCount = Math.floor(pool / 10000);
+  const totalPlayers = Math.max(1, Math.min(8, baseCount + 1));
+
+  for (let i = 0; i < totalPlayers; i++) {
+    const offsetX = (i - (totalPlayers - 1) / 2) * 28;
+    const offsetY = (i % 2) * 8;
+
+    const isMe = (i === 0);
+    const color = isMe ? 0x00cc66 : PLAYER_COLORS[i % PLAYER_COLORS.length];
+
+    const player = createCharacterSprite(
+      scene,
+      cfg.x + cfg.w / 2 + offsetX,
+      cfg.y + cfg.h / 2 + 15 + offsetY,
+      color,
+      0x000000
+    );
+    player.setDepth(20 + i);
+    player.setScale(isMe ? 1.1 : 0.9);
+    player.baseY = player.y;
+
+    scene.tweens.add({
+      targets: player,
+      y: player.baseY - 3,
+      duration: 600 + i * 100,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+      delay: i * 100
+    });
+
+    scene.playerSprites.push(player);
+  }
+
+  // Highlight player của MÌNH
+  if (scene.playerSprites[0]) {
+    const me = scene.playerSprites[0];
+    if (scene.playerArrow) scene.playerArrow.destroy();
+    if (scene.playerName) scene.playerName.destroy();
+
+    scene.playerArrow = scene.add.text(me.x, me.y - 45, '▼', {
+      fontFamily: 'Poppins, sans-serif', fontSize: '24px', fontStyle: 'bold',
+      color: '#00ff88', stroke: '#000000', strokeThickness: 4
+    }).setOrigin(0.5).setDepth(30);
+    scene.playerArrow.setData('isHighlight', true);
+
+    scene.tweens.add({
+      targets: scene.playerArrow,
+      y: scene.playerArrow.y + 8,
+      duration: 500,
+      yoyo: true,
+      repeat: -1
+    });
+
+    scene.playerName = scene.add.text(me.x, me.y + 42, 'BẠN', {
+      fontFamily: 'Poppins, sans-serif', fontSize: '11px', fontStyle: 'bold',
+      color: '#00ff88', backgroundColor: '#000000', padding: { x: 6, y: 2 }
+    }).setOrigin(0.5).setDepth(30);
+    scene.playerName.setData('isHighlight', true);
+  }
+}
+
+// ===== CLICK PHÒNG =====
+function onRoomClick(roomId) {
+  if (gameState.phase !== 'betting' && gameState.phase !== 'idle') return;
+  if (betConfirmed) return;
+
+  const scene = gameScene;
+  if (!scene) return;
+
+  const betAmount = survivalBet || 10000;
+
+  if (gameState.selectedRoom === roomId) {
+    roomPools[roomId] = Math.max(0, (roomPools[roomId] || 0) - betAmount);
+    localStorage.setItem('roomPools', JSON.stringify(roomPools));
+    myCurrentBet = { roomId: null, amount: 0 };
+
+    clearAllAuras(scene);
+    gameState.selectedRoom = null;
+    survivalSelectedRoom = null;
+
+    scene.roomCharacters.forEach(c => { c.setVisible(true); c.setAlpha(1); });
+    updateAllBadges(scene);
+    return;
+  }
+
+  if (gameState.selectedRoom && gameState.selectedRoom !== roomId) {
+    roomPools[gameState.selectedRoom] = Math.max(0, (roomPools[gameState.selectedRoom] || 0) - betAmount);
+  }
+
+  gameState.selectedRoom = roomId;
+  survivalSelectedRoom = roomId;
+  roomPools[roomId] = (roomPools[roomId] || 0) + betAmount;
+  localStorage.setItem('roomPools', JSON.stringify(roomPools));
+  myCurrentBet = { roomId: roomId, amount: betAmount };
+
+  clearAllAuras(scene);
+  const cfg = ROOMS_CONFIG.find(r => r.id === roomId);
+
+  scene.roomCharacters.forEach(c => {
+    if (c.roomId === roomId) c.setVisible(false);
+    else { c.setVisible(true); c.setAlpha(1); }
+  });
+
+  const aura = scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w - 16, cfg.h - 16, 0xffd700, 0);
+    aura.setStrokeStyle(3, 0xffd700, 1);
+  aura.setDepth(11);
+  aura.setData('isAura', true);
+  scene.tweens.add({ targets: aura, alpha: 0.85, duration: 500, yoyo: true, repeat: -1 });
+  scene.rooms.find(r => r.cfg.id === roomId).aura = aura;
+
+  renderPlayersInRoom(scene, roomId);
+  updateAllBadges(scene);
+}
+
+// ===== DROPDOWN CƯỢC =====
+function toggleBetDropdown(scene) {
+  if (gameState.phase !== 'betting' && gameState.phase !== 'idle') return;
+  if (betConfirmed) return;
+
+  if (scene.betUI.dropdownOpen) { closeBetDropdown(scene); return; }
+  scene.betUI.dropdownOpen = true;
+
+  const amounts = [1000, 5000, 10000, 50000, 100000, 500000];
+  const itemH = 36;
+  const dropdownX = 105;
+  const dropdownW = 145;
+  const betBtnY = GAME_H - 55;
+
+  scene.betUI.dropdownItems = [];
+
+  const backdrop = scene.add.rectangle(
+    dropdownX, betBtnY - 25 - (amounts.length * (itemH + 2)) / 2,
+    dropdownW + 10,
+    amounts.length * (itemH + 2) + 10,
+    0x000000, 0.01
+  );
+  backdrop.setDepth(198);
+  backdrop.setInteractive();
+  scene.betUI.dropdownBackdrop = backdrop;
+
+  amounts.forEach((amt, idx) => {
+    const itemY = betBtnY - 30 - (amounts.length - idx - 1) * (itemH + 2) - itemH / 2;
+
+    const itemBg = scene.add.rectangle(dropdownX, itemY, dropdownW, itemH, 0x2a2a3e)
+      .setStrokeStyle(2, 0x6a6a9a, 1)
+      .setDepth(200 + idx)
+      .setInteractive({ useHandCursor: true });
+
+    const itemText = scene.add.text(dropdownX, itemY, amt.toLocaleString('vi-VN') + ' 💎', {
+      fontFamily: 'Poppins, sans-serif',
+      fontSize: '14px',
+      fontStyle: 'bold',
+      color: amt <= userDiamonds ? '#ffffff' : '#666'
+    }).setOrigin(0.5).setDepth(201 + idx);
+    itemText.setInteractive({ useHandCursor: true });
+
+    itemBg.on('pointerover', () => {
+      if (amt <= userDiamonds) itemBg.setFillStyle(0x4a4a8e);
+    });
+    itemBg.on('pointerout', () => itemBg.setFillStyle(0x2a2a3e));
+
+    itemBg.on('pointerdown', () => {
+      if (amt > userDiamonds) {
+        itemText.setColor('#ff4444');
+        setTimeout(() => itemText.setColor(amt <= userDiamonds ? '#fff' : '#666'), 300);
+        return;
+      }
+      selectBetAmount(scene, amt);
+    });
+
+    itemText.on('pointerdown', () => {
+      if (amt > userDiamonds) return;
+      selectBetAmount(scene, amt);
+    });
+
+    scene.betUI.dropdownItems.push({ bg: itemBg, text: itemText });
+  });
+}
+
+function closeBetDropdown(scene) {
+  if (!scene.betUI.dropdownOpen) return;
+  scene.betUI.dropdownOpen = false;
+  if (scene.betUI.dropdownItems) {
+    scene.betUI.dropdownItems.forEach(it => { if (it.bg) it.bg.destroy(); if (it.text) it.text.destroy(); });
+    scene.betUI.dropdownItems = [];
+  }
+  if (scene.betUI.dropdownBackdrop) {
+    scene.betUI.dropdownBackdrop.destroy();
+    scene.betUI.dropdownBackdrop = null;
+  }
+}
+
+function selectBetAmount(scene, amount) {
+  if (gameState.selectedRoom && myCurrentBet.roomId === gameState.selectedRoom) {
+    const oldAmount = myCurrentBet.amount;
+    roomPools[gameState.selectedRoom] = Math.max(0, (roomPools[gameState.selectedRoom] || 0) - oldAmount);
+    roomPools[gameState.selectedRoom] = (roomPools[gameState.selectedRoom] || 0) + amount;
+    localStorage.setItem('roomPools', JSON.stringify(roomPools));
+    myCurrentBet = { roomId: gameState.selectedRoom, amount: amount };
+  }
+
+  survivalBet = amount;
+  scene.betUI.betBtnText.setText('💎 ' + amount.toLocaleString('vi-VN') + ' ▼');
+  scene.betUI.confirmBtnSub.setText('Cược: ' + amount.toLocaleString('vi-VN') + ' 💎');
+  scene.betUI.confirmBtnBg.setFillStyle(0xffd699).setStrokeStyle(2, 0xffb347, 1);
+  scene.betUI.confirmBtnBg.setData('disabled', false);
+
+  if (gameState.selectedRoom) {
+    renderPlayersInRoom(scene, gameState.selectedRoom);
+  }
+
+  updateAllBadges(scene);
+  closeBetDropdown(scene);
+}
+
+// ===== VÒNG MỚI =====
+function autoStartRound() {
+  if (gameState.phase === 'playing' || gameState.phase === 'revealing') return;
+
+  roomPools = { 1: 0, 2: 0, 3: 0, 4: 0 };
+  localStorage.setItem('roomPools', JSON.stringify(roomPools));
+
+  const allRooms = [1, 2, 3, 4];
+  const playerRoom = allRooms[Math.floor(Math.random() * 4)];
+  const shuffled = [...allRooms].sort(() => Math.random() - 0.5);
+
+  gameState.phase = 'betting';
+  gameState.selectedRoom = playerRoom;
+  survivalSelectedRoom = playerRoom;
+  gameState.killerRooms = shuffled.slice(0, 2);
+  gameState.safeRooms = shuffled.slice(2);
+  gameState.startTime = Date.now();
+  gameState.countdown = 60;
+  gameState.revealingStartTime = 0;
+  betConfirmed = false;
+  survivalBet = 0;
+  myCurrentBet = { roomId: null, amount: 0 };
+
+  const scene = gameScene;
+  if (scene && scene.betUI) {
+    scene.betUI.betBtnText.setText('💎 10,000 ▼');
+    scene.betUI.confirmBtnSub.setText('Cược: 10,000 💎');
+    scene.betUI.confirmBtnBg.setFillStyle(0xffd699).setStrokeStyle(2, 0xffb347, 1);
+    scene.betUI.confirmBtnBg.setData('disabled', false);
+    scene.betUI.confirmBtnText.setText('ĐẶT KIM CƯƠNG');
+    closeBetDropdown(scene);
+
+    clearAllAuras(scene);
+
+    scene.roomCharacters.forEach(c => {
+      if (c.roomId === playerRoom) c.setVisible(false);
+      else { c.setVisible(true); c.setAlpha(1); }
+    });
+
+    const cfg = ROOMS_CONFIG.find(r => r.id === playerRoom);
+
+    const aura = scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w - 16, cfg.h - 16, 0xffd700, 0);
+    aura.setStrokeStyle(3, 0xffd700, 1);
+    aura.setDepth(11);
+    aura.setData('isAura', true);
+    scene.tweens.add({ targets: aura, alpha: 0.85, duration: 500, yoyo: true, repeat: -1 });
+    scene.rooms.find(r => r.cfg.id === playerRoom).aura = aura;
+
+    simulateOtherPlayers(scene);
+    renderPlayersInRoom(scene, playerRoom);
+    updateAllBadges(scene);
+  }
+
+  saveGameState();
+}
+
+function simulateOtherPlayers(scene) {
+  const numPlayers = Math.floor(Math.random() * 3) + 2;
+  const amounts = [1000, 5000, 10000, 20000, 50000, 100000];
+  for (let i = 0; i < numPlayers; i++) {
+    const roomId = Math.floor(Math.random() * 4) + 1;
+    const amount = amounts[Math.floor(Math.random() * amounts.length)];
+    roomPools[roomId] = (roomPools[roomId] || 0) + amount;
+  }
+  localStorage.setItem('roomPools', JSON.stringify(roomPools));
+  updateAllBadges(scene);
+}
+
+// ===== XÁC NHẬN CƯỢC =====
+function confirmBet() {
+  if (betConfirmed) return;
+
+  if (!survivalSelectedRoom) {
+    const randomRoom = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
+    survivalSelectedRoom = randomRoom;
+    gameState.selectedRoom = randomRoom;
+  }
+
+  if (survivalBet === 0) survivalBet = 1000;
+  if (survivalBet > userDiamonds) { alert('❌ Không đủ kim cương!'); return; }
+
+  userDiamonds -= survivalBet;
+  betConfirmed = true;
+  saveLocalState();
+  updatePointsUI();
+  updateHUD();
+
+  const scene = gameScene;
+  if (scene && scene.betUI) {
+    scene.betUI.confirmBtnText.setText('✅ ĐÃ ĐẶT');
+    scene.betUI.confirmBtnSub.setText('Chờ kết quả...');
+    scene.betUI.confirmBtnBg.setFillStyle(0x4a4a6a).setStrokeStyle(2, 0x6a6a9a, 1);
+    scene.betUI.confirmBtnBg.setData('disabled', true);
+    closeBetDropdown(scene);
+  }
+
+  gameState.phase = 'playing';
+  gameState.startTime = Date.now();
+  saveGameState();
+}
+
+function saveGameState() {
+  localStorage.setItem('survivalState', JSON.stringify({
+    phase: gameState.phase,
+    startTime: gameState.startTime,
+    selectedRoom: survivalSelectedRoom,
+    killerRooms: gameState.killerRooms,
+    safeRooms: gameState.safeRooms,
+    bet: survivalBet,
+    betConfirmed: betConfirmed
+  }));
+}
+
+// ===== UPDATE LOOP =====
+function updateGame(time, delta) {
+  const scene = this;
+  if (!scene) return;
+
+  if (gameState.phase === 'betting' || gameState.phase === 'playing') {
+    const elapsed = (Date.now() - gameState.startTime) / 1000;
+    gameState.countdown = Math.max(0, 60 - elapsed);
+    const hudTimer = document.getElementById('hudTimer');
+    if (hudTimer) {
+      hudTimer.textContent = '⏱️ ' + Math.ceil(gameState.countdown) + 's';
+      if (gameState.countdown < 10) hudTimer.classList.add('danger');
+    }
+
+    if (gameState.countdown <= 0) {
+      if (gameState.phase === 'betting' && !betConfirmed) {
+        if (userDiamonds >= 1000) {
+          survivalBet = 1000;
+          confirmBet();
+        } else {
+          survivalBet = 0;
+          betConfirmed = true;
+          gameState.phase = 'playing';
+        }
+      }
+      if (gameState.phase === 'playing') {
+        gameState.countdown = 0;
+        gameState.phase = 'revealing';
+        gameState.revealingStartTime = Date.now();
+        killerWalkInAnimation();
+      }
+    }
+  }
+
+  // Timeout cho phase revealing
+  if (gameState.phase === 'revealing' && gameState.revealingStartTime) {
+    const elapsed = (Date.now() - gameState.revealingStartTime) / 1000;
+    if (elapsed > 25) {
+      console.warn('⚠️ Revealing treo quá 25s → force end');
+      gameState.phase = 'ended';
+      if (scene.killerSprite) {
+        scene.killerSprite.setVisible(false);
+        scene.killerSprite.setAlpha(0);
+      }
+      if (scene.doorLeft) scene.doorLeft.x = DOOR_ENTRANCE.x - 22;
+      if (scene.doorRight) scene.doorRight.x = DOOR_ENTRANCE.x + 22;
+      showSurvivalResult();
+    }
+  }
+
+  if (gameState.phase === 'resting') {
+    const elapsed = (Date.now() - gameState.restStartTime) / 1000;
+    const remaining = Math.max(0, 30 - elapsed);
+    const restTimer = document.getElementById('restTimer');
+    if (restTimer) restTimer.textContent = Math.ceil(remaining);
+
+    if (remaining <= 0) {
+      const restOverlay = document.getElementById('restOverlay');
+      if (restOverlay) restOverlay.classList.remove('show');
+      gameState.phase = 'idle';
+      resetKillerAndDoors(scene);
+      autoStartRound();
+    }
+  }
+}
+
+// ===== RESET KILLER + DOORS =====
+function resetKillerAndDoors(scene) {
+  if (!scene) return;
+  if (scene.killerSprite) {
+    scene.killerSprite.setPosition(DOOR_ENTRANCE.x, DOOR_ENTRANCE.y);
+    scene.killerSprite.setVisible(false);
+    scene.killerSprite.setAlpha(0);
+  }
+  if (scene.doorLeft) scene.doorLeft.x = DOOR_ENTRANCE.x - 22;
+  if (scene.doorRight) scene.doorRight.x = DOOR_ENTRANCE.x + 22;
+}
+
+// ===== KILLER DI CHUYỂN =====
+function moveKillerTo(scene, tx, ty, duration) {
+  return new Promise(resolve => {
+    if (!scene || !scene.killerSprite) {
+      resolve();
+      return;
+    }
+
+    const sx = scene.killerSprite.x;
+    const sy = scene.killerSprite.y;
+    const dx = tx - sx;
+    const dy = ty - sy;
+
+    if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+      scene.killerSprite.setPosition(tx, ty);
+      resolve();
+      return;
+    }
+
+    let resolved = false;
+    const safetyTimeout = setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        if (scene.killerSprite) scene.killerSprite.setPosition(tx, ty);
+        resolve();
+      }
+    }, duration + 5000);
+
+    const safeResolve = () => {
+      if (resolved) return;
+      resolved = true;
+      clearTimeout(safetyTimeout);
+      resolve();
+    };
+
+    if (Math.abs(dx) > 5 && Math.abs(dy) > 5) {
+      scene.tweens.add({
+        targets: scene.killerSprite,
+        y: ty,
+        duration: duration * 0.5,
+        ease: 'Linear',
+        onComplete: () => {
+          scene.tweens.add({
+            targets: scene.killerSprite,
+            x: tx,
+            duration: duration * 0.5,
+            ease: 'Linear',
+            onComplete: safeResolve
+          });
+        }
+      });
+    } else {
+      scene.tweens.add({
+        targets: scene.killerSprite,
+        x: tx,
+        y: ty,
+        duration: duration,
+        ease: 'Linear',
+        onComplete: safeResolve
+      });
+    }
+  });
+}
+
+// ===== KILLER ANIMATION =====
+async function killerWalkInAnimation() {
+  const scene = gameScene;
+  if (!scene) return;
+
+  try {
+    scene.tweens.add({ targets: scene.doorLeft, x: DOOR_ENTRANCE.x - 40, duration: 400 });
+    scene.tweens.add({ targets: scene.doorRight, x: DOOR_ENTRANCE.x + 40, duration: 400 });
+    await new Promise(r => setTimeout(r, 400));
+
+    scene.roomCharacters.forEach(c => {
+      if (gameState.killerRooms.includes(c.roomId)) c.setVisible(false);
+      else c.setAlpha(0.3);
+    });
+
+    scene.killerSprite.setPosition(DOOR_ENTRANCE.x, DOOR_ENTRANCE.y);
+    scene.killerSprite.setVisible(true);
+    scene.killerSprite.setAlpha(0);
+    scene.tweens.add({ targets: scene.killerSprite, alpha: 1, duration: 400 });
+    await new Promise(r => setTimeout(r, 500));
+
+    scene.tweens.add({ targets: scene.doorLeft, x: DOOR_ENTRANCE.x - 22, duration: 400, delay: 200 });
+    scene.tweens.add({ targets: scene.doorRight, x: DOOR_ENTRANCE.x + 22, duration: 400, delay: 200 });
+
+    const killerRooms = [...gameState.killerRooms];
+    killerRooms.sort((a, b) => {
+      const ca = ROOMS_CONFIG.find(r => r.id === a);
+      const cb = ROOMS_CONFIG.find(r => r.id === b);
+      return ca.y - cb.y;
+    });
+
+    for (const roomId of killerRooms) {
+      const cfg = ROOMS_CONFIG.find(r => r.id === roomId);
+      const hubY = CORRIDOR_H_Y;
+
+      await moveKillerTo(scene, GAME_W / 2, MAP_BOTTOM - 40, 900);
+      await moveKillerTo(scene, GAME_W / 2, hubY, 1600);
+      await moveKillerTo(scene, cfg.doorX, hubY, 900);
+      await moveKillerTo(scene, cfg.doorX, cfg.doorY, 500);
+      await new Promise(r => setTimeout(r, 300));
+      await moveKillerTo(scene, cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, 700);
+      await new Promise(r => setTimeout(r, 300));
+
+      const room = scene.rooms.find(r => r.cfg.id === roomId);
+      if (room.aura) { room.aura.destroy(); room.aura = null; }
+      const aura = scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w - 16, cfg.h - 16, 0xff2a2a, 0.15);
+      aura.setStrokeStyle(3, 0xff2a2a, 1);
+      aura.setDepth(11);
+      aura.setData('isAura', true);
+      room.aura = aura;
+
+      await killerAttackAnimation(scene, cfg);
+
+      await new Promise(r => setTimeout(r, 400));
+      await moveKillerTo(scene, cfg.doorX, cfg.doorY, 500);
+      await moveKillerTo(scene, cfg.doorX, hubY, 600);
+    }
+
+    await moveKillerTo(scene, GAME_W / 2, hubY, 900);
+    await moveKillerTo(scene, GAME_W / 2, MAP_BOTTOM - 40, 1000);
+    await moveKillerTo(scene, GAME_W / 2, DOOR_ENTRANCE.y, 700);
+
+    scene.tweens.add({ targets: scene.doorLeft, x: DOOR_ENTRANCE.x - 40, duration: 400 });
+    scene.tweens.add({ targets: scene.doorRight, x: DOOR_ENTRANCE.x + 40, duration: 400 });
+    await new Promise(r => setTimeout(r, 400));
+
+    scene.tweens.add({
+      targets: scene.killerSprite, alpha: 0,
+      duration: 500, onComplete: () => scene.killerSprite.setVisible(false)
+    });
+
+    await new Promise(r => setTimeout(r, 300));
+    scene.tweens.add({ targets: scene.doorLeft, x: DOOR_ENTRANCE.x - 22, duration: 400 });
+    scene.tweens.add({ targets: scene.doorRight, x: DOOR_ENTRANCE.x + 22, duration: 400 });
+
+    await new Promise(r => setTimeout(r, 800));
+    showSurvivalResult();
+  } catch (error) {
+    console.error('❌ Lỗi killerWalkInAnimation:', error);
+    if (scene && scene.killerSprite) {
+      scene.killerSprite.setVisible(false);
+      scene.killerSprite.setAlpha(0);
+    }
+    if (scene && scene.doorLeft) scene.doorLeft.x = DOOR_ENTRANCE.x - 22;
+    if (scene && scene.doorRight) scene.doorRight.x = DOOR_ENTRANCE.x + 22;
+    await new Promise(r => setTimeout(r, 500));
+    showSurvivalResult();
+  }
+}
+
+// ===== KILLER CHÉM =====
+async function killerAttackAnimation(scene, cfg) {
+  const killer = scene.killerSprite;
+  const baseX = killer.x;
+  const baseY = killer.y;
+
+  // Nhịp 1: chém chéo xuống
+  const slash1 = scene.add.graphics();
+  slash1.lineStyle(5, 0xffffff, 1);
+  slash1.lineBetween(baseX - 35, baseY - 35, baseX + 35, baseY + 35);
+  slash1.setDepth(23);
+  scene.tweens.add({ targets: slash1, alpha: 0, duration: 280, onComplete: () => slash1.destroy() });
+  scene.tweens.add({ targets: killer, x: baseX + 12, duration: 80, yoyo: true, repeat: 2, onComplete: () => killer.setX(baseX) });
+  await new Promise(r => setTimeout(r, 350));
+
+  // Nhịp 2: chém chéo ngược
+  const slash2 = scene.add.graphics();
+  slash2.lineStyle(5, 0xff4444, 1);
+  slash2.lineBetween(baseX - 35, baseY + 35, baseX + 35, baseY - 35);
+  slash2.setDepth(23);
+  scene.tweens.add({ targets: slash2, alpha: 0, duration: 280, onComplete: () => slash2.destroy() });
+  scene.tweens.add({ targets: killer, x: baseX - 12, duration: 80, yoyo: true, repeat: 2, onComplete: () => killer.setX(baseX) });
+  await new Promise(r => setTimeout(r, 350));
+
+  // Nhịp 3: chém ngang
+  const slash3 = scene.add.graphics();
+  slash3.lineStyle(5, 0xffff00, 1);
+  slash3.lineBetween(baseX - 40, baseY, baseX + 40, baseY);
+  slash3.setDepth(23);
+  scene.tweens.add({ targets: slash3, alpha: 0, duration: 280, onComplete: () => slash3.destroy() });
+  scene.tweens.add({ targets: killer, y: baseY - 10, duration: 90, yoyo: true, repeat: 2, onComplete: () => killer.setY(baseY) });
+  await new Promise(r => setTimeout(r, 400));
+
+  // Rung aura đỏ
+  const room = scene.rooms.find(r => r.cfg.id === cfg.id);
+  if (room && room.aura) {
+    scene.tweens.add({ targets: room.aura, alpha: 0.5, duration: 140, yoyo: true, repeat: 3 });
+  }
+}
+
+// ===== KẾT QUẢ =====
+function showSurvivalResult() {
+  gameState.phase = 'ended';
+  const isWin = gameState.safeRooms.includes(survivalSelectedRoom);
+  const resultEl = document.getElementById('survivalResult');
+
+  const scene = gameScene;
+  if (scene) {
+    resetKillerAndDoors(scene);
+    scene.rooms.forEach(r => {
+      if (r.aura) { r.aura.destroy(); r.aura = null; }
+    });
+  }
+
+  if (isWin) {
+    const winAmount = survivalBet * 2;
+    userDiamonds += winAmount;
+    saveLocalState(); updatePointsUI(); updateHUD();
+    if (resultEl) resultEl.innerHTML = `<div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-radius:16px;padding:18px;text-align:center;border-left:5px solid #4CAF50;margin-top:10px;">
+      <div style="font-size:20px;font-weight:800;color:#1b5e20;margin-bottom:6px;">🎉 BẠN SỐNG SÓT!</div>
+      <div style="font-size:13.5px;color:#555;line-height:1.6;">Bạn chọn <b>${ROOM_NAMES[survivalSelectedRoom-1]}</b> — an toàn!<br>Sát thủ vào: <b>${gameState.killerRooms.map(r => ROOM_NAMES[r-1]).join(', ')}</b><br>Nhận <b style="color:#4CAF50;font-size:18px;">+${winAmount} 💎</b></div>
+    </div>`;
+    survivalHistory.unshift({
+      room: survivalSelectedRoom, roomName: ROOM_NAMES[survivalSelectedRoom-1],
+      killerRoomNames: gameState.killerRooms.map(r => ROOM_NAMES[r-1]),
+      safeRoomNames: gameState.safeRooms.map(r => ROOM_NAMES[r-1]),
+      bet: survivalBet, win: winAmount, isWin: true, time: getTimeStr()
+    });
+  } else {
+    if (resultEl) resultEl.innerHTML = `<div style="background:linear-gradient(135deg,#ffebee,#ffcdd2);border-radius:16px;padding:18px;text-align:center;border-left:5px solid #f44336;margin-top:10px;">
+      <div style="font-size:20px;font-weight:800;color:#b71c1c;margin-bottom:6px;">💀 BẠN ĐÃ CHẾT!</div>
+      <div style="font-size:13.5px;color:#555;line-height:1.6;">Bạn chọn <b>${ROOM_NAMES[survivalSelectedRoom-1]}</b> — sát thủ đã vào!<br>Phòng an toàn: <b>${gameState.safeRooms.map(r => ROOM_NAMES[r-1]).join(', ')}</b><br>Mất <b style="color:#f44336;font-size:18px;">-${survivalBet} 💎</b></div>
+    </div>`;
+    survivalHistory.unshift({
+      room: survivalSelectedRoom, roomName: ROOM_NAMES[survivalSelectedRoom-1],
+      killerRoomNames: gameState.killerRooms.map(r => ROOM_NAMES[r-1]),
+      safeRoomNames: gameState.safeRooms.map(r => ROOM_NAMES[r-1]),
+      bet: survivalBet, win: 0, isWin: false, time: getTimeStr()
+    });
+  }
+
+  survivalHistory = survivalHistory.slice(0, 30);
+  localStorage.setItem('survivalHistory', JSON.stringify(survivalHistory));
+  renderSurvivalHistory();
+  renderBXH();
+  updateGameStats();
+  saveUserData();
+
+  setTimeout(startRestPhase, 5000);
+}
+
+function startRestPhase() {
+  console.log('😴 Bắt đầu nghỉ 30s');
+  gameState.phase = 'resting';
+  gameState.restStartTime = Date.now();
+
+  const restOverlay = document.getElementById('restOverlay');
+  if (restOverlay) restOverlay.classList.add('show');
+
+  const restTimer = document.getElementById('restTimer');
+    if (restTimer) restTimer.textContent = '30';
+
+  const hudTimer = document.getElementById('hudTimer');
+  if (hudTimer) {
+    hudTimer.textContent = '😴 NGHỈ NGƠI';
+    hudTimer.classList.remove('danger');
+  }
+
+  const scene = gameScene;
+  if (scene) {
+    clearAllAuras(scene);
+    resetKillerAndDoors(scene);
+  }
+
+  saveGameState();
+}
+
+function restoreGameState() {
+  try {
+    const saved = localStorage.getItem('survivalState');
+    if (!saved) { setTimeout(() => autoStartRound(), 1500); return; }
+
+    const state = JSON.parse(saved);
+    const elapsed = (Date.now() - state.startTime) / 1000;
+
+    if (elapsed > 600) {
+      localStorage.removeItem('survivalState');
+      setTimeout(() => autoStartRound(), 1500);
+      return;
+    }
+
+    gameState.killerRooms = state.killerRooms;
+    gameState.safeRooms = state.safeRooms;
+    gameState.startTime = state.startTime;
+    survivalSelectedRoom = state.selectedRoom;
+    survivalBet = state.bet;
+    betConfirmed = state.betConfirmed;
+    gameState.selectedRoom = state.selectedRoom;
+
+    const scene = gameScene;
+
+    if (elapsed < 60) {
+      gameState.phase = state.phase;
+      gameState.countdown = 60 - elapsed;
+
+      if (scene) {
+        scene.roomCharacters.forEach(c => { if (c.roomId === state.selectedRoom) c.setVisible(false); });
+        const cfg = ROOMS_CONFIG.find(r => r.id === state.selectedRoom);
+
+        clearAllAuras(scene);
+        const aura = scene.add.rectangle(cfg.x + cfg.w / 2, cfg.y + cfg.h / 2, cfg.w - 16, cfg.h - 16, 0xffd700, 0);
+        aura.setStrokeStyle(3, 0xffd700, 1).setDepth(11);
+        aura.setData('isAura', true);
+        scene.tweens.add({ targets: aura, alpha: 0.85, duration: 500, yoyo: true, repeat: -1 });
+        scene.rooms.find(r => r.cfg.id === state.selectedRoom).aura = aura;
+
+        renderPlayersInRoom(scene, state.selectedRoom);
+
+        if (state.betConfirmed && scene.betUI) {
+          scene.betUI.confirmBtnText.setText('✅ ĐÃ ĐẶT');
+          scene.betUI.confirmBtnSub.setText('Chờ kết quả...');
+          scene.betUI.confirmBtnBg.setFillStyle(0x4a4a6a).setData('disabled', true);
+        }
+      }
+    } else {
+      setTimeout(() => autoStartRound(), 1500);
+    }
+  } catch (e) {
+    console.error('Lỗi khôi phục:', e);
+    localStorage.removeItem('survivalState');
+    setTimeout(() => autoStartRound(), 1500);
+  }
+}
+
+// ===== HUD =====
+function updateHUD() {
+  const hudD = document.getElementById('hudDiamonds');
+  if (hudD) hudD.textContent = userDiamonds.toLocaleString('vi-VN');
+}
+
+// ===== LỊCH SỬ =====
+function renderSurvivalHistory() {
+  const list = document.getElementById('survivalHistory');
+  if (!list) return;
+  if (survivalHistory.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;font-size:13px;">Chưa có ván nào</div>`;
+    return;
+  }
+  list.innerHTML = survivalHistory.map((h, idx) => `
+    <div class="game-history-item ${h.isWin ? '' : 'lose'}">
+      <div class="game-history-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="game-history-icon"><i class="fas ${h.isWin ? 'fa-trophy' : 'fa-skull'}"></i></div>
+          <div>
+            <div class="game-history-title">Ván #${survivalHistory.length - idx}</div>
+            <div class="game-history-time">${h.time}</div>
+          </div>
+        </div>
+        <div class="game-history-amount">
+          <div class="amt">${h.isWin ? '+' + h.win : '-' + h.bet} 💎</div>
+          <div class="lbl">${h.isWin ? 'Sống sót' : 'Bị giết'}</div>
+        </div>
+      </div>
+      <div class="room-tags">
+        <div class="rt-label">💀 Kẻ sát nhân đã vào:</div>
+        <div class="rt-list">${(h.killerRoomNames || []).map(n => `<span class="rt-tag">${n}</span>`).join('')}</div>
+      </div>
+      <div class="room-tags safe">
+        <div class="rt-label">✅ Phòng an toàn:</div>
+        <div class="rt-list">${(h.safeRoomNames || []).map(n => `<span class="rt-tag">${n}</span>`).join('')}</div>
+      </div>
+      <div class="rt-my-pick">🧑 Bạn đã chọn: <b style="color:${h.isWin ? '#4CAF50' : '#f44336'};">${h.roomName}</b></div>
+    </div>
+  `).join('');
+}
+
+// ===== BXH =====
+function renderBXH() {
+  const list = document.getElementById('bxhList');
+  if (!list) return;
+  const myName = document.getElementById('sName')?.textContent || 'Bạn';
+  const myAvatar = document.getElementById('navAvatar')?.src || '';
+  const wins = survivalHistory.filter(h => h.isWin).length;
+  const netProfit = survivalHistory.reduce((s, h) => s + (h.isWin ? h.win : -h.bet), 0);
+  const fakePlayers = [
+    { name: 'Minh Quân', wins: 128, net: 48200, avatar: 'M' },
+    { name: 'Hoàng Long', wins: 95, net: 31500, avatar: 'H' },
+    { name: 'Thanh Tùng', wins: 87, net: 27800, avatar: 'T' },
+    { name: 'Văn Nam', wins: 64, net: 18200, avatar: 'V' },
+    { name: 'Đức Anh', wins: 52, net: 12500, avatar: 'D' }
+  ];
+  const me = { name: myName + ' (Bạn)', wins: wins, net: netProfit, avatar: myAvatar, isMe: true };
+  const all = [...fakePlayers, me].sort((a, b) => b.net - a.net);
+  list.innerHTML = all.map((p, idx) => {
+    const rankClass = idx === 0 ? 'top1' : idx === 1 ? 'top2' : idx === 2 ? 'top3' : '';
+    const rankIcon = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
+    const avatarHtml = p.avatar && p.avatar.startsWith('http')
+      ? `<img class="bxh-avatar" src="${p.avatar}" alt="">`
+      : `<div class="bxh-avatar" style="${p.isMe ? 'background:linear-gradient(135deg,#ffd700,#ff9800);' : ''}">${(p.name[0] || '?').toUpperCase()}</div>`;
+    return `<div class="bxh-item ${rankClass}">
+      <div class="bxh-rank">${rankIcon}</div>
+      ${avatarHtml}
+      <div class="bxh-info"><div class="bxh-name">${p.name}</div><div class="bxh-stat">🏆 ${p.wins} ván thắng</div></div>
+      <div class="bxh-win ${p.net < 0 ? 'lose' : ''}">${p.net >= 0 ? '+' : ''}${p.net.toLocaleString('vi-VN')} 💎<small>Lợi nhuận</small></div>
+    </div>`;
+  }).join('');
+}
+
+function updateGameStats() {
+  const wins = survivalHistory.filter(h => h.isWin).length;
+  const total = survivalHistory.length;
+  const net = survivalHistory.reduce((s, h) => s + (h.isWin ? h.win : -h.bet), 0);
+  const el1 = document.getElementById('statTotalGames');
+  if (el1) el1.textContent = total;
+  const el2 = document.getElementById('statWins');
+  if (el2) el2.textContent = wins;
+  const el3 = document.getElementById('statNetProfit');
+  if (el3) {
+    el3.textContent = (net >= 0 ? '+' : '') + net.toLocaleString('vi-VN');
+    el3.style.color = net >= 0 ? '#6A1B9A' : '#f44336';
+  }
+}
+
+function showHistoryModal() {
+  const overlay = document.createElement('div');
+  overlay.id = 'historyTempOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const box = document.createElement('div');
+  box.style.cssText = 'background:white;border-radius:20px;max-width:440px;width:100%;max-height:85vh;overflow-y:auto;padding:20px;';
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-size:18px;font-weight:800;color:#ff9800;">📜 Lịch Sử</div>
+      <button onclick="document.getElementById('historyTempOverlay').remove()" style="width:32px;height:32px;border-radius:50%;background:#f5f5f5;border:none;font-size:16px;cursor:pointer;">✕</button>
+    </div>
+    <div id="historyModalList"></div>`;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  const list = document.getElementById('historyModalList');
+  if (survivalHistory.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#888;font-size:13px;">Chưa có ván nào</div>`;
+    return;
+  }
+  list.innerHTML = survivalHistory.slice(0, 15).map((h, idx) => `
+    <div style="background:${h.isWin ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' : 'linear-gradient(135deg,#ffebee,#ffcdd2)'};border-radius:14px;padding:14px;margin-bottom:12px;border-left:4px solid ${h.isWin ? '#4CAF50' : '#f44336'};">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div><div style="font-size:13px;font-weight:800;">${h.isWin ? '🏆' : '💀'} Ván #${survivalHistory.length - idx}</div><div style="font-size:10.5px;color:#888;">🕐 ${h.time}</div></div>
+        <div style="text-align:right;"><div style="font-size:15px;font-weight:800;color:${h.isWin ? '#4CAF50' : '#f44336'};">${h.isWin ? '+' + h.win : '-' + h.bet} 💎</div><div style="font-size:10px;color:#888;">${h.isWin ? 'Sống sót' : 'Bị giết'}</div></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.7);border-radius:10px;padding:10px;margin-bottom:8px;border-left:3px solid #f44336;">
+        <div style="font-size:11px;font-weight:800;color:#b71c1c;margin-bottom:6px;">💀 Sát thủ vào:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">${(h.killerRoomNames || []).map(n => `<span style="background:white;color:#b71c1c;padding:4px 10px;border-radius:8px;font-size:11.5px;font-weight:700;border:1.5px solid #f44336;">${n}</span>`).join('')}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.7);border-radius:10px;padding:10px;margin-bottom:8px;border-left:3px solid #4CAF50;">
+        <div style="font-size:11px;font-weight:800;color:#1b5e20;margin-bottom:6px;">✅ Phòng an toàn:</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">${(h.safeRoomNames || []).map(n => `<span style="background:white;color:#1b5e20;padding:4px 10px;border-radius:8px;font-size:11.5px;font-weight:700;border:1.5px solid #4CAF50;">${n}</span>`).join('')}</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.5);border-radius:8px;padding:6px 10px;font-size:11.5px;color:#555;font-weight:600;">🧑 Bạn chọn: <b style="color:${h.isWin ? '#4CAF50' : '#f44336'};">${h.roomName}</b></div>
+    </div>
+  `).join('');
+}
+
+// ===== TAB SWITCHING =====
+function switchRewardTab(tabName, event) {
+  document.querySelectorAll('#tab-reward .wallet-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#tab-reward .wallet-tab-content').forEach(c => c.classList.remove('active'));
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
+  const content = document.getElementById('reward-content-' + tabName);
+  if (content) content.classList.add('active');
+  if (tabName === 'cash') updateCashDiamondsUI();
+}
+
+function switchBottomNav(tabName, el) {
+  document.querySelectorAll('.bn-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  switchTab(tabName, null);
+}
+
+function openGame(gameId) {
+  if (gameId === 'survival') {
+    document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.add('hidden'));
+    document.getElementById('tab-survival').classList.remove('hidden');
+    document.querySelectorAll('.bn-item').forEach(i => i.classList.remove('active'));
+    const bnItems = document.querySelectorAll('.bn-item');
+    if (bnItems[1]) bnItems[1].classList.add('active');
+    setTimeout(() => {
+      initPhaserGame();
+      setTimeout(() => restoreGameState(), 1200);
+    }, 200);
+  }
+}
+
+function switchTab(tabName, event) {
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
+  document.querySelectorAll('[id^="tab-"]').forEach(el => el.classList.add('hidden'));
+  const target = document.getElementById('tab-' + tabName);
+  if (target) target.classList.remove('hidden');
+  const bnIndex = { ads: 0, game: 1, survival: 1 }[tabName];
+  document.querySelectorAll('.bn-item').forEach(i => i.classList.remove('active'));
+  const bnItems = document.querySelectorAll('.bn-item');
+  if (bnIndex !== undefined && bnItems[bnIndex]) bnItems[bnIndex].classList.add('active');
+  localStorage.setItem('currentTab', tabName);
+  if (tabName === 'reward') { renderHistory(); renderCashHistory(); updateCashDiamondsUI(); }
+  if (tabName === 'diamond') updateDiamondUI();
+  if (tabName === 'ads') {
+    const lastClaim = parseInt(localStorage.getItem('lastClaim')) || 0;
+    if (Date.now() - lastClaim < CLAIM_COOLDOWN_MS) startCooldownDisplay();
+  }
+}
+
+// ===== MODAL EVENTS =====
+document.getElementById('orderModal').addEventListener('click', (e) => { if (e.target.id === 'orderModal') closeModal(); });
+document.getElementById('notifyOverlay').addEventListener('click', (e) => { if (e.target.id === 'notifyOverlay') closeNotify(); });
+document.getElementById('enterCodeOverlay').addEventListener('click', (e) => { if (e.target.id === 'enterCodeOverlay') closeEnterCode(); });
+document.getElementById('switchAccountOverlay').addEventListener('click', (e) => { if (e.target.id === 'switchAccountOverlay') closeSwitchAccount(); });
+document.getElementById('logoutOverlay').addEventListener('click', (e) => { if (e.target.id === 'logoutOverlay') closeLogout(); });
+document.getElementById('depositOverlay').addEventListener('click', (e) => { if (e.target.id === 'depositOverlay') closeDeposit(); });
+
+// ===== COPY =====
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(showCopyToast).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showCopyToast(); } catch (e) { alert('Không thể copy'); }
+  document.body.removeChild(ta);
+}
+function showCopyToast() {
+  const toast = document.getElementById('copiedToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
+}
+
+// ===== KHỞI TẠO CUỐI =====
+window.addEventListener('load', () => {
+  setTimeout(() => { initPhaserGame(); }, 800);
+});
+</script>
+</body>
+</html>
